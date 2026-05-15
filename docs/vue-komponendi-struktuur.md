@@ -1,59 +1,10 @@
-# CLAUDE.md — Frontend
+# Vue komponendi struktuur (Options API)
 
-See fail annab Claude Code'ile juhiseid `frontend/` kausta kohta (Vue 3, Vite).
+See fail kirjeldab meie projektis kasutatavat Vue 3 komponendi ülesehitust Options API-ga.
 
-> **NB!** See fail peab alati jääma eestikeelseks. Ära tõlgi seda inglise keelde.
+---
 
-## Käsud (käivita `frontend/` kaustast)
-
-```bash
-npm install              # Paigalda sõltuvused
-npm run dev              # Käivita arendusserver pordil 8081
-npm run build            # Tootmise build
-npm run lint             # Lint ja automaatne parandus (oxlint + eslint)
-npm run format           # Vorminda lähtekood Prettier'iga
-```
-
-## Arhitektuur
-
-| Kaust | Roll |
-|---|---|
-| `views/` | Täislehe komponendid, mis on seotud ruuteri marsruutidega |
-| `components/common/` | Ühised UI-elemendid (nupud, sildid, laadijad) |
-| `components/forms/` | Vormi sisend- ja validatsioonikomponendid |
-| `components/modals/` | Modaalakende komponendid |
-| `components/tables/` | Tabelite kuvamise komponendid |
-| `navigation/` | Navigatsiooniriba ja menüü komponendid |
-| `api-services/` | Axios päringute moodulid — üks fail ressursi kohta |
-| `auth/` | Sisselogimise olek, tokeni haldus, marsruudi kaitsed |
-| `router/` | Vue Routeri marsruutide definitsioonid |
-
-## Kaustade struktuur
-
-```
-frontend/
-├── public/                 # Avalikud staatilised failid (kopeeritakse buildi)
-└── src/
-    ├── api-services/       # Axios API päringute teenused — üks fail ressursi kohta
-    ├── assets/             # Staatilised ressursid (pildid, fondid jms)
-    ├── auth/               # Autentimise loogika ja abifunktsioonid
-    ├── components/
-    │   ├── common/         # Üldkasutatavad elemendid (nupud, sildid, laadijad)
-    │   ├── forms/          # Vormi komponendid (sisendid, validatsioon)
-    │   ├── modals/         # Modaalakende komponendid
-    │   └── tables/         # Tabelite komponendid
-    ├── navigation/         # Navigatsiooniriba ja menüü komponendid
-    ├── router/             # Vue Router marsruutide konfiguratsioon
-    └── views/              # Lehekülgede komponendid (marsruutidega seotud)
-```
-
-## Vue koodistiil
-
-Kasuta kõigis komponentides **Options API**-t. Ära kasuta Composition API-t (`setup()`, `<script setup>`, `ref`, `reactive` jms).
-
-## Vue komponendi struktuur (Options API)
-
-### Üldine järjekord `<script>` sees
+## Üldine järjekord `<script>` sees
 
 ```js
 export default {
@@ -102,7 +53,9 @@ export default {
 }
 ```
 
-### Props kirjutamise reeglid
+---
+
+## Props kirjutamise reeglid
 
 Lihtsatel propidel piisab tüübist:
 
@@ -129,16 +82,20 @@ props: {
 }
 ```
 
-### Emits ja sündmuste nimetamine
+---
 
-Kõik väljalähtuvad sündmused kirjutatakse `emits` massiivi.
+## Emits ja sündmuste nimetamine
+
+Kõik väljalähtuvad sündmused kirjutatakse `emits` massiivi.  
 Sündmuse nimi algab alati **`event-`** eesliitega:
 
 ```js
 emits: ['event-modal-closed', 'event-location-deleted', 'event-new-city-selected']
 ```
 
-### Data — algväärtuste struktuur
+---
+
+## Data — algväärtuste struktuur
 
 `data()` tagastab alati objekti. Keerukamad andmed (API vastused) kirjutatakse välja koos tühja struktuuriga, et Vue saaks reaktiivsuse seadistada:
 
@@ -171,9 +128,11 @@ data() {
 },
 ```
 
-### Methods — API päringute muster
+---
 
-API päringud käivad `.then()` / `.catch()` / `.finally()` ahelana.
+## Methods — API päringute muster
+
+API päringud käivad `.then()` / `.catch()` / `.finally()` ahelana.  
 Iga päringu vastus suunatakse eraldi `handle`-meetodisse:
 
 ```js
@@ -203,7 +162,9 @@ methods: {
 },
 ```
 
-### Lifecycle hook
+---
+
+## Lifecycle hook
 
 Andmete laadimine käib `beforeMount` sees (mitte `mounted`):
 
@@ -215,7 +176,9 @@ beforeMount() {
 },
 ```
 
-### Template — sündmuste ja propide sidumine
+---
+
+## Template — sündmuste ja propide sidumine
 
 **Propid** antakse alla `:`-ga (lühivorm `v-bind:`):
 ```html
@@ -233,7 +196,9 @@ Lihtsad sündmused võib kirjutada otse template'i:
 @event-new-city-selected="location.cityId = $event"
 ```
 
-### Täielik näidiskomponent
+---
+
+## Täielik näidiskomponent
 
 ```vue
 <template>
@@ -305,10 +270,3 @@ export default {
 }
 </script>
 ```
-
-## Olulised seadistused
-
-- Vite suunab kõik `/api/**` päringud aadressile `http://localhost:8080` — CORS seadistust arenduses ei ole vaja.
-- `@` alias viitab `frontend/src/` kaustale.
-- Globaalne Axios'e eksemplar on kättesaadav kui `this.$axios` (registreeritud `main.js`-s).
-- Olekuhaldus toimub **Pinia** poodide kaudu.
