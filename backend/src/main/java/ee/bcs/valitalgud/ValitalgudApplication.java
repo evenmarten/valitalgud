@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ValitalgudbackApplication {
+public class ValitalgudApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ValitalgudbackApplication.class, args);
+		SpringApplication.run(ValitalgudApplication.class, args);
 	}
 
 }
