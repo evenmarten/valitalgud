@@ -2,6 +2,7 @@ package ee.bcs.valitalgud.infrastructure.error;
 
 import ee.bcs.valitalgud.infrastructure.exception.BadRequestException;
 import ee.bcs.valitalgud.infrastructure.exception.ForbiddenException;
+import ee.bcs.valitalgud.infrastructure.exception.NotFoundException;
 import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,11 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ApiError> handleForbidden(ForbiddenException ex) {
+        return buildResponse(ex.getErrorResponse());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
         return buildResponse(ex.getErrorResponse());
     }
 
