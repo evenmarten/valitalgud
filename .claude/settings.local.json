@@ -3,7 +3,8 @@
     "allow": [
       "Bash(mkdir -p backend/src/main/java/ee/bcs/valitalgud/controller backend/src/main/java/ee/bcs/valitalgud/infrastructure/error backend/src/main/java/ee/bcs/valitalgud/infrastructure/exception backend/src/main/java/ee/bcs/valitalgud/persistence backend/src/main/java/ee/bcs/valitalgud/service)",
       "Bash(rm -rf backend/src/main/java/ee/valiit backend/src/test/java/ee/valiit)",
-      "Bash(psql --version)"
+      "Bash(psql --version)",
+      "Bash(grep *)"
     ]
   }
 }

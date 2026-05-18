@@ -12,13 +12,13 @@ INSERT INTO cities (name) VALUES
 INSERT INTO roles (name) VALUES ('USER'), ('ADMIN');
 
 -- Kasutajad
--- NB! password_hash on BCrypt hash sõnale "password" — kasutamiseks testkasutajatega
-INSERT INTO users (password_hash, role_id, status) VALUES
-    ('$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE'),
-    ('$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', (SELECT id FROM roles WHERE name = 'ADMIN'), 'ACTIVE'),
-    ('$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE'),
-    ('$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE'),
-    ('$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE');
+-- NB! Õppeprojekt — paroolid on tahtlikult plain text. Tootmises kasuta alati hash'imist (nt BCrypt).
+INSERT INTO users (password, role_id, status) VALUES
+    ('password', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE'),
+    ('password', (SELECT id FROM roles WHERE name = 'ADMIN'), 'ACTIVE'),
+    ('password', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE'),
+    ('password', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE'),
+    ('password', (SELECT id FROM roles WHERE name = 'USER'),  'ACTIVE');
 
 -- Kontaktid (full_name, email, phone on contacts tabelis, mitte users tabelis)
 INSERT INTO contacts (user_id, full_name, email, phone) VALUES

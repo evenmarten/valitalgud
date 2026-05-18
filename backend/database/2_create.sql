@@ -49,16 +49,6 @@ CREATE TABLE cities (
 );
 
 -- Table: comments
-CREATE TABLE comments (
-                          id serial  NOT NULL,
-                          event_id integer  NOT NULL,
-                          user_id integer  NOT NULL,
-                          content varchar(2000)  NOT NULL,
-                          created_at timestamp  NOT NULL DEFAULT now(),
-                          CONSTRAINT comments_pk PRIMARY KEY (id)
-);
-
--- Table: contacts
 CREATE TABLE contacts (
                           id serial  NOT NULL,
                           user_id integer  NOT NULL,
@@ -70,18 +60,18 @@ CREATE TABLE contacts (
                           CONSTRAINT contacts_pk PRIMARY KEY (id)
 );
 
--- Table: event_skill_tags
+-- Table: contacts
 CREATE TABLE event_skill_tags (
                                   event_id integer  NOT NULL,
                                   skill_tag_id integer  NOT NULL,
                                   CONSTRAINT event_skill_tags_pk PRIMARY KEY (event_id,skill_tag_id)
 );
 
+-- Table: event_skill_tags
 CREATE INDEX idx_event_skill_tags_event on event_skill_tags (event_id ASC);
 
 CREATE INDEX idx_event_skill_tags_tag on event_skill_tags (skill_tag_id ASC);
 
--- Table: events
 CREATE TABLE events (
                         id serial  NOT NULL,
                         organizer_id integer  NOT NULL,
@@ -100,13 +90,13 @@ CREATE TABLE events (
                         CONSTRAINT events_pk PRIMARY KEY (id)
 );
 
+-- Table: events
 CREATE INDEX idx_events_organizer on events (organizer_id ASC);
 
 CREATE INDEX idx_events_date on events (event_date ASC);
 
 CREATE INDEX idx_events_city on events (city_id ASC);
 
--- Table: order_items
 CREATE TABLE order_items (
                              id serial  NOT NULL,
                              order_id integer  NOT NULL,
@@ -118,9 +108,9 @@ CREATE TABLE order_items (
                              CONSTRAINT order_items_pk PRIMARY KEY (id)
 );
 
+-- Table: order_items
 CREATE INDEX idx_order_items_order on order_items (order_id ASC);
 
--- Table: orders
 CREATE TABLE orders (
                         id serial  NOT NULL,
                         user_id integer  NULL,
@@ -135,9 +125,9 @@ CREATE TABLE orders (
                         CONSTRAINT orders_pk PRIMARY KEY (id)
 );
 
+-- Table: orders
 CREATE INDEX idx_orders_user on orders (user_id ASC);
 
--- Table: products
 CREATE TABLE products (
                           id serial  NOT NULL,
                           name varchar(200)  NOT NULL,
@@ -151,7 +141,7 @@ CREATE TABLE products (
                           CONSTRAINT products_pk PRIMARY KEY (id)
 );
 
--- Table: registrations
+-- Table: products
 CREATE TABLE registrations (
                                id serial  NOT NULL,
                                user_id integer  NOT NULL,
@@ -161,6 +151,16 @@ CREATE TABLE registrations (
                                CONSTRAINT AK_5 UNIQUE (user_id, event_id) NOT DEFERRABLE  INITIALLY IMMEDIATE,
                                CONSTRAINT CHECK_2 CHECK (( status IN ( 'LAHEB' , 'VOIB_OLLA' , 'EI_LAHE' ) )) NOT DEFERRABLE INITIALLY IMMEDIATE,
                                CONSTRAINT registrations_pk PRIMARY KEY (id)
+);
+
+-- Table: registrations
+CREATE TABLE comments (
+                          id serial  NOT NULL,
+                          event_id integer  NOT NULL,
+                          user_id integer  NOT NULL,
+                          content varchar(1000)  NOT NULL,
+                          created_at timestamp  NOT NULL DEFAULT now(),
+                          CONSTRAINT comments_pk PRIMARY KEY (id)
 );
 
 CREATE INDEX idx_registrations_user on registrations (user_id ASC);
@@ -186,7 +186,7 @@ CREATE TABLE skill_tags (
 -- Table: users
 CREATE TABLE users (
                        id serial  NOT NULL,
-                       password_hash varchar(255)  NOT NULL,
+                       password varchar(255)  NOT NULL,
                        role_id integer  NOT NULL DEFAULT 1,
                        status varchar(30)  NOT NULL DEFAULT 'active',
                        created_at timestamp  NOT NULL DEFAULT now(),
