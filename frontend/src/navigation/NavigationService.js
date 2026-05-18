@@ -45,6 +45,10 @@ export default {
     router.push('/unauthorized')
   },
 
+  navigateToOrderSuccess(orderId) {
+    router.push({ name: 'order-success', state: { orderId } })
+  },
+
   navigateToErrorView() {
     router.push('/404')
   },

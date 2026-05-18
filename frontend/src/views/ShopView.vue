@@ -89,8 +89,6 @@
 import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
 import ProductService from '@/api-services/ProductService.js'
-import CartService from '@/api-services/CartService.js'
-import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
@@ -153,64 +151,34 @@ export default {
     },
 
     addToCart(productId, quantity) {
-      this.errorMessage = ''
-      const user = AuthHelper.getUser()
-      if (!user) {
-        NavigationService.navigateToLogin()
-        return
-      }
-      CartService.sendAddCartItemRequest({ userId: user.userId, productId, quantity })
-        .then((response) => this.handleAddToCartResponse(response.data))
-        .catch((error) => this.handleAddToCartError(error))
-        .finally()
-    },
-
-    handleAddToCartResponse(cartItem) {
-      this.successMessage = 'Toode lisatud ostukorvi!'
-      setTimeout(() => (this.successMessage = ''), 2000)
-    },
-
-    handleAddToCartError(error) {
-      const statusCode = error.response?.status
-      if (statusCode === 400) {
-        this.errorMessage = error.response.data.message
-      } else if (statusCode === 401) {
-        NavigationService.navigateToLogin()
-      } else {
-        NavigationService.navigateToErrorView()
-      }
+      const product = this.products.find((p) => p.productId === productId)
+      this.addToCartLocalStorage(product, quantity)
     },
 
     addToCartFromPanel() {
-      this.panelErrorMessage = ''
-      const user = AuthHelper.getUser()
-      if (!user) {
-        NavigationService.navigateToLogin()
-        return
-      }
-      CartService.sendAddCartItemRequest({
-        userId: user.userId,
-        productId: this.selectedProduct.productId,
-        quantity: this.quantity,
-      })
-        .then((response) => this.handleAddToCartFromPanelResponse(response.data))
-        .catch((error) => this.handleAddToCartFromPanelError(error))
-        .finally()
-    },
-
-    handleAddToCartFromPanelResponse(cartItem) {
+      this.addToCartLocalStorage(this.selectedProduct, this.quantity)
       this.closePanel()
     },
 
-    handleAddToCartFromPanelError(error) {
-      const statusCode = error.response?.status
-      if (statusCode === 400) {
-        this.panelErrorMessage = error.response.data.message
-      } else if (statusCode === 401) {
-        NavigationService.navigateToLogin()
+    addToCartLocalStorage(product, quantity) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+      const existingItem = cart.find((item) => item.productId === product.productId)
+      if (existingItem) {
+        existingItem.quantity += quantity
+        existingItem.lineTotal = Number((Number(existingItem.price) * existingItem.quantity).toFixed(2))
       } else {
-        NavigationService.navigateToErrorView()
+        cart.push({
+          productId: product.productId,
+          name: product.name,
+          price: Number(product.price),
+          imageUrl: product.imageUrl,
+          quantity: quantity,
+          lineTotal: Number((Number(product.price) * quantity).toFixed(2)),
+        })
       }
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.successMessage = 'Toode lisatud ostukorvi!'
+      setTimeout(() => (this.successMessage = ''), 2000)
     },
   },
   beforeMount() {

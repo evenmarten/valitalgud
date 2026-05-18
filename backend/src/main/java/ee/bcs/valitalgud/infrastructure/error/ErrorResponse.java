@@ -16,7 +16,10 @@ public enum ErrorResponse {
     MISSING_FIELDS("MISSING_FIELDS", "Palun täitke kõik kohustuslikud väljad", HttpStatus.BAD_REQUEST),
     MISSING_USER_ID("MISSING_USER_ID", "Kasutaja ID on kohustuslik", HttpStatus.BAD_REQUEST),
     CART_ITEM_NOT_FOUND("CART_ITEM_NOT_FOUND", "Ostukorvi rida ei leitud", HttpStatus.NOT_FOUND),
-    NOT_CART_OWNER("NOT_CART_OWNER", "Teil pole õigust seda ostukorvi muuta", HttpStatus.FORBIDDEN);
+    NOT_CART_OWNER("NOT_CART_OWNER", "Teil pole õigust seda ostukorvi muuta", HttpStatus.FORBIDDEN),
+    MISSING_ORDER_FIELDS("MISSING_ORDER_FIELDS", "Palun täitke kõik kohustuslikud väljad", HttpStatus.BAD_REQUEST),
+    INVALID_ORDER_FIELD_FORMAT("INVALID_ORDER_FIELD_FORMAT", "Mõni väli on vales vormingus", HttpStatus.BAD_REQUEST),
+    EMPTY_CART("EMPTY_CART", "Ostukorv on tühi", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;

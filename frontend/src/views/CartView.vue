@@ -5,8 +5,6 @@
     <div class="container py-4">
       <h2 class="text-center mb-4">Your Shopping Cart</h2>
 
-      <AlertError :error-message="errorMessage" />
-
       <div v-if="isEmpty" class="text-center py-5">
         <p class="text-muted fs-5">Ostukorv on tühi</p>
         <button class="btn btn-primary" @click="goToShop">Jätka ostlemist</button>
@@ -17,14 +15,14 @@
           <table class="table align-middle">
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
+                <th>Toode</th>
+                <th>Hind</th>
+                <th>Kogus</th>
+                <th>Kokku</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in cart.items" :key="item.cartItemId">
+              <tr v-for="item in items" :key="item.productId">
                 <td>
                   <div
                     class="d-flex align-items-center gap-3 product-link"
@@ -65,20 +63,20 @@
               <h5 class="card-title mb-3">Order Summary</h5>
               <div class="d-flex justify-content-between mb-2">
                 <span>Subtotal:</span>
-                <span>${{ Number(cart.subtotal).toFixed(2) }}</span>
+                <span>${{ subtotal.toFixed(2) }}</span>
               </div>
               <div class="d-flex justify-content-between mb-2">
                 <span>Shipping:</span>
-                <span>${{ Number(cart.shipping).toFixed(2) }}</span>
+                <span>${{ shipping.toFixed(2) }}</span>
               </div>
               <div class="d-flex justify-content-between mb-2">
                 <span>Tax (8%):</span>
-                <span>${{ Number(cart.tax).toFixed(2) }}</span>
+                <span>${{ tax.toFixed(2) }}</span>
               </div>
               <hr />
               <div class="d-flex justify-content-between fw-bold fs-5 mb-3">
                 <span>Total:</span>
-                <span>${{ Number(cart.total).toFixed(2) }}</span>
+                <span>${{ total.toFixed(2) }}</span>
               </div>
               <button class="btn btn-primary w-100" @click="goToCheckout">
                 Proceed to Checkout
@@ -116,25 +114,15 @@
 
 <script>
 import AppNavbar from '@/navigation/AppNavbar.vue'
-import AlertError from '@/components/common/AlertError.vue'
-import CartService from '@/api-services/CartService.js'
 import ProductService from '@/api-services/ProductService.js'
-import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
   name: 'CartView',
-  components: { AppNavbar, AlertError },
+  components: { AppNavbar },
   data() {
     return {
-      cart: {
-        cartId: null,
-        items: [],
-        subtotal: 0,
-        shipping: 0,
-        tax: 0,
-        total: 0,
-      },
+      items: [],
       selectedProduct: {
         productId: 0,
         name: '',
@@ -144,15 +132,55 @@ export default {
         stockQuantity: 0,
       },
       isPanelOpen: false,
-      errorMessage: '',
     }
   },
   computed: {
     isEmpty() {
-      return this.cart.items.length === 0
+      return this.items.length === 0
+    },
+    subtotal() {
+      return this.items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0)
+    },
+    shipping() {
+      return this.isEmpty ? 0 : 5.0
+    },
+    tax() {
+      return Math.round(this.subtotal * 0.08 * 100) / 100
+    },
+    total() {
+      return this.subtotal + this.shipping + this.tax
     },
   },
   methods: {
+    loadCart() {
+      this.items = JSON.parse(localStorage.getItem('cart') || '[]')
+    },
+
+    saveCart() {
+      localStorage.setItem('cart', JSON.stringify(this.items))
+    },
+
+    incrementQuantity(item) {
+      item.quantity++
+      item.lineTotal = Number((Number(item.price) * item.quantity).toFixed(2))
+      this.saveCart()
+    },
+
+    decrementQuantity(item) {
+      if (item.quantity === 1) {
+        this.removeItem(item)
+      } else {
+        item.quantity--
+        item.lineTotal = Number((Number(item.price) * item.quantity).toFixed(2))
+        this.saveCart()
+      }
+    },
+
+    removeItem(item) {
+      this.items = this.items.filter((i) => i.productId !== item.productId)
+      this.saveCart()
+    },
+
     openDetails(productId) {
       ProductService.sendGetProductDetailsRequest(productId)
         .then((response) => this.handleGetProductDetailsResponse(response.data))
@@ -169,61 +197,6 @@ export default {
       this.isPanelOpen = false
     },
 
-    getCart() {
-      const user = AuthHelper.getUser()
-      CartService.sendGetCartRequest(user.userId)
-        .then((response) => this.handleGetCartResponse(response.data))
-        .catch((error) => this.handleCartError(error))
-        .finally()
-    },
-
-    handleGetCartResponse(cart) {
-      this.cart = cart
-    },
-
-    incrementQuantity(item) {
-      this.updateItemQuantity(item, item.quantity + 1)
-    },
-
-    decrementQuantity(item) {
-      if (item.quantity === 1) {
-        this.removeItem(item)
-      } else {
-        this.updateItemQuantity(item, item.quantity - 1)
-      }
-    },
-
-    updateItemQuantity(item, newQuantity) {
-      this.errorMessage = ''
-      const user = AuthHelper.getUser()
-      CartService.sendUpdateCartItemRequest(item.cartItemId, { userId: user.userId, quantity: newQuantity })
-        .then((response) => this.handleCartUpdated(response.data))
-        .catch((error) => this.handleCartError(error))
-        .finally()
-    },
-
-    removeItem(item) {
-      this.errorMessage = ''
-      const user = AuthHelper.getUser()
-      CartService.sendDeleteCartItemRequest(item.cartItemId, user.userId)
-        .then((response) => this.handleCartUpdated(response.data))
-        .catch((error) => this.handleCartError(error))
-        .finally()
-    },
-
-    handleCartUpdated(cart) {
-      this.cart = cart
-    },
-
-    handleCartError(error) {
-      const statusCode = error.response?.status
-      if (statusCode === 400 || statusCode === 403 || statusCode === 404) {
-        this.errorMessage = error.response.data.message
-      } else {
-        NavigationService.navigateToErrorView()
-      }
-    },
-
     goToCheckout() {
       NavigationService.navigateToCheckout()
     },
@@ -233,7 +206,7 @@ export default {
     },
   },
   beforeMount() {
-    this.getCart()
+    this.loadCart()
   },
 }
 </script>
