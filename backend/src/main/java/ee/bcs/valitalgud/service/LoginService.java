@@ -9,6 +9,7 @@ import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
 import ee.bcs.valitalgud.persistence.contact.Contact;
 import ee.bcs.valitalgud.persistence.contact.ContactRepository;
 import ee.bcs.valitalgud.persistence.user.User;
+import ee.bcs.valitalgud.persistence.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class LoginService {
     private static final String ACTIVE_STATUS = "ACTIVE";
 
     private final ContactRepository contactRepository;
+    private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public LoginResponseDto login(LoginDto loginDto) {
@@ -38,7 +40,7 @@ public class LoginService {
             throw new ForbiddenException(ErrorResponse.ACCOUNT_BLOCKED);
         }
 
-        return toResponse(user, contact);
+        return userMapper.toLoginResponseDto(user, contact);
     }
 
     private void validateCredentialsPresent(LoginDto loginDto) {
@@ -51,38 +53,5 @@ public class LoginService {
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
-    }
-
-    private LoginResponseDto toResponse(User user, Contact contact) {
-        String[] nameParts = splitFullName(contact.getFullName());
-        return LoginResponseDto.builder()
-                .userId(user.getId().longValue())
-                .firstName(nameParts[0])
-                .middleName(nameParts[1])
-                .lastName(nameParts[2])
-                .role(user.getRole().getName())
-                .build();
-    }
-
-    // Returns [firstName, middleName, lastName]; middleName may be null.
-    private String[] splitFullName(String fullName) {
-        String trimmed = fullName == null ? "" : fullName.trim();
-        if (trimmed.isEmpty()) {
-            return new String[]{"", null, ""};
-        }
-        String[] parts = trimmed.split("\\s+");
-        if (parts.length == 1) {
-            return new String[]{parts[0], null, ""};
-        }
-        if (parts.length == 2) {
-            return new String[]{parts[0], null, parts[1]};
-        }
-        String first = parts[0];
-        String last = parts[parts.length - 1];
-        StringBuilder middle = new StringBuilder(parts[1]);
-        for (int i = 2; i < parts.length - 1; i++) {
-            middle.append(' ').append(parts[i]);
-        }
-        return new String[]{first, middle.toString(), last};
     }
 }
