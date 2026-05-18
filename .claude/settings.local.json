@@ -5,7 +5,8 @@
       "Bash(rm -rf backend/src/main/java/ee/valiit backend/src/test/java/ee/valiit)",
       "Bash(psql --version)",
       "Bash(grep *)",
-      "Bash(pdftotext -layout \"/Users/a88/IdeaProjects/valitalgud/mustand/frontend mockup.pdf\" -)"
+      "Bash(pdftotext -layout \"/Users/a88/IdeaProjects/valitalgud/mustand/frontend mockup.pdf\" -)",
+      "Bash(awk '{printf \"%-40s %s\\\\n\", $9, $5}')"
     ]
   }
 }
