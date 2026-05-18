@@ -1,10 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HelloWorld from '../components/HelloWorld.vue'
+import LoginView from '@/views/LoginView.vue'
 
 const routes = [
   {
     path: '/',
-    component: HelloWorld,
+    redirect: '/login',
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
   },
 ]
 

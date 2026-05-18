@@ -163,11 +163,11 @@ Täisstack ürituste halduse rakendus: Vue 3 + Spring Boot + PostgreSQL.
 ## FAAS 7 — Frontend: Vaated (Views)
 
 ### 7.1 Avalikud vaated (autentimine ei nõuta)
-- [ ] **7.1.1** `LandingPage.vue` (`/`) — tutvustustekst, dünaamiline header, nupud: "Logi sisse" / "Loo kasutaja" / "Events" / "E-pood"
+- [ ] **7.1.1** `LandingPage.vue` (`/`) — tutvustustekst, dünaamiline header, nupud: "Logi sisse" / "Loo kasutaja" / "Sündmused" / "E-pood"
 - [ ] **7.1.2** `LoginView.vue` (`/login`) — vorm (email, parool), POST /api/login, localStorage salvestamine, redirect /events; vead: 400, 401, 403
 - [ ] **7.1.3** `RegisterView.vue` (`/register`) — vorm (fullName, email, password, repeatPassword, phone, description), frontend valideerimine (repeatPassword), POST /api/register, redirect /login; vead: 400, 409
-- [ ] **7.1.4** `UnauthorizedView.vue` (`/unauthorized`) — teade + nupud Login / Create User / Home
-- [ ] **7.1.5** `ErrorView.vue` (`/404` + catch-all) — 404 leht, nupp Home
+- [ ] **7.1.4** `UnauthorizedView.vue` (`/unauthorized`) — teade + nupud "Logi sisse" / "Loo kasutaja" / "Avalehele"
+- [ ] **7.1.5** `ErrorView.vue` (`/404` + catch-all) — 404 leht, nupp "Avalehele"
 
 ### 7.2 Kaitstud vaated — kasutaja
 - [ ] **7.2.1** `ProfileView.vue` (`/profile`) — GET /api/user/profile, kuva andmed, 3 nuppu mis avavad modaale
@@ -176,7 +176,7 @@ Täisstack ürituste halduse rakendus: Vue 3 + Spring Boot + PostgreSQL.
 - [ ] **7.2.4** `DeleteConfirmationModal.vue` — DELETE /api/user/profile; hoiatustekst, peale õnnestumist localStorage.clear() + redirect /
 
 ### 7.3 Kaitstud vaated — sündmused
-- [ ] **7.3.1** `EventsView.vue` (`/events`) — GET /api/events, filtrid (linn dropdown, skill-tag checkboxid, kuupäev), kaardid koos "View Details" nuppudega; nupp "Loo sündmus"
+- [ ] **7.3.1** `EventsView.vue` (`/events`) — GET /api/events, filtrid (linn dropdown, skill-tag checkboxid, kuupäev), kaardid koos "Vaata detaile" nuppudega; nupp "Loo sündmus"
 - [ ] **7.3.2** `EventDetailsView.vue` (`/events/:id`) — GET /api/events/:id, registreerimise staatuse loogika (LÄHEB/VÕIB-OLLA/EI LÄHE + Kinnita/Muuda valik), kommentaaride sektsioon (GET + POST)
 - [ ] **7.3.3** `MyEventsView.vue` (`/my-events`) — GET /api/my-events, 3 tabi (Sel nädalal/Tulevased/Kõik), kaardid; nupp "Minu loodud sündmused"
 - [ ] **7.3.4** `CalendarView.vue` (`/calendar`) — GET /api/calendar, kuva kuu, märgi päevad millel on sündmused; päeva klõps → GET /api/calendar/day → näita sündmused allosas; eelmine/järgmine kuu navigatsioon
@@ -185,10 +185,10 @@ Täisstack ürituste halduse rakendus: Vue 3 + Spring Boot + PostgreSQL.
 - [ ] **7.3.7** `OrganizedEventsView.vue` (`/my-organized-events`) — GET /api/my-organized-events, tabel (pealkiri, kuupäev, asukoht, staatus, osalejad, nupud Detail/Muuda)
 
 ### 7.4 Avalikud vaated — e-pood
-- [ ] **7.4.1** `ShopView.vue` (`/shop`) — GET /api/products, grid (3 per rida), parempoolne detailide paneel (v-if selectedProduct), ostukorv localStorage'is; nupud: "Add to Cart" (qty+1), "Details" (laeb detailid), quantity selector paremas paneeli, "X" peidab paneeli
-- [ ] **7.4.2** `CartView.vue` (`/cart`) — loeb localStorage "cart", tabel (toode, hind, kogus ±, kokku, x), Order Summary (subtotal + shipping 5€ + tax 8% + total); "Proceed to Checkout" ainult kui cart pole tühi
-- [ ] **7.4.3** `CheckoutView.vue` (`/checkout`) — POST /api/orders, arvelduse vorm (kohustuslikud väljad + valideerimine), kui cart tühi → redirect /cart; peale POST → cart tühjendamine + redirect /order-success
-- [ ] **7.4.4** `OrderSuccessView.vue` (`/order-success`) — õnnestumise kinnitus, nupud "Jätka ostlemist" (/shop) ja "Avalehele" (/); kui jõutakse ilma tellimuseta → redirect /shop
+- [ ] **7.4.1** `ShopView.vue` (`/shop`) — GET /api/products, ruudustik (3 reas), parempoolne detailide paneel (v-if selectedProduct), ostukorv localStorage'is; nupud: "Lisa korvi" (qty+1), "Detailid" (laeb detailid), koguse valija paremal paneelil, "X" peidab paneeli
+- [ ] **7.4.2** `CartView.vue` (`/cart`) — loeb localStorage võtit "cart", tabel (toode, hind, kogus ±, kokku, x), Tellimuse kokkuvõte (vahesumma + transport 5€ + käibemaks 8% + kokku); "Mine kassasse" ainult kui ostukorv pole tühi
+- [ ] **7.4.3** `CheckoutView.vue` (`/checkout`) — POST /api/orders, arvelduse vorm (kohustuslikud väljad + valideerimine), kui ostukorv tühi → suuna /cart; peale POST → ostukorvi tühjendamine + suuna /order-success
+- [ ] **7.4.4** `OrderSuccessView.vue` (`/order-success`) — õnnestumise kinnitus, nupud "Jätka ostlemist" (/shop) ja "Avalehele" (/); kui jõutakse ilma tellimuseta → suuna /shop
 
 ---
 
