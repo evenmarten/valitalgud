@@ -6,7 +6,8 @@
       "Bash(psql --version)",
       "Bash(grep *)",
       "Bash(pdftotext -layout \"/Users/a88/IdeaProjects/valitalgud/mustand/frontend mockup.pdf\" -)",
-      "Bash(awk '{printf \"%-40s %s\\\\n\", $9, $5}')"
+      "Bash(awk '{printf \"%-40s %s\\\\n\", $9, $5}')",
+      "Bash(./gradlew compileJava)"
     ]
   }
 }
