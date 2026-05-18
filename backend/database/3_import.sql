@@ -74,11 +74,11 @@ INSERT INTO event_skill_tags (event_id, skill_tag_id) VALUES
 
 -- Näidis-tooted (e-commerce)
 INSERT INTO products (name, description, price, image_url, stock_quantity) VALUES
-    ('Water Bottle', 'Roostevabast terasest joogipudel, 500ml.',       15.99, 'http://example.com/bottle.jpg',    50),
-    ('Scarf',        'Pehme villasall talviseks ilmaks.',              25.00, 'http://example.com/scarf.jpg',     30),
-    ('Gauntlets',    'Naha-kindad ekstreemspordi harrastajatele.',     35.50, 'http://example.com/gauntlets.jpg', 20),
-    ('T-shirt',      'Puuvillane T-särk Event Management App logoga.', 20.00, 'http://example.com/tshirt.jpg',   100),
-    ('Cap',          'Reguleeritav nokamüts.',                         18.75, 'http://example.com/cap.jpg',       40);
+    ('Water Bottle', 'Roostevabast terasest joogipudel, 500ml.',       15.99, '/images/products/water-bottle.jpg', 50),
+    ('Scarf',        'Pehme villasall talviseks ilmaks.',              25.00, '/images/products/scarf.jpg',        30),
+    ('Gauntlets',    'Nahk-kindad ekstreemspordi harrastajatele.',     35.50, '/images/products/gauntlets.jpg',    20),
+    ('T-shirt',      'Puuvillane T-särk Event Management App logoga.', 20.00, '/images/products/t-shirt.jpg',    100),
+    ('Cap',          'Reguleeritav nokamüts.',                         18.75, '/images/products/cap.jpg',          40);
 
 -- Registreerimised (eri statustega — testimaks "Minu sündmused" ja "View Participants" vaateid)
 INSERT INTO registrations (user_id, event_id, status) VALUES

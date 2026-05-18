@@ -13,8 +13,32 @@ export default {
     router.push('/register')
   },
 
+  navigateToShop() {
+    router.push('/shop')
+  },
+
+  navigateToCart() {
+    router.push('/cart')
+  },
+
+  navigateToCheckout() {
+    router.push('/checkout')
+  },
+
   navigateToEvents() {
     router.push('/events')
+  },
+
+  navigateToMyEvents() {
+    router.push('/my-events')
+  },
+
+  navigateToCalendar() {
+    router.push('/calendar')
+  },
+
+  navigateToProfile() {
+    router.push('/profile')
   },
 
   navigateToUnauthorized() {

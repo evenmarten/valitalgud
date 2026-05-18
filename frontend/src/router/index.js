@@ -1,8 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
+import ShopView from '@/views/ShopView.vue'
+import CartView from '@/views/CartView.vue'
+import AuthHelper from '@/auth/auth.js'
 
 const protectedRoutes = [
+  '/shop',
+  '/cart',
   '/events',
   '/my-events',
   '/calendar',
@@ -19,6 +24,16 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+  },
+  {
+    path: '/shop',
+    name: 'shop',
+    component: ShopView,
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: CartView,
   },
   {
     path: '/unauthorized',
@@ -38,9 +53,8 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const isProtected = protectedRoutes.includes(to.path) || to.path.startsWith('/events/')
-  const userId = localStorage.getItem('userId')
 
-  if (isProtected && !userId) {
+  if (isProtected && !AuthHelper.isLoggedIn()) {
     return '/unauthorized'
   }
 })

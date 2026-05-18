@@ -13,7 +13,10 @@ public enum ErrorResponse {
     INVALID_QUANTITY("INVALID_QUANTITY", "Kogus peab olema suurem kui null", HttpStatus.BAD_REQUEST),
     INSUFFICIENT_STOCK("INSUFFICIENT_STOCK", "Laos pole piisavalt tooteid", HttpStatus.BAD_REQUEST),
     NOT_AUTHENTICATED("NOT_AUTHENTICATED", "Palun logige sisse", HttpStatus.UNAUTHORIZED),
-    MISSING_FIELDS("MISSING_FIELDS", "Palun täitke kõik kohustuslikud väljad", HttpStatus.BAD_REQUEST);
+    MISSING_FIELDS("MISSING_FIELDS", "Palun täitke kõik kohustuslikud väljad", HttpStatus.BAD_REQUEST),
+    MISSING_USER_ID("MISSING_USER_ID", "Kasutaja ID on kohustuslik", HttpStatus.BAD_REQUEST),
+    CART_ITEM_NOT_FOUND("CART_ITEM_NOT_FOUND", "Ostukorvi rida ei leitud", HttpStatus.NOT_FOUND),
+    NOT_CART_OWNER("NOT_CART_OWNER", "Teil pole õigust seda ostukorvi muuta", HttpStatus.FORBIDDEN);
 
     private final String code;
     private final String message;
