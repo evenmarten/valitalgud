@@ -23,4 +23,17 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             @Param("cityId") Integer cityId,
             @Param("skillTagId") Integer skillTagId,
             @Param("fromDate") LocalDate fromDate);
+
+    @Query(value = """
+            SELECT DISTINCT EXTRACT(DAY FROM event_date)::int
+            FROM events
+            WHERE EXTRACT(MONTH FROM event_date) = :month
+              AND EXTRACT(YEAR FROM event_date) = :year
+              AND is_cancelled = false
+            ORDER BY 1
+            """, nativeQuery = true)
+    List<Integer> findEventDaysForMonth(@Param("month") int month, @Param("year") int year);
+
+    @Query("FROM Event e WHERE e.eventDate = :date AND e.isCancelled = false ORDER BY e.startTime ASC")
+    List<Event> findByEventDateAndNotCancelled(@Param("date") LocalDate date);
 }

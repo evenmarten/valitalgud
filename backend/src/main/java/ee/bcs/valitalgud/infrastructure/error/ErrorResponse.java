@@ -37,7 +37,9 @@ public enum ErrorResponse {
     SKILL_TAG_NOT_FOUND("SKILL_TAG_NOT_FOUND", "Valitud oskuse-tagi ei leitud", HttpStatus.BAD_REQUEST),
     NOT_EVENT_OWNER("NOT_EVENT_OWNER", "Teil pole õigust seda sündmust muuta/tühistada", HttpStatus.FORBIDDEN),
     MAX_PARTICIPANTS_BELOW_CURRENT("MAX_PARTICIPANTS_BELOW_CURRENT", "Maksimaalne osalejate arv ei saa olla väiksem kui registreerunute arv", HttpStatus.BAD_REQUEST),
-    INVALID_FILTER("INVALID_FILTER", "Vigane filtri väärtus (lubatud: THIS_WEEK, UPCOMING, ALL_FUTURE)", HttpStatus.BAD_REQUEST);
+    INVALID_FILTER("INVALID_FILTER", "Vigane filtri väärtus (lubatud: THIS_WEEK, UPCOMING, ALL_FUTURE)", HttpStatus.BAD_REQUEST),
+    INVALID_CALENDAR_PARAMS("INVALID_CALENDAR_PARAMS", "Vigased kalendri parameetrid", HttpStatus.BAD_REQUEST),
+    INVALID_DATE_FORMAT("INVALID_DATE_FORMAT", "Vigane kuupäeva formaat (oodatud YYYY-MM-DD)", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;
