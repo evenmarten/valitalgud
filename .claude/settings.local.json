@@ -15,7 +15,10 @@
       "Bash(curl -s http://localhost:8080/api/events)",
       "Bash(python3 -c \"import sys,json;data=json.load\\(sys.stdin\\);e=data[0];print\\('cityId' in e and 'skillTagIds' in e\\)\")",
       "Bash(./gradlew compileJava --rerun-tasks)",
-      "Bash(kill 71567 39948)"
+      "Bash(kill 71567 39948)",
+      "Bash(PGPASSWORD=student123 psql *)",
+      "Bash(curl -s -X POST -H \"Content-Type: application/json\" -d '{\"email\":\"john.doe@example.com\",\"password\":\"password\"}' http://localhost:8080/api/login)",
+      "Bash(curl *)"
     ]
   }
 }

@@ -45,6 +45,29 @@
           </div>
         </div>
       </div>
+
+      <h3 class="mt-5 mb-4">Tutvu meie e-poega</h3>
+      <div class="row g-4">
+        <div
+          v-for="product in demoProducts"
+          :key="product.productId"
+          class="col-sm-6 col-md-4"
+        >
+          <div class="card h-100 shop-card" @click="goToShop">
+            <div class="card-img-top demo-banner" :style="bannerStyle(product)">
+              <span class="demo-banner-label">{{ product.bannerLabel }}</span>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="text-muted small mb-2">{{ product.category }}</p>
+              <p class="card-text text-truncate-3">{{ product.description }}</p>
+
+              <p class="fw-bold fs-5 mb-0 mt-auto">{{ product.price }} €</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -95,13 +118,45 @@ export default {
           maxParticipants: 500,
         },
       ],
+      demoProducts: [
+        {
+          productId: 'demo-product-1',
+          name: 'Ürituse T-särk',
+          description: 'Pehme puuvillane T-särk valitalgud logoga. Sobib nii üritusele kui igapäevaseks kandmiseks.',
+          category: 'Riided',
+          price: '19.90',
+          bannerLabel: 'SHIRT',
+          bannerColor: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+        },
+        {
+          productId: 'demo-product-2',
+          name: 'Termokruus',
+          description: 'Hoia oma jook soe terve ürituse vältel. Vastupidav terasest termokruus graveeritud logoga.',
+          category: 'Aksessuaarid',
+          price: '14.50',
+          bannerLabel: 'MUG',
+          bannerColor: 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
+        },
+        {
+          productId: 'demo-product-3',
+          name: 'Märkmik',
+          description: 'A5 formaadis kõvakaaneline märkmik. Ideaalne ideede, töötubade ja koosolekute märkmete jaoks.',
+          category: 'Kontoritarbed',
+          price: '9.90',
+          bannerLabel: 'NOTE',
+          bannerColor: 'linear-gradient(135deg, #f97316 0%, #eab308 100%)',
+        },
+      ],
     }
   },
   methods: {
-    bannerStyle(event) {
+    bannerStyle(item) {
       return {
-        background: event.bannerColor,
+        background: item.bannerColor,
       }
+    },
+    goToShop() {
+      this.$router.push('/shop')
     },
   },
 }
@@ -127,5 +182,15 @@ export default {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.shop-card {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 </style>

@@ -23,4 +23,30 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             @Param("cityId") Integer cityId,
             @Param("skillTagId") Integer skillTagId,
             @Param("fromDate") LocalDate fromDate);
+
+    @Query(value = """
+            SELECT DISTINCT
+                e.id AS eventId,
+                e.title AS title,
+                e.event_date AS date,
+                c.name AS city,
+                e.is_cancelled AS isCancelled,
+                e.max_participants AS maxParticipants,
+                (SELECT COUNT(*) FROM registrations r
+                 WHERE r.event_id = e.id AND r.status = 'LAHEB') AS currentParticipants
+            FROM events e
+            JOIN cities c ON c.id = e.city_id
+            LEFT JOIN event_skill_tags est ON est.event_id = e.id
+            LEFT JOIN skill_tags st ON st.id = est.skill_tag_id
+            WHERE e.organizer_id = :userId
+              AND (CAST(:city AS text) IS NULL OR c.name = :city)
+              AND (CAST(:skillTag AS text) IS NULL OR st.name = :skillTag)
+              AND (CAST(:date AS date) IS NULL OR e.event_date = CAST(:date AS date))
+            ORDER BY e.event_date DESC
+            """, nativeQuery = true)
+    List<OrganizedEventProjection> findOrganizedEventsBy(
+            @Param("userId") Integer userId,
+            @Param("city") String city,
+            @Param("skillTag") String skillTag,
+            @Param("date") LocalDate date);
 }

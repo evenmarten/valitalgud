@@ -12,6 +12,7 @@ import EventDetailsView from '@/views/EventDetailsView.vue'
 import CreateEventView from '@/views/CreateEventView.vue'
 import EditEventView from '@/views/EditEventView.vue'
 import MyEventsView from '@/views/MyEventsView.vue'
+import MyOrganizedEventsView from '@/views/MyOrganizedEventsView.vue'
 import AuthHelper from '@/auth/auth.js'
 
 const protectedRoutes = [
@@ -82,6 +83,11 @@ const routes = [
     path: '/my-events',
     name: 'my-events',
     component: MyEventsView,
+  },
+  {
+    path: '/my-organized-events',
+    name: 'my-organized-events',
+    component: MyOrganizedEventsView,
   },
   {
     path: '/unauthorized',
