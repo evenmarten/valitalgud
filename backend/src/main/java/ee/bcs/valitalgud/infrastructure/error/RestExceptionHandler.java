@@ -40,6 +40,10 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiError> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        Class<?> requiredType = ex.getRequiredType();
+        if (requiredType != null && java.time.LocalDate.class.isAssignableFrom(requiredType)) {
+            return buildResponse(ErrorResponse.INVALID_DATE_FORMAT);
+        }
         return buildResponse(ErrorResponse.INVALID_QUERY_PARAMETER);
     }
 

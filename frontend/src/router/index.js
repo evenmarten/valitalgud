@@ -12,6 +12,7 @@ import EventDetailsView from '@/views/EventDetailsView.vue'
 import CreateEventView from '@/views/CreateEventView.vue'
 import EditEventView from '@/views/EditEventView.vue'
 import MyEventsView from '@/views/MyEventsView.vue'
+import CalendarView from '@/views/CalendarView.vue'
 import MyOrganizedEventsView from '@/views/MyOrganizedEventsView.vue'
 import AuthHelper from '@/auth/auth.js'
 
@@ -88,6 +89,11 @@ const routes = [
     path: '/my-organized-events',
     name: 'my-organized-events',
     component: MyOrganizedEventsView,
+  },
+  {
+    path: '/calendar',
+    name: 'calendar',
+    component: CalendarView,
   },
   {
     path: '/unauthorized',
