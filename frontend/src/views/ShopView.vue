@@ -27,7 +27,7 @@
               <h6 class="card-title">{{ product.name }}</h6>
               <p class="card-text text-muted">${{ Number(product.price).toFixed(2) }}</p>
               <div class="d-flex gap-2 mt-auto">
-                <button class="btn btn-success btn-sm" @click="addToCart(product.productId, 1)">
+                <button class="btn btn-success btn-sm" @click="addToCart(product, 1)">
                   Add to Cart
                 </button>
                 <button class="btn btn-outline-primary btn-sm" @click="openDetails(product.productId)">
@@ -59,8 +59,6 @@
         <h5>{{ selectedProduct.name }}</h5>
         <p class="text-muted">{{ selectedProduct.description }}</p>
         <p class="fs-5 fw-bold">${{ Number(selectedProduct.price).toFixed(2) }}</p>
-
-        <AlertError :error-message="panelErrorMessage" />
 
         <div class="d-flex align-items-center gap-3 mb-4">
           <span>Quantity:</span>
@@ -108,7 +106,6 @@ export default {
       isPanelOpen: false,
       quantity: 1,
       errorMessage: '',
-      panelErrorMessage: '',
       successMessage: '',
     }
   },
@@ -125,7 +122,6 @@ export default {
     },
 
     openDetails(productId) {
-      this.panelErrorMessage = ''
       this.quantity = 1
       ProductService.sendGetProductDetailsRequest(productId)
         .then((response) => this.handleGetProductDetailsResponse(response.data))
@@ -150,8 +146,7 @@ export default {
       this.quantity--
     },
 
-    addToCart(productId, quantity) {
-      const product = this.products.find((p) => p.productId === productId)
+    addToCart(product, quantity) {
       this.addToCartLocalStorage(product, quantity)
     },
 

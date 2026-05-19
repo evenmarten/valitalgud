@@ -30,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
+    private static final BigDecimal SHIPPING_COST = new BigDecimal("5.00");
+    private static final BigDecimal TAX_RATE = new BigDecimal("0.08");
 
     private final BillingRepository billingRepository;
     private final OrderRepository orderRepository;
@@ -44,8 +46,8 @@ public class OrderService {
         List<Product> products = loadAndValidateProducts(createOrderDto.getItems());
         Billing billing = createAndSaveBilling(createOrderDto);
         BigDecimal subtotal = calculateSubtotal(createOrderDto.getItems(), products);
-        BigDecimal shipping = new BigDecimal("5.00");
-        BigDecimal tax = subtotal.multiply(new BigDecimal("0.08")).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal shipping = SHIPPING_COST;
+        BigDecimal tax = calculateTax(subtotal);
         BigDecimal total = subtotal.add(shipping).add(tax);
         Order order = createAndSaveOrder(createOrderDto.getUserId(), billing.getId(), subtotal, shipping, tax, total);
         createOrderItemsAndDecrementStock(createOrderDto.getItems(), products, order);
@@ -106,6 +108,10 @@ public class OrderService {
         billing.setPhone(createOrderDto.getPhone());
         billing.setEmail(createOrderDto.getEmail());
         return billingRepository.save(billing);
+    }
+
+    private BigDecimal calculateTax(BigDecimal subtotal) {
+        return subtotal.multiply(TAX_RATE).setScale(2, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calculateSubtotal(List<OrderItemDto> items, List<Product> products) {

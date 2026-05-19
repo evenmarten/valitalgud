@@ -26,15 +26,31 @@ export default {
       NavigationService.navigateToHome()
     },
     goToProfile() {
+      if (!AuthHelper.isLoggedIn()) {
+        NavigationService.navigateToUnauthorized()
+        return
+      }
       NavigationService.navigateToProfile()
     },
     goToEvents() {
+      if (!AuthHelper.isLoggedIn()) {
+        NavigationService.navigateToUnauthorized()
+        return
+      }
       NavigationService.navigateToEvents()
     },
     goToMyEvents() {
+      if (!AuthHelper.isLoggedIn()) {
+        NavigationService.navigateToUnauthorized()
+        return
+      }
       NavigationService.navigateToMyEvents()
     },
     goToCalendar() {
+      if (!AuthHelper.isLoggedIn()) {
+        NavigationService.navigateToUnauthorized()
+        return
+      }
       NavigationService.navigateToCalendar()
     },
     goToCart() {

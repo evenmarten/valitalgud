@@ -100,9 +100,16 @@ export default {
   methods: {
     submitOrder() {
       this.errorMessage = ''
+      OrderService.sendCreateOrderRequest(this.buildCreateOrderDto())
+        .then((response) => this.handleCreateOrderResponse(response.data))
+        .catch((error) => this.handleCreateOrderError(error))
+        .finally()
+    },
+
+    buildCreateOrderDto() {
       const cartItems = JSON.parse(localStorage.getItem('cart') || '[]')
       const user = AuthHelper.getUser()
-      const createOrderDto = {
+      return {
         userId: user ? user.userId : null,
         firstName: this.form.firstName,
         lastName: this.form.lastName,
@@ -115,10 +122,6 @@ export default {
         email: this.form.email,
         items: cartItems.map((item) => ({ productId: item.productId, quantity: item.quantity })),
       }
-      OrderService.sendCreateOrderRequest(createOrderDto)
-        .then((response) => this.handleCreateOrderResponse(response.data))
-        .catch((error) => this.handleCreateOrderError(error))
-        .finally()
     },
 
     handleCreateOrderResponse(order) {

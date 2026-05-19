@@ -86,28 +86,28 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <div v-if="isPanelOpen" class="panel-overlay" @click.self="closePanel">
-    <div class="panel-content p-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Toote detailid</h5>
-        <button type="button" class="btn-close" @click="closePanel"></button>
+    <div v-if="isPanelOpen" class="panel-overlay" @click.self="closePanel">
+      <div class="panel-content p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0">Toote detailid</h5>
+          <button type="button" class="btn-close" @click="closePanel"></button>
+        </div>
+
+        <img
+          v-if="selectedProduct.imageUrl"
+          :src="selectedProduct.imageUrl"
+          :alt="selectedProduct.name"
+          class="img-fluid rounded mb-3"
+          style="height: 200px; object-fit: contain; width: 100%; background: #f8f9fa;"
+        />
+        <div v-else class="bg-secondary rounded mb-3" style="height: 200px;"></div>
+
+        <h5>{{ selectedProduct.name }}</h5>
+        <p class="text-muted">{{ selectedProduct.description }}</p>
+        <p class="fs-5 fw-bold">${{ Number(selectedProduct.price).toFixed(2) }}</p>
+        <p class="text-muted small">Laoseis: {{ selectedProduct.stockQuantity }}</p>
       </div>
-
-      <img
-        v-if="selectedProduct.imageUrl"
-        :src="selectedProduct.imageUrl"
-        :alt="selectedProduct.name"
-        class="img-fluid rounded mb-3"
-        style="height: 200px; object-fit: contain; width: 100%; background: #f8f9fa;"
-      />
-      <div v-else class="bg-secondary rounded mb-3" style="height: 200px;"></div>
-
-      <h5>{{ selectedProduct.name }}</h5>
-      <p class="text-muted">{{ selectedProduct.description }}</p>
-      <p class="fs-5 fw-bold">${{ Number(selectedProduct.price).toFixed(2) }}</p>
-      <p class="text-muted small">Laoseis: {{ selectedProduct.stockQuantity }}</p>
     </div>
   </div>
 </template>
@@ -162,7 +162,7 @@ export default {
 
     incrementQuantity(item) {
       item.quantity++
-      item.lineTotal = Number((Number(item.price) * item.quantity).toFixed(2))
+      this.recalculateLineTotal(item)
       this.saveCart()
     },
 
@@ -171,9 +171,13 @@ export default {
         this.removeItem(item)
       } else {
         item.quantity--
-        item.lineTotal = Number((Number(item.price) * item.quantity).toFixed(2))
+        this.recalculateLineTotal(item)
         this.saveCart()
       }
+    },
+
+    recalculateLineTotal(item) {
+      item.lineTotal = Number((Number(item.price) * item.quantity).toFixed(2))
     },
 
     removeItem(item) {

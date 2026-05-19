@@ -35,44 +35,11 @@ public class CartService {
 
     @Transactional
     public CartItemResponseDto addCartItem(AddCartItemDto dto) {
-        if (dto.getUserId() == null) {
-            throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
-        }
-        if (dto.getProductId() == null) {
-            throw new BadRequestException(ErrorResponse.MISSING_FIELDS);
-        }
-        if (dto.getQuantity() == null || dto.getQuantity() <= 0) {
-            throw new BadRequestException(ErrorResponse.INVALID_QUANTITY);
-        }
-
-        Product product = productRepository.findById(dto.getProductId())
-                .orElseThrow(() -> new NotFoundException(ErrorResponse.PRODUCT_NOT_FOUND));
-
-        if (dto.getQuantity() > product.getStockQuantity()) {
-            throw new BadRequestException(ErrorResponse.INSUFFICIENT_STOCK);
-        }
-
-        Cart cart = cartRepository.findByUserId(dto.getUserId())
-                .orElseGet(() -> {
-                    Cart newCart = new Cart();
-                    newCart.setUserId(dto.getUserId());
-                    return cartRepository.save(newCart);
-                });
-
-        CartItem cartItem = cartItemRepository
-                .findByCartIdAndProductId(cart.getId(), product.getId())
-                .map(existing -> {
-                    existing.setQuantity(existing.getQuantity() + dto.getQuantity());
-                    return cartItemRepository.save(existing);
-                })
-                .orElseGet(() -> {
-                    CartItem newItem = new CartItem();
-                    newItem.setCart(cart);
-                    newItem.setProduct(product);
-                    newItem.setQuantity(dto.getQuantity());
-                    return cartItemRepository.save(newItem);
-                });
-
+        validateAddCartItemFields(dto);
+        Product product = getValidProductBy(dto.getProductId());
+        validateQuantity(dto.getQuantity(), product.getStockQuantity());
+        Cart cart = getOrCreateCart(dto.getUserId());
+        CartItem cartItem = addOrUpdateCartItem(cart, product, dto.getQuantity());
         return cartItemMapper.toCartItemResponseDto(cartItem);
     }
 
@@ -103,6 +70,45 @@ public class CartService {
         Cart cart = cartItem.getCart();
         cartItemRepository.delete(cartItem);
         return buildCartResponse(cart);
+    }
+
+    private void validateAddCartItemFields(AddCartItemDto dto) {
+        if (dto.getUserId() == null) {
+            throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
+        }
+        if (dto.getProductId() == null) {
+            throw new BadRequestException(ErrorResponse.MISSING_FIELDS);
+        }
+    }
+
+    private Product getValidProductBy(Integer productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException(ErrorResponse.PRODUCT_NOT_FOUND));
+    }
+
+    private Cart getOrCreateCart(Integer userId) {
+        return cartRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUserId(userId);
+                    return cartRepository.save(newCart);
+                });
+    }
+
+    private CartItem addOrUpdateCartItem(Cart cart, Product product, Integer quantity) {
+        return cartItemRepository
+                .findByCartIdAndProductId(cart.getId(), product.getId())
+                .map(existing -> {
+                    existing.setQuantity(existing.getQuantity() + quantity);
+                    return cartItemRepository.save(existing);
+                })
+                .orElseGet(() -> {
+                    CartItem newItem = new CartItem();
+                    newItem.setCart(cart);
+                    newItem.setProduct(product);
+                    newItem.setQuantity(quantity);
+                    return cartItemRepository.save(newItem);
+                });
     }
 
     private CartResponseDto buildCartResponse(Cart cart) {
