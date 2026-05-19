@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LandingPage from '@/views/LandingPage.vue'
 import LoginView from '@/views/LoginView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
 import ShopView from '@/views/ShopView.vue'
@@ -19,7 +20,8 @@ const protectedRoutes = [
 const routes = [
   {
     path: '/',
-    redirect: '/login',
+    name: 'landing',
+    component: LandingPage,
   },
   {
     path: '/login',
