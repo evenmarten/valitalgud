@@ -20,6 +20,7 @@ public enum ErrorResponse {
     MISSING_ORDER_FIELDS("MISSING_ORDER_FIELDS", "Palun täitke kõik kohustuslikud väljad", HttpStatus.BAD_REQUEST),
     INVALID_ORDER_FIELD_FORMAT("INVALID_ORDER_FIELD_FORMAT", "Mõni väli on vales vormingus", HttpStatus.BAD_REQUEST),
     EMPTY_CART("EMPTY_CART", "Ostukorv on tühi", HttpStatus.BAD_REQUEST),
+    INVALID_QUERY_PARAMETER("INVALID_QUERY_PARAMETER", "Filtri parameeter on vales formaadis", HttpStatus.BAD_REQUEST),
     EMAIL_ALREADY_EXISTS("EMAIL_ALREADY_EXISTS", "See e-post on juba kasutusel", HttpStatus.CONFLICT);
 
     private final String code;
