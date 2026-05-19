@@ -1,9 +1,12 @@
 package ee.bcs.valitalgud.persistence.event;
 
+import ee.bcs.valitalgud.controller.event.dto.CreateEventDto;
 import ee.bcs.valitalgud.controller.event.dto.EventDetailsResponseDto;
 import ee.bcs.valitalgud.controller.event.dto.EventResponseDto;
+import ee.bcs.valitalgud.controller.event.dto.UpdateEventDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper
 public interface EventMapper {
@@ -27,4 +30,22 @@ public interface EventMapper {
     @Mapping(target = "currentParticipants", ignore = true)
     @Mapping(target = "userRegistrationStatus", ignore = true)
     EventDetailsResponseDto toEventDetailsResponseDto(Event event);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "organizer", ignore = true)
+    @Mapping(target = "city", ignore = true)
+    @Mapping(target = "skillTags", ignore = true)
+    @Mapping(target = "isCancelled", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(source = "date", target = "eventDate")
+    Event toEvent(CreateEventDto createEventDto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "organizer", ignore = true)
+    @Mapping(target = "city", ignore = true)
+    @Mapping(target = "skillTags", ignore = true)
+    @Mapping(target = "isCancelled", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(source = "date", target = "eventDate")
+    void updateEventFromDto(UpdateEventDto updateEventDto, @MappingTarget Event event);
 }

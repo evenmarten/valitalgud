@@ -14,7 +14,8 @@
       "Bash(npm run *)",
       "Bash(curl -s http://localhost:8080/api/events)",
       "Bash(python3 -c \"import sys,json;data=json.load\\(sys.stdin\\);e=data[0];print\\('cityId' in e and 'skillTagIds' in e\\)\")",
-      "Bash(./gradlew compileJava --rerun-tasks)"
+      "Bash(./gradlew compileJava --rerun-tasks)",
+      "Bash(kill 71567 39948)"
     ]
   }
 }

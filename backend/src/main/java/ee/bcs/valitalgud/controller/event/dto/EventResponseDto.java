@@ -60,4 +60,7 @@ public class EventResponseDto {
 
     @Schema(description = "Organisaatori nimi", example = "Tech Events OÜ")
     private String organizerName;
+
+    @Schema(description = "Kas sündmus on tühistatud", example = "false")
+    private Boolean isCancelled;
 }

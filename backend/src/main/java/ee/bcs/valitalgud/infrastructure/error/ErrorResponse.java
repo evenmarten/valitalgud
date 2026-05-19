@@ -28,7 +28,16 @@ public enum ErrorResponse {
     EVENT_CANCELLED("EVENT_CANCELLED", "Sündmus on tühistatud", HttpStatus.CONFLICT),
     COMMENT_CONTENT_REQUIRED("COMMENT_CONTENT_REQUIRED", "Kommentaari sisu on kohustuslik", HttpStatus.BAD_REQUEST),
     COMMENT_TOO_LONG("COMMENT_TOO_LONG", "Kommentaar on liiga pikk (max 1000 tähemärki)", HttpStatus.BAD_REQUEST),
-    NOT_ALLOWED("NOT_ALLOWED", "Sul ei ole õigust seda toimingut teha", HttpStatus.FORBIDDEN);
+    NOT_ALLOWED("NOT_ALLOWED", "Sul ei ole õigust seda toimingut teha", HttpStatus.FORBIDDEN),
+    INVALID_EVENT_DATA("INVALID_EVENT_DATA", "Palun täitke kõik väljad õigesti", HttpStatus.BAD_REQUEST),
+    INVALID_EVENT_TIME_RANGE("INVALID_EVENT_TIME_RANGE", "Lõpuaeg peab olema hilisem kui algusaeg", HttpStatus.BAD_REQUEST),
+    INVALID_EVENT_DATE("INVALID_EVENT_DATE", "Sündmuse kuupäev peab olema tulevikus", HttpStatus.BAD_REQUEST),
+    INVALID_PARTICIPANTS_COUNT("INVALID_PARTICIPANTS_COUNT", "Maksimaalne osalejate arv peab olema suurem kui 0", HttpStatus.BAD_REQUEST),
+    CITY_NOT_FOUND("CITY_NOT_FOUND", "Valitud linna ei leitud", HttpStatus.BAD_REQUEST),
+    SKILL_TAG_NOT_FOUND("SKILL_TAG_NOT_FOUND", "Valitud oskuse-tagi ei leitud", HttpStatus.BAD_REQUEST),
+    NOT_EVENT_OWNER("NOT_EVENT_OWNER", "Teil pole õigust seda sündmust muuta/tühistada", HttpStatus.FORBIDDEN),
+    MAX_PARTICIPANTS_BELOW_CURRENT("MAX_PARTICIPANTS_BELOW_CURRENT", "Maksimaalne osalejate arv ei saa olla väiksem kui registreerunute arv", HttpStatus.BAD_REQUEST),
+    INVALID_FILTER("INVALID_FILTER", "Vigane filtri väärtus (lubatud: THIS_WEEK, UPCOMING, ALL_FUTURE)", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;

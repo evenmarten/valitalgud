@@ -24,4 +24,20 @@ export default {
   sendAddCommentRequest(eventId, userId, createCommentDto) {
     return axios.post(`/api/events/${eventId}/comments`, createCommentDto, { params: { userId } })
   },
+
+  sendGetEventForEditRequest(eventId, userId) {
+    return axios.get(`/api/events/${eventId}/edit`, { params: { userId } })
+  },
+
+  sendCreateEventRequest(createEventDto, userId) {
+    return axios.post('/api/events', createEventDto, { params: { userId } })
+  },
+
+  sendUpdateEventRequest(eventId, updateEventDto, userId) {
+    return axios.put(`/api/events/${eventId}`, updateEventDto, { params: { userId } })
+  },
+
+  sendDeleteEventRequest(eventId, userId) {
+    return axios.delete(`/api/events/${eventId}`, { params: { userId } })
+  },
 }

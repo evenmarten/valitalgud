@@ -9,6 +9,9 @@ import CheckoutView from '@/views/CheckoutView.vue'
 import OrderSuccessView from '@/views/OrderSuccessView.vue'
 import EventsView from '@/views/EventsView.vue'
 import EventDetailsView from '@/views/EventDetailsView.vue'
+import CreateEventView from '@/views/CreateEventView.vue'
+import EditEventView from '@/views/EditEventView.vue'
+import MyEventsView from '@/views/MyEventsView.vue'
 import AuthHelper from '@/auth/auth.js'
 
 const protectedRoutes = [
@@ -61,9 +64,24 @@ const routes = [
     component: EventsView,
   },
   {
+    path: '/events/create',
+    name: 'event-create',
+    component: CreateEventView,
+  },
+  {
+    path: '/events/:id/edit',
+    name: 'event-edit',
+    component: EditEventView,
+  },
+  {
     path: '/events/:id',
     name: 'event-details',
     component: EventDetailsView,
+  },
+  {
+    path: '/my-events',
+    name: 'my-events',
+    component: MyEventsView,
   },
   {
     path: '/unauthorized',
