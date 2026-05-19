@@ -21,7 +21,14 @@ public enum ErrorResponse {
     INVALID_ORDER_FIELD_FORMAT("INVALID_ORDER_FIELD_FORMAT", "Mõni väli on vales vormingus", HttpStatus.BAD_REQUEST),
     EMPTY_CART("EMPTY_CART", "Ostukorv on tühi", HttpStatus.BAD_REQUEST),
     INVALID_QUERY_PARAMETER("INVALID_QUERY_PARAMETER", "Filtri parameeter on vales formaadis", HttpStatus.BAD_REQUEST),
-    EMAIL_ALREADY_EXISTS("EMAIL_ALREADY_EXISTS", "See e-post on juba kasutusel", HttpStatus.CONFLICT);
+    EMAIL_ALREADY_EXISTS("EMAIL_ALREADY_EXISTS", "See e-post on juba kasutusel", HttpStatus.CONFLICT),
+    EVENT_NOT_FOUND("EVENT_NOT_FOUND", "Sündmust ei leitud", HttpStatus.NOT_FOUND),
+    INVALID_REGISTRATION_STATUS("INVALID_REGISTRATION_STATUS", "Vale registreerumise staatus", HttpStatus.BAD_REQUEST),
+    EVENT_FULL("EVENT_FULL", "Sündmus on osalejatega täidetud", HttpStatus.CONFLICT),
+    EVENT_CANCELLED("EVENT_CANCELLED", "Sündmus on tühistatud", HttpStatus.CONFLICT),
+    COMMENT_CONTENT_REQUIRED("COMMENT_CONTENT_REQUIRED", "Kommentaari sisu on kohustuslik", HttpStatus.BAD_REQUEST),
+    COMMENT_TOO_LONG("COMMENT_TOO_LONG", "Kommentaar on liiga pikk (max 1000 tähemärki)", HttpStatus.BAD_REQUEST),
+    NOT_ALLOWED("NOT_ALLOWED", "Sul ei ole õigust seda toimingut teha", HttpStatus.FORBIDDEN);
 
     private final String code;
     private final String message;
