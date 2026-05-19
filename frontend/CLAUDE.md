@@ -312,3 +312,415 @@ export default {
 - `@` alias viitab `frontend/src/` kaustale.
 - Globaalne Axios'e eksemplar on kättesaadav kui `this.$axios` (registreeritud `main.js`-s).
 - Olekuhaldus toimub **Pinia** poodide kaudu.
+
+---
+
+# Koodistiili juhend (Java/Spring Boot)
+
+> Juhend õpilasele: kuidas kirjutada uut koodi samas stiilis nagu valitalgud backendis.
+
+## 1. Üldine koodistiil
+
+Kood on **lihtne, lühike ja selge**. Iga klass teeb ühte asja, iga meetod teeb ühte asja.
+
+- Kood on otsekohene — loetakse nagu lause
+- Puudub tarbetu keerukus
+- Üks klass = üks vastutus
+- Kasutatakse Lomboki annotatsioone, et vältida boilerplate koodi
+- Meetodid on lühikesed — tavaliselt 1–10 rida
+
+Näide lühikesest service-meetodist:
+
+```java
+public List<CityOptionDto> getCityOptions() {
+    return cityRepository.findAll()
+        .stream()
+        .map(cityMapper::toOptionDto)
+        .toList();
+}
+```
+
+Kood räägib ise enda eest. Kommentaare lisatakse ainult siis, kui midagi pole ilmne.
+
+---
+
+## 2. Projekti kihiline ülesehitus
+
+| Kiht | Pakett | Roll |
+|---|---|---|
+| Controller | `controller/` | Võtab vastu HTTP päringuid, tagastab vastused |
+| Service | `service/` | Sisaldab äriloogikat, koordineerib tööd |
+| Repository | `persistence/<ressurss>/` | Suhtleb andmebaasiga |
+| Entity | `persistence/<ressurss>/` | Esindab andmebaasi tabelit Java objektina |
+| DTO | `controller/<ressurss>/dto/` | Andmete edastamine API kaudu |
+| Mapper | `persistence/<ressurss>/` | Teisendab entity DTO-ks ja vastupidi |
+| Exception | `infrastructure/exception/` | Kohandatud veaklassid |
+| Error handling | `infrastructure/` | Globaalne veakäsitlus |
+
+**Mida ei tohiks kihtide vahel segada:**
+- Controllerisse ei kirjutata äriloogikat
+- Servicesse ei kirjutata SQL-päringuid otse
+- Repository ei tea, mis formaadis andmed väljapoole lähevad
+
+---
+
+## 3. Service-klassi stiil
+
+```java
+@Service
+@RequiredArgsConstructor
+public class LocationService {
+
+    private final LocationRepository locationRepository;
+    private final LocationMapper locationMapper;
+
+    public List<LocationResponseDto> getLocations() {
+        return locationMapper.toResponseDtos(locationRepository.findAll());
+    }
+}
+```
+
+- `@Service` + `@RequiredArgsConstructor` — Lombok loob konstruktori kõigile `final` väljadele (dependency injection).
+- Kõik sõltuvused on `private final`.
+- Meetodid on lühikesed ja konkreetse eesmärgiga.
+- Äriloogika on service-s, mitte controlleris.
+
+---
+
+## 4. Meetodite loomise põhimõtted
+
+Iga meetod teeb **ühte asja** ja teeb seda selgelt.
+
+- Meetodi nimi väljendab tegevust
+- Meetod on lühike — üldiselt alla 10 rea
+- Sisu liigub loogilises järjekorras: võta andmed → tee midagi → tagasta tulemus
+
+**Millal kasutada milliseid tegusõnu:**
+
+| Tegusõna | Millal kasutada |
+|---|---|
+| `get` | Tagastab ühe konkreetse asja, eeldab et see eksisteerib |
+| `find` | Otsib — võib tagastada `Optional` või `null` |
+| `create` | Loob uue kirje |
+| `update` | Muudab olemasolevat kirjet |
+| `delete` | Kustutab kirje |
+| `validate` | Kontrollib tingimust, ei tagasta objekti |
+| `handle` | Sisaldab tingimuslikku loogikat, muteerib DTO-d või entiteeti |
+| `to` | Teisendab objekti teiseks (mapper meetodid) |
+
+---
+
+## 5. Meetodite nimede lihtsus
+
+Hea meetodinimi on **lühike, selge ja arusaadav** — ka ilma kommentaarideta.
+
+| Halb nimi | Parem nimi |
+|---|---|
+| `performUserAuthenticationAndReturnLoginResponse` | `login` |
+| `retrieveCustomerDataFromDatabaseByCustomerId` | `getCustomer` |
+| `convertUserEntityIntoLoginResponseDtoObject` | `toLoginResponseDto` |
+
+- Nime lugedes peaks kohe aru saama, mida meetod teeb
+- Liiga pikk nimi tähendab sageli, et meetod teeb liiga palju asju
+- Hea nimi asendab kommentaari
+
+---
+
+## 6. DTO-de kasutamine
+
+**DTO (Data Transfer Object)** on lihtsalt andmekandja — objekt, millega andmeid liigutatakse API kaudu sisse ja välja.
+
+- Entiteeti ei tagastata otse controllerist — see võib sisaldada tundlikku infot (paroole, sisemisi ID-sid).
+
+Nimetamise muster:
+
+```
+LocationDto / LocationRequestDto  — päringuks saadetav (request)
+LocationResponseDto               — nimekirja vastus
+LocationDetailDto                 — detailvaate vastus
+CityOptionDto                     — rippmenüü valik
+```
+
+DTO klass:
+
+```java
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class LocationResponseDto {
+    private Integer locationId;
+    private String locationName;
+    private String cityName;
+}
+```
+
+- `@Data` — getterid, setterid, equals, hashCode, toString
+- `@AllArgsConstructor` + `@NoArgsConstructor` — konstruktorid (tühi on vajalik JSON deserializatsiooniks)
+
+---
+
+## 7. Mapperite kasutamine
+
+```java
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface LocationMapper {
+
+    LocationResponseDto toResponseDto(Location location);
+
+    List<LocationResponseDto> toResponseDtos(List<Location> locations);
+
+    Location toEntity(LocationDto locationDto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateLocation(LocationDto locationDto, @MappingTarget Location location);
+}
+```
+
+| Meetod | Tähendus |
+|---|---|
+| `toResponseDto` | Entity → Response DTO |
+| `toEntity` | DTO → Entity |
+| `toOptionDto` | Entity → rippmenüü valik |
+| `updateLocation` | Uuendab olemasolevat entity-t DTO põhjal |
+
+---
+
+## 8. Repository kasutamine
+
+```java
+public interface LocationRepository extends JpaRepository<Location, Integer> {
+
+    @Query("select l from Location l where l.status = :status")
+    List<Location> findActiveLocationsBy(String status);
+
+    @Query("select count(l) > 0 from Location l where l.name = :name")
+    boolean locationExistsBy(String name);
+}
+```
+
+- Kohandatud päringud: JPQL `@Query` annotatsiooniga.
+- Standardsed operatsioonid (`findById`, `save`, `findAll`) tulevad `JpaRepository`-lt.
+
+**`Optional` kasutamine** service-s `orElseThrow`-ga:
+
+```java
+User user = userRepository.findByUsername(username)
+    .orElseThrow(() -> new ForbiddenException(INCORRECT_CREDENTIALS.getMessage(), INCORRECT_CREDENTIALS.getErrorCode()));
+```
+
+---
+
+## 9. Exception ja error handling
+
+**Exception klassid:**
+
+- `ForbiddenException` — kasutajal pole õigust (403)
+- `DataNotFoundException` — andmeid ei leitud (404)
+- `PrimaryKeyNotFoundException` — konkreetne ID ei eksisteeri (404)
+
+```java
+@Getter
+public class PrimaryKeyNotFoundException extends RuntimeException {
+    private final String message;
+    private final Integer errorCode;
+
+    public PrimaryKeyNotFoundException(String message, Integer errorCode) {
+        super(message);
+        this.message = message;
+        this.errorCode = errorCode;
+    }
+}
+```
+
+**ErrorResponse enum** — kõik veateated ühes kohas:
+
+```java
+@Getter
+public enum ErrorResponse {
+    INCORRECT_CREDENTIALS("Vale kasutajanimi või parool", 111),
+    USER_NOT_FOUND("Kasutajat ei leitud", 112);
+
+    private final String message;
+    private final Integer errorCode;
+}
+```
+
+Kasutamine koos static impordiga:
+
+```java
+import static ee.bcs.valitalgud.infrastructure.error.ErrorResponse.INCORRECT_CREDENTIALS;
+
+throw new ForbiddenException(INCORRECT_CREDENTIALS.getMessage(), INCORRECT_CREDENTIALS.getErrorCode());
+```
+
+**RestExceptionHandler** (`@ControllerAdvice`) muudab erindid `ApiError` vastusteks:
+
+```java
+@ExceptionHandler(PrimaryKeyNotFoundException.class)
+public ResponseEntity<ApiError> handlePrimaryKeyNotFoundException(PrimaryKeyNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(new ApiError(ex.getMessage(), ex.getErrorCode()));
+}
+```
+
+---
+
+## 10. Annotatsioonide stiil
+
+**Springi annotatsioonid:**
+
+| Annotatsioon | Kus kasutatakse |
+|---|---|
+| `@RestController` + `@RequestMapping("/api")` | Controller klassid |
+| `@Service` | Service klassid |
+| `@GetMapping`, `@PostMapping` jne | Üksikud endpoint meetodid |
+| `@ControllerAdvice` | Globaalne veakäsitlus |
+
+**Lomboki annotatsioonid:**
+
+| Annotatsioon | Kus kasutatakse |
+|---|---|
+| `@RequiredArgsConstructor` | Service ja controller klassid |
+| `@Getter` + `@Setter` | Entity klassid |
+| `@Data` + `@AllArgsConstructor` + `@NoArgsConstructor` | DTO klassid |
+| `@Getter` | ErrorResponse enum ja exception klassid |
+
+**Static import** enum väärtuste jaoks:
+
+```java
+import static ee.bcs.valitalgud.Status.ACTIVE;
+// Kasutamine: ACTIVE.getCode()  (mitte Status.ACTIVE.getCode())
+```
+
+---
+
+## 11. Uue funktsionaalsuse lisamise muster
+
+**Samm 1: Loo Request DTO**
+```java
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class LocationRequestDto {
+    private String locationName;
+    private Integer cityId;
+}
+```
+
+**Samm 2: Lisa controllerisse endpoint**
+```java
+@PostMapping("/locations")
+public void createLocation(@RequestBody LocationRequestDto dto) {
+    locationService.createLocation(dto);
+}
+```
+
+**Samm 3: Lisa service-meetod**
+```java
+public void createLocation(LocationRequestDto dto) {
+    City city = cityService.getValidCityBy(dto.getCityId());
+    Location location = locationMapper.toEntity(dto);
+    location.setCity(city);
+    locationRepository.save(location);
+}
+```
+
+**Samm 4: Lisa mapper-meetod**
+```java
+Location toEntity(LocationRequestDto dto);
+```
+
+**Samm 5: Vajadusel lisa ErrorResponse**
+```java
+MY_NEW_ERROR("Mingi veateade", 444),
+```
+
+Kontrolli lõpus:
+- Kas igal kihil on oma vastutus?
+- Kas meetodid on lühikesed?
+- Kas nimed on lihtsad ja arusaadavad?
+
+---
+
+## 12. Praktilised reeglid
+
+- **Üks meetod = üks tegevus** — kui meetod teeb kahte asja, jaga see kaheks
+- **Controllerisse ei kirjutata äriloogikat** — controller ainult võtab vastu ja tagastab
+- **Service juhib loogikat** — otsused, kontrollid ja arvutused käivad siin
+- **Repository suhtleb andmebaasiga** — mujal SQL-i ega JPQL-i ei kirjutata
+- **Mapper teisendab objekte** — entity ↔ DTO teisendus on mapperi töö
+- **DTO liigub API kaudu** — entity ei lähe API-le otse
+- **Meetodi nimi olgu lihtne** — `login`, mitte `performUserAuthentication`
+- **Veateated kuuluvad `ErrorResponse` enumisse**, mitte koodi sisse kirjutatud stringidesse
+- **Ära leiuta uut mustrit** — kui projektis on muster olemas, kasuta seda
+
+---
+
+## 13. Hea ja halb näide
+
+### Äriloogika controlleris
+
+```java
+// Halb
+@PostMapping("/login")
+public LoginResponseDto login(@RequestBody LoginRequestDto dto) {
+    User user = userRepository.findByUsername(dto.getUsername())
+        .orElseThrow(() -> new RuntimeException("Vale kasutajanimi"));
+    return new LoginResponseDto(user.getId(), user.getUsername());
+}
+
+// Hea
+@PostMapping("/login")
+public LoginResponseDto login(@RequestBody LoginRequestDto dto) {
+    return loginService.login(dto);
+}
+```
+
+### Entity tagastamine DTO asemel
+
+```java
+// Halb — avalikustab andmebaasi struktuuri
+@GetMapping("/locations")
+public List<Location> getLocations() {
+    return locationRepository.findAll();
+}
+
+// Hea
+@GetMapping("/locations")
+public List<LocationResponseDto> getLocations() {
+    return locationService.getLocations();
+}
+```
+
+### Liiga pikk service-meetod
+
+```java
+// Halb — kõik loogika ühes meetodis
+public void createLocation(LocationRequestDto dto) {
+    Optional<City> city = cityRepository.findById(dto.getCityId());
+    if (city.isEmpty()) { throw new RuntimeException("Linn ei leitud"); }
+    Location location = new Location();
+    location.setName(dto.getLocationName());
+    location.setCity(city.get());
+    location.setStatus("A");
+    locationRepository.save(location);
+}
+
+// Hea — avalik meetod annab ülevaate sammudest
+public void createLocation(LocationRequestDto dto) {
+    City city = cityService.getValidCityBy(dto.getCityId());
+    Location location = locationMapper.toEntity(dto);
+    location.setCity(city);
+    locationRepository.save(location);
+}
+```
+
+### Veateade koodi sisse kirjutatud
+
+```java
+// Halb
+throw new ForbiddenException("Vale kasutajanimi või parool", 111);
+
+// Hea
+throw new ForbiddenException(INCORRECT_CREDENTIALS.getMessage(), INCORRECT_CREDENTIALS.getErrorCode());
+```

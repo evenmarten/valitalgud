@@ -1,6 +1,7 @@
 package ee.bcs.valitalgud.infrastructure.error;
 
 import ee.bcs.valitalgud.infrastructure.exception.BadRequestException;
+import ee.bcs.valitalgud.infrastructure.exception.ConflictException;
 import ee.bcs.valitalgud.infrastructure.exception.ForbiddenException;
 import ee.bcs.valitalgud.infrastructure.exception.NotFoundException;
 import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
@@ -29,6 +30,11 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
+        return buildResponse(ex.getErrorResponse());
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiError> handleConflict(ConflictException ex) {
         return buildResponse(ex.getErrorResponse());
     }
 
