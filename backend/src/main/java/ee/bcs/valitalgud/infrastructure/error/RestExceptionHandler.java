@@ -7,6 +7,7 @@ import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -29,6 +30,11 @@ public class RestExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
         return buildResponse(ex.getErrorResponse());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiError> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return buildResponse(ErrorResponse.INVALID_QUERY_PARAMETER);
     }
 
     private ResponseEntity<ApiError> buildResponse(ErrorResponse errorResponse) {

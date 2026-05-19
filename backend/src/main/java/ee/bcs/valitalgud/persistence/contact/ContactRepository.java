@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
     Optional<Contact> findByEmailIgnoreCase(String email);
+
+    Optional<Contact> findByUserId(Integer userId);
 }

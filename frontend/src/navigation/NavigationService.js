@@ -29,6 +29,14 @@ export default {
     router.push('/events')
   },
 
+  navigateToEventDetails(eventId) {
+    router.push(`/events/${eventId}`)
+  },
+
+  navigateToCreateEvent() {
+    router.push('/events/create')
+  },
+
   navigateToMyEvents() {
     router.push('/my-events')
   },

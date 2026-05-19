@@ -5,6 +5,7 @@ import ShopView from '@/views/ShopView.vue'
 import CartView from '@/views/CartView.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
 import OrderSuccessView from '@/views/OrderSuccessView.vue'
+import EventsView from '@/views/EventsView.vue'
 import AuthHelper from '@/auth/auth.js'
 
 const protectedRoutes = [
@@ -44,6 +45,11 @@ const routes = [
     path: '/order-success',
     name: 'order-success',
     component: OrderSuccessView,
+  },
+  {
+    path: '/events',
+    name: 'events',
+    component: EventsView,
   },
   {
     path: '/unauthorized',

@@ -7,7 +7,14 @@
       "Bash(grep *)",
       "Bash(pdftotext -layout \"/Users/a88/IdeaProjects/valitalgud/mustand/frontend mockup.pdf\" -)",
       "Bash(awk '{printf \"%-40s %s\\\\n\", $9, $5}')",
-      "Bash(./gradlew compileJava)"
+      "Bash(./gradlew compileJava)",
+      "Bash(./gradlew bootRun *)",
+      "Bash(curl -sf http://localhost:8080/actuator/health)",
+      "Bash(curl -sf http://localhost:8080/api/events)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:8080/api/events)",
+      "Bash(python3 -c \"import sys,json;data=json.load\\(sys.stdin\\);e=data[0];print\\('cityId' in e and 'skillTagIds' in e\\)\")",
+      "Bash(./gradlew compileJava --rerun-tasks)"
     ]
   }
 }
