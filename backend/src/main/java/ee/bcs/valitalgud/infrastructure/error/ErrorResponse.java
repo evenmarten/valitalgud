@@ -39,7 +39,13 @@ public enum ErrorResponse {
     MAX_PARTICIPANTS_BELOW_CURRENT("MAX_PARTICIPANTS_BELOW_CURRENT", "Maksimaalne osalejate arv ei saa olla väiksem kui registreerunute arv", HttpStatus.BAD_REQUEST),
     INVALID_FILTER("INVALID_FILTER", "Vigane filtri väärtus (lubatud: THIS_WEEK, UPCOMING, ALL_FUTURE)", HttpStatus.BAD_REQUEST),
     INVALID_CALENDAR_PARAMS("INVALID_CALENDAR_PARAMS", "Vigased kalendri parameetrid", HttpStatus.BAD_REQUEST),
-    INVALID_DATE_FORMAT("INVALID_DATE_FORMAT", "Vigane kuupäeva formaat (oodatud YYYY-MM-DD)", HttpStatus.BAD_REQUEST);
+    INVALID_DATE_FORMAT("INVALID_DATE_FORMAT", "Vigane kuupäeva formaat (oodatud YYYY-MM-DD)", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND("USER_NOT_FOUND", "Kasutajat ei leitud", HttpStatus.NOT_FOUND),
+    NOT_PROFILE_OWNER("NOT_PROFILE_OWNER", "Teil pole õigust seda profiili muuta", HttpStatus.FORBIDDEN),
+    INVALID_EMAIL_FORMAT("INVALID_EMAIL_FORMAT", "Vigane e-posti formaat", HttpStatus.BAD_REQUEST),
+    WRONG_OLD_PASSWORD("WRONG_OLD_PASSWORD", "Praegune parool on vale", HttpStatus.BAD_REQUEST),
+    PASSWORDS_DO_NOT_MATCH("PASSWORDS_DO_NOT_MATCH", "Uued paroolid ei ühti", HttpStatus.BAD_REQUEST),
+    PASSWORD_TOO_SHORT("PASSWORD_TOO_SHORT", "Parool peab olema vähemalt 8 tähemärki", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;

@@ -14,6 +14,8 @@ import EditEventView from '@/views/EditEventView.vue'
 import MyEventsView from '@/views/MyEventsView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import MyOrganizedEventsView from '@/views/MyOrganizedEventsView.vue'
+import ProfileView from '@/views/ProfileView.vue'
+import ErrorView from '@/views/ErrorView.vue'
 import AuthHelper from '@/auth/auth.js'
 
 const protectedRoutes = [
@@ -96,13 +98,23 @@ const routes = [
     component: CalendarView,
   },
   {
+    path: '/profile',
+    name: 'profile',
+    component: ProfileView,
+  },
+  {
     path: '/unauthorized',
     name: 'unauthorized',
     component: UnauthorizedView,
   },
   {
+    path: '/404',
+    name: 'error',
+    component: ErrorView,
+  },
+  {
     path: '/:pathMatch(.*)*',
-    redirect: '/unauthorized',
+    redirect: '/404',
   },
 ]
 
