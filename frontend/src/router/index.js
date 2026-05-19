@@ -22,7 +22,6 @@ const routes = [
     path: '/',
     name: 'landing',
     component: LandingPage,
-    beforeEnter: () => (AuthHelper.isLoggedIn() ? '/events' : true),
   },
   {
     path: '/login',

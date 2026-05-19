@@ -8,6 +8,7 @@
         <a href="#" @click.prevent="goToEvents" class="nav-link text-white">Events</a>
         <a href="#" @click.prevent="goToMyEvents" class="nav-link text-white">My Events</a>
         <a href="#" @click.prevent="goToCalendar" class="nav-link text-white">Calendar</a>
+        <a href="#" @click.prevent="goToShop" class="nav-link text-white">Shop</a>
         <a href="#" @click.prevent="logout" class="nav-link text-white">Logout</a>
         <a href="#" @click.prevent="goToCart" class="nav-link text-white">Cart</a>
       </div>
@@ -52,6 +53,9 @@ export default {
         return
       }
       NavigationService.navigateToCalendar()
+    },
+    goToShop() {
+      NavigationService.navigateToShop()
     },
     goToCart() {
       NavigationService.navigateToCart()
