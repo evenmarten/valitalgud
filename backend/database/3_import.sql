@@ -45,21 +45,42 @@ INSERT INTO events (organizer_id, city_id, title, description, address, event_da
      'Suur Tehnoloogiakonverents',
      'Aastane konverents, mis toob kokku tehnoloogiamaailma tipud.',
      'Kultuurikatel, Põhja pst 27a',
-     '2023-10-26', '09:00', '18:00', 100, 'http://example.com/banner1.jpg'),
+     '2023-10-26', '09:00', '18:00', 100, 'https://picsum.photos/seed/tehnokonverents/1200/400'),
 
     ((SELECT u.id FROM users u JOIN contacts c ON c.user_id = u.id WHERE c.email = 'organizer@example.com'),
      (SELECT id FROM cities WHERE name = 'Tartu'),
      'Maraton Jooksuüritus',
      'Traditsiooniline maraton nii proffidele kui harrastajatele.',
      'Raekoja plats 1',
-     '2023-11-15', '08:00', '14:00', 500, NULL),
+     '2023-11-15', '08:00', '14:00', 500, 'https://picsum.photos/seed/maraton/1200/400'),
 
     ((SELECT u.id FROM users u JOIN contacts c ON c.user_id = u.id WHERE c.email = 'organizer@example.com'),
      (SELECT id FROM cities WHERE name = 'Pärnu'),
      'Jazz Festival',
      'Kolmepäevane jazzmuusika festival erinevate artistidega.',
      'Rannapark',
-     '2023-12-01', '17:00', '23:00', 200, NULL);
+     '2023-12-01', '17:00', '23:00', 200, 'https://picsum.photos/seed/jazzfestival/1200/400'),
+
+    ((SELECT u.id FROM users u JOIN contacts c ON c.user_id = u.id WHERE c.email = 'organizer@example.com'),
+     (SELECT id FROM cities WHERE name = 'Tallinn'),
+     'Veebiarenduse Töötuba',
+     'Praktiline töötuba modernsest veebiarendusest Vue ja Spring Bootiga.',
+     'Ülemiste City, Valukoja 8',
+     '2026-06-15', '10:00', '16:00', 30, 'https://picsum.photos/seed/veebiarendus/1200/400'),
+
+    ((SELECT u.id FROM users u JOIN contacts c ON c.user_id = u.id WHERE c.email = 'organizer@example.com'),
+     (SELECT id FROM cities WHERE name = 'Pärnu'),
+     'Suvine Discgolfi Turniir',
+     'Lõbus discgolfi turniir kõigile tasemetele, auhinnad parimatele.',
+     'Rannapark, discgolfi rada',
+     '2026-07-04', '11:00', '17:00', 64, 'https://picsum.photos/seed/discgolf/1200/400'),
+
+    ((SELECT u.id FROM users u JOIN contacts c ON c.user_id = u.id WHERE c.email = 'organizer@example.com'),
+     (SELECT id FROM cities WHERE name = 'Tartu'),
+     'Disainikonverents',
+     'Kohtumispaik UX- ja graafilistele disaineritele, töötoad ja ettekanded.',
+     'Aparaaditakas, Riia 15b',
+     '2026-09-20', '09:30', '17:30', 150, 'https://picsum.photos/seed/disainikonverents/1200/400');
 
 -- Sündmuse oskuse-sildid
 INSERT INTO event_skill_tags (event_id, skill_tag_id) VALUES
@@ -70,7 +91,15 @@ INSERT INTO event_skill_tags (event_id, skill_tag_id) VALUES
     ((SELECT id FROM events     WHERE title = 'Maraton Jooksuüritus'),
      (SELECT id FROM skill_tags WHERE name  = 'Sport')),
     ((SELECT id FROM events     WHERE title = 'Jazz Festival'),
-     (SELECT id FROM skill_tags WHERE name  = 'Muusika'));
+     (SELECT id FROM skill_tags WHERE name  = 'Muusika')),
+    ((SELECT id FROM events     WHERE title = 'Veebiarenduse Töötuba'),
+     (SELECT id FROM skill_tags WHERE name  = 'IT')),
+    ((SELECT id FROM events     WHERE title = 'Veebiarenduse Töötuba'),
+     (SELECT id FROM skill_tags WHERE name  = 'React')),
+    ((SELECT id FROM events     WHERE title = 'Suvine Discgolfi Turniir'),
+     (SELECT id FROM skill_tags WHERE name  = 'Sport')),
+    ((SELECT id FROM events     WHERE title = 'Disainikonverents'),
+     (SELECT id FROM skill_tags WHERE name  = 'Design'));
 
 -- Näidis-tooted (e-commerce)
 INSERT INTO products (name, description, price, image_url, stock_quantity) VALUES
