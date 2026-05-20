@@ -1,5 +1,3 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import axios from 'axios'
@@ -8,9 +6,10 @@ import App from './App.vue'
 import router from './router'
 import AuthHelper from '@/auth/auth.js'
 
-// Bootstrap
+// Bootstrap (laaditakse ENNE main.css-i, et Neobrutalism teema saaks Bootstrapi üle kirjutada)
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.js'
+import './assets/main.css'
 
 // Auto-logout: kui mõni päring tagastab 401 (NOT_AUTHENTICATED), siis
 // localStorage'is olev kasutaja ei kehti enam (nt konto kustutatud) —

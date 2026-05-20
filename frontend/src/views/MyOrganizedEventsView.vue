@@ -261,6 +261,8 @@ export default {
 .modal-content {
   background: white;
   width: 460px;
-  border-radius: 8px;
+  border: 3px solid #000;
+  border-radius: 0;
+  box-shadow: 8px 8px 0 #000;
 }
 </style>

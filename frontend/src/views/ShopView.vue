@@ -197,5 +197,6 @@ export default {
   width: 380px;
   height: 100%;
   overflow-y: auto;
+  border-left: 4px solid #000;
 }
 </style>
