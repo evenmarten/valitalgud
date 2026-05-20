@@ -74,11 +74,12 @@ INSERT INTO event_skill_tags (event_id, skill_tag_id) VALUES
 
 -- Näidis-tooted (e-commerce)
 INSERT INTO products (name, description, price, image_url, stock_quantity) VALUES
-    ('Water Bottle', 'Roostevabast terasest joogipudel, 500ml.',       15.99, '/images/products/water-bottle.jpg', 50),
-    ('Scarf',        'Pehme villasall talviseks ilmaks.',              25.00, '/images/products/scarf.jpg',        30),
-    ('Gauntlets',    'Nahk-kindad ekstreemspordi harrastajatele.',     35.50, '/images/products/gauntlets.jpg',    20),
-    ('T-shirt',      'Puuvillane T-särk Event Management App logoga.', 20.00, '/images/products/t-shirt.jpg',    100),
-    ('Cap',          'Reguleeritav nokamüts.',                         18.75, '/images/products/cap.jpg',          40);
+    ('Joogipudel', 'Roostevabast terasest joogipudel, mahutavusega 500ml.',         15.99, '/images/products/water-bottle.jpg', 50),
+    ('Sall',       'Pehme villasall talviseks ilmaks.',                            25.00, '/images/products/scarf.jpg',        30),
+    ('Kindad',     'Tugevad nahk-kindad ekstreemspordi harrastajatele.',           35.50, '/images/products/gauntlets.jpg',    20),
+    ('T-särk',     'Puuvillane T-särk Event Management App logoga.',               20.00, '/images/products/t-shirt.jpg',    100),
+    ('Nokamüts',   'Reguleeritav nokamüts päikese ja vihma eest kaitseks.',        18.75, '/images/products/cap.jpg',          40),
+    ('Seljakott',  'Kerge ja vastupidav seljakott igapäevaseks kasutuseks.',       45.00, '/images/products/seljakott1.jpg',   25);
 
 -- Registreerimised (eri statustega — testimaks "Minu sündmused" ja "View Participants" vaateid)
 INSERT INTO registrations (user_id, event_id, status) VALUES

@@ -5,7 +5,8 @@
       <div class="row justify-content-center">
         <div class="col-md-6">
           <h2 class="mb-4">Palju õnne eduka ostu puhul!</h2>
-          <div class="d-flex gap-2 justify-content-center">
+          <img src="/images/doggy gif.webp" alt="" class="mb-4" style="width: 350px;" />
+          <div class="d-flex gap-2 justify-content-center mt-4">
             <button class="btn btn-primary" @click="goToShop">Jätka ostlemist</button>
             <button class="btn btn-outline-secondary" @click="goToHome">Avalehele</button>
           </div>

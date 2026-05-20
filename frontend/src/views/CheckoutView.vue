@@ -2,30 +2,31 @@
   <div>
     <AppNavbar />
 
-    <div class="container py-4" style="max-width: 600px;">
+    <div class="container py-4" style="max-width: 860px;">
       <h2 class="mb-4">Arveldus &amp; transport</h2>
 
       <AlertError :error-message="errorMessage" />
 
-      <form @submit.prevent="submitOrder">
-        <div class="mb-3">
-          <label class="form-label">Eesnimi <span class="text-danger">*</span></label>
-          <input v-model="form.firstName" type="text" class="form-control" />
+      <form @submit.prevent="submitOrder" class="fs-5">
+        <div class="row mb-4">
+          <div class="col-6">
+            <label class="form-label fw-semibold">Eesnimi <span class="text-danger">*</span></label>
+            <input v-model="form.firstName" type="text" class="form-control form-control-lg" />
+          </div>
+          <div class="col-6">
+            <label class="form-label fw-semibold">Perekonnanimi <span class="text-danger">*</span></label>
+            <input v-model="form.lastName" type="text" class="form-control form-control-lg" />
+          </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">Perekonnanimi <span class="text-danger">*</span></label>
-          <input v-model="form.lastName" type="text" class="form-control" />
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Ettevõtte nimi (valikuline)</label>
+          <input v-model="form.companyName" type="text" class="form-control form-control-lg" />
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">Ettevõtte nimi (valikuline)</label>
-          <input v-model="form.companyName" type="text" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Riik / piirkond <span class="text-danger">*</span></label>
-          <select v-model="form.country" class="form-select">
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Riik / piirkond <span class="text-danger">*</span></label>
+          <select v-model="form.country" class="form-select form-select-lg">
             <option value="Eesti">Eesti</option>
             <option value="Läti">Läti</option>
             <option value="Leedu">Leedu</option>
@@ -34,38 +35,47 @@
           </select>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-4">
           <div class="col-8">
-            <label class="form-label">Tänav ja majanumber <span class="text-danger">*</span></label>
-            <input v-model="form.street" type="text" class="form-control" placeholder="Tänav ja majanumber" />
+            <label class="form-label fw-semibold">Tänav ja majanumber <span class="text-danger">*</span></label>
+            <input v-model="form.street" type="text" class="form-control form-control-lg" placeholder="Tänav ja majanumber" />
           </div>
           <div class="col-4">
-            <label class="form-label">Postiindeks <span class="text-danger">*</span></label>
-            <input v-model="form.postalCode" type="text" class="form-control" />
+            <label class="form-label fw-semibold">Postiindeks <span class="text-danger">*</span></label>
+            <input v-model="form.postalCode" type="text" class="form-control form-control-lg" />
           </div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-4">
           <div class="col-8">
-            <label class="form-label">Linn / Alevik <span class="text-danger">*</span></label>
-            <input v-model="form.city" type="text" class="form-control" />
+            <label class="form-label fw-semibold">Linn / Alevik <span class="text-danger">*</span></label>
+            <input v-model="form.city" type="text" class="form-control form-control-lg" />
           </div>
           <div class="col-4">
-            <label class="form-label">Telefon <span class="text-danger">*</span></label>
-            <input v-model="form.phone" type="text" class="form-control" />
+            <label class="form-label fw-semibold">Telefon <span class="text-danger">*</span></label>
+            <input v-model="form.phone" type="text" class="form-control form-control-lg" />
           </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">E-posti aadress <span class="text-danger">*</span></label>
-          <input v-model="form.email" type="text" class="form-control" />
+        <div class="mb-4">
+          <label class="form-label fw-semibold">E-posti aadress <span class="text-danger">*</span></label>
+          <input v-model="form.email" type="text" class="form-control form-control-lg" />
         </div>
 
-        <p class="text-muted small mb-3">
+        <p class="text-muted mb-4">
           Sinu e-post ja telefon on salvestatud selleks, et saaksime sulle tellimuse kohta teavitusi saata.
         </p>
 
-        <button type="submit" class="btn btn-primary w-100">Pay</button>
+        <p class="fw-semibold mb-2">Maksa pangalingiga:</p>
+        <div class="d-flex gap-2 flex-wrap mb-3">
+          <button type="button" class="btn badge fs-6 fw-bold bg-warning text-dark px-3 py-2">Swedbank</button>
+          <button type="button" class="btn badge fs-6 fw-bold bg-success px-3 py-2">SEB</button>
+          <button type="button" class="btn badge fs-6 fw-bold bg-dark px-3 py-2">LHV</button>
+          <button type="button" class="btn badge fs-6 fw-bold bg-primary px-3 py-2">Luminor</button>
+          <button type="button" class="btn badge fs-6 fw-bold bg-danger px-3 py-2">Coop</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-lg">Maksma</button>
       </form>
     </div>
   </div>

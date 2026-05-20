@@ -3,7 +3,7 @@
     <AppNavbar />
 
     <div class="container py-4">
-      <h2 class="text-center mb-4">Your Shopping Cart</h2>
+      <h2 class="text-center mb-4">Minu ostukorv</h2>
 
       <div v-if="isEmpty" class="text-center py-5">
         <p class="text-muted fs-5">Ostukorv on tühi</p>
@@ -12,44 +12,44 @@
 
       <div v-else class="row g-4">
         <div class="col-lg-8">
-          <table class="table align-middle">
-            <thead>
+          <table class="table table-hover align-middle fs-5">
+            <thead class="table-light">
               <tr>
-                <th>Toode</th>
-                <th>Hind</th>
-                <th>Kogus</th>
-                <th>Kokku</th>
+                <th class="py-3">Toode</th>
+                <th class="py-3">Hind</th>
+                <th class="py-3">Kogus</th>
+                <th class="py-3">Kokku</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in items" :key="item.productId">
-                <td>
+                <td class="py-3">
                   <div
-                    class="d-flex align-items-center gap-3 product-link"
+                    class="d-flex align-items-center gap-4 product-link"
                     @click="openDetails(item.productId)"
                   >
                     <img
                       v-if="item.imageUrl"
                       :src="item.imageUrl"
                       :alt="item.name"
-                      style="width: 60px; height: 60px; object-fit: contain; background: #f8f9fa;"
+                      style="width: 100px; height: 100px; object-fit: contain; background: #f8f9fa;"
                     />
-                    <div v-else style="width: 60px; height: 60px; background: #f8f9fa;"></div>
-                    <span class="text-primary text-decoration-underline">{{ item.name }}</span>
+                    <div v-else style="width: 100px; height: 100px; background: #f8f9fa;"></div>
+                    <span class="text-primary text-decoration-underline fs-5">{{ item.name }}</span>
                   </div>
                 </td>
-                <td>${{ Number(item.price).toFixed(2) }}</td>
-                <td>
+                <td class="py-3">{{ Number(item.price).toFixed(2) }} €</td>
+                <td class="py-3">
                   <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-outline-secondary btn-sm" @click="decrementQuantity(item)">-</button>
-                    <span>{{ item.quantity }}</span>
-                    <button class="btn btn-outline-secondary btn-sm" @click="incrementQuantity(item)">+</button>
+                    <button class="btn btn-outline-secondary" @click="decrementQuantity(item)">-</button>
+                    <span class="px-2">{{ item.quantity }}</span>
+                    <button class="btn btn-outline-secondary" @click="incrementQuantity(item)">+</button>
                   </div>
                 </td>
-                <td>
-                  <div class="d-flex align-items-center gap-2">
-                    <span>${{ Number(item.lineTotal).toFixed(2) }}</span>
-                    <button class="btn btn-sm text-danger p-0" @click="removeItem(item)">✕</button>
+                <td class="py-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <span class="fw-semibold">{{ Number(item.lineTotal).toFixed(2) }} €</span>
+                    <button class="btn text-danger p-0" @click="removeItem(item)">✕</button>
                   </div>
                 </td>
               </tr>
@@ -58,28 +58,28 @@
         </div>
 
         <div class="col-lg-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title mb-3">Order Summary</h5>
-              <div class="d-flex justify-content-between mb-2">
-                <span>Subtotal:</span>
-                <span>${{ subtotal.toFixed(2) }}</span>
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <h4 class="fw-bold mb-4">Tellimuse kokkuvõte</h4>
+              <div class="d-flex justify-content-between mb-3 fs-5">
+                <span class="text-muted">Vahesumma:</span>
+                <span>{{ subtotal.toFixed(2) }} €</span>
               </div>
-              <div class="d-flex justify-content-between mb-2">
-                <span>Shipping:</span>
-                <span>${{ shipping.toFixed(2) }}</span>
+              <div class="d-flex justify-content-between mb-3 fs-5">
+                <span class="text-muted">Transport:</span>
+                <span>{{ shipping.toFixed(2) }} €</span>
               </div>
-              <div class="d-flex justify-content-between mb-2">
-                <span>Tax (8%):</span>
-                <span>${{ tax.toFixed(2) }}</span>
+              <div class="d-flex justify-content-between mb-3 fs-5">
+                <span class="text-muted">Käibemaks (8%):</span>
+                <span>{{ tax.toFixed(2) }} €</span>
               </div>
               <hr />
-              <div class="d-flex justify-content-between fw-bold fs-5 mb-3">
-                <span>Total:</span>
-                <span>${{ total.toFixed(2) }}</span>
+              <div class="d-flex justify-content-between fw-bold fs-4 mb-4">
+                <span>Kokku:</span>
+                <span class="text-success">{{ total.toFixed(2) }} €</span>
               </div>
-              <button class="btn btn-primary w-100" @click="goToCheckout">
-                Proceed to Checkout
+              <button class="btn btn-primary w-100 fs-5" @click="goToCheckout">
+                Edasi kassasse
               </button>
             </div>
           </div>
