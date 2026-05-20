@@ -49,6 +49,7 @@ public class ProfileService {
         contact.setFullName(buildFullName(dto));
         contact.setEmail(dto.getEmail().trim());
         contact.setPhone(dto.getPhone());
+        contact.setDescription(dto.getDescription());
         contactRepository.save(contact);
 
         return buildProfileResponseDto(user, contact);
@@ -164,7 +165,7 @@ public class ProfileService {
         dto.setEmail(contact.getEmail());
         dto.setPhone(contact.getPhone());
         dto.setRole(user.getRole().getName());
-        dto.setDescription(null);
+        dto.setDescription(contact.getDescription());
         return dto;
     }
 

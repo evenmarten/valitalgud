@@ -245,9 +245,10 @@ export default {
     },
 
     openEditForm() {
+      // Perekonnanimi = viimane sõna, eesnimi = kõik enne seda (lubab tühikuga eesnime nagu "Hanna Grete")
       const parts = (this.profile.fullName || '').trim().split(/\s+/).filter(Boolean)
-      this.editForm.firstName = parts[0] || ''
-      this.editForm.lastName = parts.length > 1 ? parts.slice(1).join(' ') : ''
+      this.editForm.firstName = parts.length > 1 ? parts.slice(0, -1).join(' ') : parts[0] || ''
+      this.editForm.lastName = parts.length > 1 ? parts[parts.length - 1] : ''
       this.editForm.email = this.profile.email || ''
       this.editForm.phone = this.profile.phone || ''
       this.editForm.description = this.profile.description || ''

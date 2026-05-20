@@ -55,6 +55,7 @@ CREATE TABLE contacts (
                           full_name varchar(100)  NOT NULL,
                           email varchar(255)  NOT NULL,
                           phone varchar(20)  NULL,
+                          description varchar(500)  NULL,
                           CONSTRAINT AK_2 UNIQUE (user_id) NOT DEFERRABLE  INITIALLY IMMEDIATE,
                           CONSTRAINT AK_3 UNIQUE (email) NOT DEFERRABLE  INITIALLY IMMEDIATE,
                           CONSTRAINT contacts_pk PRIMARY KEY (id)

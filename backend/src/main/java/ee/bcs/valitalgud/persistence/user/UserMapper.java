@@ -25,13 +25,13 @@ public interface UserMapper {
             dto.setLastName("");
             return;
         }
-        int firstSpace = trimmed.indexOf(' ');
-        if (firstSpace < 0) {
+        int lastSpace = trimmed.lastIndexOf(' ');
+        if (lastSpace < 0) {
             dto.setFirstName(trimmed);
             dto.setLastName("");
             return;
         }
-        dto.setFirstName(trimmed.substring(0, firstSpace));
-        dto.setLastName(trimmed.substring(firstSpace + 1).trim());
+        dto.setFirstName(trimmed.substring(0, lastSpace));
+        dto.setLastName(trimmed.substring(lastSpace + 1));
     }
 }

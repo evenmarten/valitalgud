@@ -73,6 +73,7 @@ public class RegisterService {
         contact.setFullName(registerDto.getFullName().trim());
         contact.setEmail(registerDto.getEmail().trim());
         contact.setPhone(registerDto.getPhone());
+        contact.setDescription(registerDto.getDescription());
 
         return contactRepository.save(contact);
     }

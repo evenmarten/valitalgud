@@ -35,4 +35,7 @@ public class Contact {
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "description")
+    private String description;
 }

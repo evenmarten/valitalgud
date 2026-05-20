@@ -36,11 +36,13 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+    beforeEnter: () => (AuthHelper.isLoggedIn() ? '/' : true),
   },
   {
     path: '/register',
     name: 'register',
     component: RegisterView,
+    beforeEnter: () => (AuthHelper.isLoggedIn() ? '/' : true),
   },
   {
     path: '/shop',
