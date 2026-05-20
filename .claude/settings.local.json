@@ -19,7 +19,8 @@
       "Bash(PGPASSWORD=student123 psql *)",
       "Bash(curl -s -X POST -H \"Content-Type: application/json\" -d '{\"email\":\"john.doe@example.com\",\"password\":\"password\"}' http://localhost:8080/api/login)",
       "Bash(curl *)",
-      "Bash(lsof *)"
+      "Bash(lsof *)",
+      "Bash(sips -g pixelWidth -g pixelHeight src/assets/logo/valitalgud-logo.png)"
     ]
   }
 }

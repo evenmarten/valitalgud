@@ -1,5 +1,8 @@
 <template>
-  <div class="container py-5">
+  <div>
+    <AppNavbar />
+
+    <div class="container py-5">
     <div class="row justify-content-center">
       <div class="col-md-5">
         <div class="card shadow">
@@ -46,10 +49,12 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
 <script>
+import AppNavbar from '@/navigation/AppNavbar.vue'
 import AuthService from '@/api-services/AuthService.js'
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
@@ -57,12 +62,13 @@ import AlertError from '@/components/common/AlertError.vue'
 
 export default {
   name: 'LoginView',
-  components: { AlertError },
+  components: { AppNavbar, AlertError },
   data() {
     return {
+      // TEMP: prefilled organizer credentials for faster testing — remove before delivery
       loginDto: {
-        email: '',
-        password: '',
+        email: 'organizer@example.com',
+        password: 'password',
       },
       errorMessage: '',
     }

@@ -52,29 +52,37 @@
         <div class="card mb-4">
           <div class="card-body">
             <h5 class="card-title">Registreerimine</h5>
-            <div class="mb-3">
-              <label class="form-label">Minu osavõtuplaan</label>
-              <select v-model="selectedStatus" class="form-select" style="max-width: 280px;">
-                <option value="LAHEB">Lähen</option>
-                <option value="VOIB_OLLA">Võib-olla</option>
-                <option value="EI_LAHE">Ei lähe</option>
-              </select>
-            </div>
-            <div class="d-flex gap-2">
-              <button class="btn btn-primary" @click="register">
-                {{ isRegistered ? 'Muuda valikut' : 'Kinnita' }}
-              </button>
-              <button v-if="isRegistered" class="btn btn-outline-danger" @click="cancelRegistration">
-                Tühista registreerimine
-              </button>
-            </div>
+
+            <template v-if="isLoggedIn">
+              <div class="mb-3">
+                <label class="form-label">Minu osavõtuplaan</label>
+                <select v-model="selectedStatus" class="form-select" style="max-width: 280px;">
+                  <option value="LAHEB">Lähen</option>
+                  <option value="VOIB_OLLA">Võib-olla</option>
+                  <option value="EI_LAHE">Ei lähe</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary" @click="register">
+                  {{ isRegistered ? 'Muuda valikut' : 'Kinnita' }}
+                </button>
+                <button v-if="isRegistered" class="btn btn-outline-danger" @click="cancelRegistration">
+                  Tühista registreerimine
+                </button>
+              </div>
+            </template>
+
+            <template v-else>
+              <p class="mb-3">Sündmusele registreerimiseks pead olema sisse logitud.</p>
+              <button class="btn btn-primary" @click="goToLogin">Logi sisse</button>
+            </template>
           </div>
         </div>
 
         <div class="mb-4">
           <h4 class="mb-3">Kommentaarid</h4>
 
-          <div class="mb-3">
+          <div v-if="isLoggedIn" class="mb-3">
             <textarea
               v-model="newComment"
               class="form-control mb-2"
@@ -84,6 +92,7 @@
             ></textarea>
             <button class="btn btn-secondary" @click="addComment">Lisa kommentaar</button>
           </div>
+          <p v-else class="text-muted mb-3">Kommentaari lisamiseks logi sisse.</p>
 
           <div v-if="comments.length === 0" class="text-muted py-2">
             Kommentaare pole
@@ -142,6 +151,9 @@ export default {
     }
   },
   computed: {
+    isLoggedIn() {
+      return this.userId !== null
+    },
     isRegistered() {
       return this.event.userRegistrationStatus !== null
     },
@@ -286,6 +298,10 @@ export default {
       const hours = String(date.getHours()).padStart(2, '0')
       const minutes = String(date.getMinutes()).padStart(2, '0')
       return `${day}.${month}.${year} ${hours}:${minutes}`
+    },
+
+    goToLogin() {
+      NavigationService.navigateToLogin()
     },
   },
   beforeMount() {

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div class="p-3">
-      <button class="btn btn-outline-secondary" @click="goHome">Home</button>
-    </div>
+    <AppNavbar />
 
     <div class="container py-3">
       <div class="row justify-content-center">
@@ -103,13 +101,14 @@
 </template>
 
 <script>
+import AppNavbar from '@/navigation/AppNavbar.vue'
 import AuthService from '@/api-services/AuthService.js'
 import NavigationService from '@/navigation/NavigationService.js'
 import AlertError from '@/components/common/AlertError.vue'
 
 export default {
   name: 'RegisterView',
-  components: { AlertError },
+  components: { AppNavbar, AlertError },
   data() {
     return {
       registerDto: {
@@ -166,10 +165,6 @@ export default {
       } else {
         NavigationService.navigateToErrorView()
       }
-    },
-
-    goHome() {
-      NavigationService.navigateToHome()
     },
   },
 }

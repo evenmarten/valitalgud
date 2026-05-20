@@ -71,7 +71,7 @@ public class EventController {
     })
     public EventDetailsResponseDto getEventDetails(
             @PathVariable Integer eventId,
-            @RequestParam Integer userId) {
+            @RequestParam(required = false) Integer userId) {
         return eventService.getEventDetails(eventId, userId);
     }
 

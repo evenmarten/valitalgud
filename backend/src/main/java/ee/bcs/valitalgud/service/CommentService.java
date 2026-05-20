@@ -27,7 +27,10 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentResponseDto> getComments(Integer eventId, Integer userId) {
-        validateUserId(userId);
+        // Kommentaaride lugemine on avalik — userId valideeritakse ainult kui see on antud.
+        if (userId != null) {
+            validateUserId(userId);
+        }
         eventService.getValidEventBy(eventId);
         return commentRepository.findByEventIdOrderByCreatedAtDesc(eventId)
                 .stream()

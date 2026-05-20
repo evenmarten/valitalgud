@@ -56,7 +56,10 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public EventDetailsResponseDto getEventDetails(Integer eventId, Integer userId) {
-        validateUserId(userId);
+        // Sündmuse detailvaade on avalik — sisselogimata kasutaja näeb sündmust, aga ilma registreerumiseta.
+        if (userId != null) {
+            validateUserId(userId);
+        }
         Event event = getValidEventBy(eventId);
         return buildEventDetailsResponseDto(event, userId);
     }
@@ -213,8 +216,10 @@ public class EventService {
             dto.setOrganizerName(contact.getFullName());
             dto.setOrganizerEmail(contact.getEmail());
         });
-        registrationRepository.findByUserIdAndEventId(userId, event.getId())
-                .ifPresent(reg -> dto.setUserRegistrationStatus(reg.getStatus()));
+        if (userId != null) {
+            registrationRepository.findByUserIdAndEventId(userId, event.getId())
+                    .ifPresent(reg -> dto.setUserRegistrationStatus(reg.getStatus()));
+        }
         return dto;
     }
 

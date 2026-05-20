@@ -18,12 +18,15 @@ import ProfileView from '@/views/ProfileView.vue'
 import ErrorView from '@/views/ErrorView.vue'
 import AuthHelper from '@/auth/auth.js'
 
-const protectedRoutes = [
-  '/events',
-  '/my-events',
-  '/calendar',
-  '/profile',
-  '/my-organized-events',
+// Kaitstud route'id route'i NIME järgi. Sündmuste loend ('events') ja detailvaade
+// ('event-details') on AVALIKUD — sisselogimata kasutaja näeb neid. Loomine/muutmine jääb kaitstuks.
+const protectedRouteNames = [
+  'my-events',
+  'calendar',
+  'profile',
+  'my-organized-events',
+  'event-create',
+  'event-edit',
 ]
 
 const routes = [
@@ -126,9 +129,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const isProtected = protectedRoutes.includes(to.path) || to.path.startsWith('/events/')
-
-  if (isProtected && !AuthHelper.isLoggedIn()) {
+  if (protectedRouteNames.includes(to.name) && !AuthHelper.isLoggedIn()) {
     return '/unauthorized'
   }
 })

@@ -47,7 +47,7 @@ public class CommentController {
     })
     public List<CommentResponseDto> getComments(
             @PathVariable Integer eventId,
-            @RequestParam Integer userId) {
+            @RequestParam(required = false) Integer userId) {
         return commentService.getComments(eventId, userId);
     }
 

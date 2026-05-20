@@ -1,17 +1,19 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid px-4">
-      <a class="navbar-brand fw-bold" href="#" @click.prevent="goToHome">LOGO</a>
+    <div class="container-fluid" style="padding-left: 44px; padding-right: 44px;">
+      <a class="navbar-brand p-0" href="#" @click.prevent="goToHome">
+        <img :src="logo" alt="Valitalgud" height="84" />
+      </a>
       <div class="d-flex gap-3 align-items-center">
         <a href="#" @click.prevent="goToHome" class="nav-link text-white">Homepage</a>
-        <a href="#" @click.prevent="goToProfile" class="nav-link text-white">Profile</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="goToProfile" class="nav-link text-white">Profile</a>
         <a href="#" @click.prevent="goToEvents" class="nav-link text-white">Events</a>
-        <a href="#" @click.prevent="goToMyEvents" class="nav-link text-white">My Events</a>
-        <a href="#" @click.prevent="goToCalendar" class="nav-link text-white">Calendar</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="goToMyEvents" class="nav-link text-white">My Events</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="goToCalendar" class="nav-link text-white">Calendar</a>
         <a href="#" @click.prevent="goToShop" class="nav-link text-white">Shop</a>
+        <a href="#" @click.prevent="goToCart" class="nav-link text-white">Cart</a>
         <a v-if="isLoggedIn" href="#" @click.prevent="logout" class="nav-link text-white">Logout</a>
         <a v-else href="#" @click.prevent="goToLogin" class="nav-link text-white">Login</a>
-        <a href="#" @click.prevent="goToCart" class="nav-link text-white">Cart</a>
       </div>
     </div>
   </nav>
@@ -20,12 +22,14 @@
 <script>
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
+import logo from '@/assets/logo/logo.png'
 
 export default {
   name: 'AppNavbar',
   data() {
     return {
       isLoggedIn: false,
+      logo,
     }
   },
   methods: {
@@ -40,10 +44,6 @@ export default {
       NavigationService.navigateToProfile()
     },
     goToEvents() {
-      if (!AuthHelper.isLoggedIn()) {
-        NavigationService.navigateToUnauthorized()
-        return
-      }
       NavigationService.navigateToEvents()
     },
     goToMyEvents() {
