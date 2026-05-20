@@ -4,7 +4,6 @@ import ee.bcs.valitalgud.controller.calendar.dto.CalendarResponseDto;
 import ee.bcs.valitalgud.controller.event.dto.EventResponseDto;
 import ee.bcs.valitalgud.infrastructure.error.ErrorResponse;
 import ee.bcs.valitalgud.infrastructure.exception.BadRequestException;
-import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
 import ee.bcs.valitalgud.persistence.event.EventMapper;
 import ee.bcs.valitalgud.persistence.event.EventRepository;
 import java.time.LocalDate;
@@ -19,6 +18,7 @@ public class CalendarService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final UserValidationService userValidationService;
 
     @Transactional(readOnly = true)
     public CalendarResponseDto getCalendar(Integer month, Integer year, Integer userId) {
@@ -42,9 +42,7 @@ public class CalendarService {
     }
 
     private void validateUserId(Integer userId) {
-        if (userId == null) {
-            throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
-        }
+        userValidationService.validateActiveUser(userId);
     }
 
     private void validateCalendarParams(Integer month, Integer year) {

@@ -15,16 +15,16 @@
           <div class="row g-3">
             <div class="col-md-4">
               <label for="cityFilter" class="form-label">Linn</label>
-              <select id="cityFilter" v-model="filter.city" class="form-select">
-                <option value="">-- Kõik linnad --</option>
-                <option v-for="city in cities" :key="city.id" :value="city.name">{{ city.name }}</option>
+              <select id="cityFilter" v-model="filter.cityId" class="form-select">
+                <option :value="null">-- Kõik linnad --</option>
+                <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
               </select>
             </div>
             <div class="col-md-4">
               <label for="skillTagFilter" class="form-label">Oskuse-tag</label>
-              <select id="skillTagFilter" v-model="filter.skillTag" class="form-select">
-                <option value="">-- Kõik tagid --</option>
-                <option v-for="tag in skillTags" :key="tag.id" :value="tag.name">{{ tag.name }}</option>
+              <select id="skillTagFilter" v-model="filter.skillTagId" class="form-select">
+                <option :value="null">-- Kõik tagid --</option>
+                <option v-for="tag in skillTags" :key="tag.id" :value="tag.id">{{ tag.name }}</option>
               </select>
             </div>
             <div class="col-md-3">
@@ -112,8 +112,8 @@ export default {
       cities: [],
       skillTags: [],
       filter: {
-        city: '',
-        skillTag: '',
+        cityId: null,
+        skillTagId: null,
         date: '',
       },
       isDeleteModalOpen: false,
@@ -148,8 +148,8 @@ export default {
 
     buildQueryParams() {
       const params = {}
-      if (this.filter.city) params.city = this.filter.city
-      if (this.filter.skillTag) params.skillTag = this.filter.skillTag
+      if (this.filter.cityId) params.cityId = this.filter.cityId
+      if (this.filter.skillTagId) params.skillTagId = this.filter.skillTagId
       if (this.filter.date) params.date = this.filter.date
       return params
     },

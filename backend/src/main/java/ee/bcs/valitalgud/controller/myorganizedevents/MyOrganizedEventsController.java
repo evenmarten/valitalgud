@@ -40,10 +40,10 @@ public class MyOrganizedEventsController {
                             schema = @Schema(implementation = ApiError.class)))
     })
     public List<OrganizedEventResponseDto> findMyOrganizedEvents(
-            @RequestParam Integer userId,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String skillTag,
+            @RequestParam(required = false) Integer userId,
+            @RequestParam(required = false) Integer cityId,
+            @RequestParam(required = false) Integer skillTagId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return myOrganizedEventsService.findMyOrganizedEvents(userId, city, skillTag, date);
+        return myOrganizedEventsService.findMyOrganizedEvents(userId, cityId, skillTagId, date);
     }
 }

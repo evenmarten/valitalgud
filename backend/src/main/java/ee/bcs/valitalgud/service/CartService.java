@@ -32,6 +32,7 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final CartItemMapper cartItemMapper;
+    private final UserValidationService userValidationService;
 
     @Transactional
     public CartItemResponseDto addCartItem(AddCartItemDto dto) {
@@ -76,6 +77,7 @@ public class CartService {
         if (dto.getUserId() == null) {
             throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
         }
+        userValidationService.ensureExistsAndActive(dto.getUserId());
         if (dto.getProductId() == null) {
             throw new BadRequestException(ErrorResponse.MISSING_FIELDS);
         }
@@ -168,5 +170,6 @@ public class CartService {
         if (userId == null) {
             throw new BadRequestException(ErrorResponse.MISSING_USER_ID);
         }
+        userValidationService.ensureExistsAndActive(userId);
     }
 }

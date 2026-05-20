@@ -24,9 +24,6 @@
             <dt class="col-sm-4">Telefon</dt>
             <dd class="col-sm-8">{{ profile.phone || '—' }}</dd>
 
-            <dt class="col-sm-4">Roll</dt>
-            <dd class="col-sm-8">{{ profile.role || '—' }}</dd>
-
             <template v-if="profile.description">
               <dt class="col-sm-4">Kirjeldus</dt>
               <dd class="col-sm-8">{{ profile.description }}</dd>
@@ -46,15 +43,11 @@
           <h5 class="card-title mb-3">Muuda profiili</h5>
 
           <div class="row g-3 mb-3">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label class="form-label">Eesnimi <span class="text-danger">*</span></label>
               <input v-model="editForm.firstName" type="text" class="form-control" placeholder="Eesnimi" />
             </div>
-            <div class="col-md-4">
-              <label class="form-label">Keskmised nimed</label>
-              <input v-model="editForm.middleName" type="text" class="form-control" placeholder="Keskmised nimed" />
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label class="form-label">Perekonnanimi <span class="text-danger">*</span></label>
               <input v-model="editForm.lastName" type="text" class="form-control" placeholder="Perekonnanimi" />
             </div>
@@ -141,7 +134,6 @@ export default {
       },
       editForm: {
         firstName: '',
-        middleName: '',
         lastName: '',
         email: '',
         phone: '',
@@ -255,8 +247,7 @@ export default {
     openEditForm() {
       const parts = (this.profile.fullName || '').trim().split(/\s+/).filter(Boolean)
       this.editForm.firstName = parts[0] || ''
-      this.editForm.lastName = parts.length > 1 ? parts[parts.length - 1] : ''
-      this.editForm.middleName = parts.length > 2 ? parts.slice(1, -1).join(' ') : ''
+      this.editForm.lastName = parts.length > 1 ? parts.slice(1).join(' ') : ''
       this.editForm.email = this.profile.email || ''
       this.editForm.phone = this.profile.phone || ''
       this.editForm.description = this.profile.description || ''

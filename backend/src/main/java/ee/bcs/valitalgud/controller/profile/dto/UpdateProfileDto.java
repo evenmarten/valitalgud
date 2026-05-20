@@ -10,9 +10,6 @@ public class UpdateProfileDto {
     @Schema(description = "Eesnimi", example = "John")
     private String firstName;
 
-    @Schema(description = "Keskmised nimed (valikuline)", example = "William")
-    private String middleName;
-
     @Schema(description = "Perekonnanimi", example = "Doe")
     private String lastName;
 

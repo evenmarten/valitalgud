@@ -9,7 +9,8 @@
         <a href="#" @click.prevent="goToMyEvents" class="nav-link text-white">My Events</a>
         <a href="#" @click.prevent="goToCalendar" class="nav-link text-white">Calendar</a>
         <a href="#" @click.prevent="goToShop" class="nav-link text-white">Shop</a>
-        <a href="#" @click.prevent="logout" class="nav-link text-white">Logout</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="logout" class="nav-link text-white">Logout</a>
+        <a v-else href="#" @click.prevent="goToLogin" class="nav-link text-white">Login</a>
         <a href="#" @click.prevent="goToCart" class="nav-link text-white">Cart</a>
       </div>
     </div>
@@ -22,6 +23,11 @@ import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
   name: 'AppNavbar',
+  data() {
+    return {
+      isLoggedIn: false,
+    }
+  },
   methods: {
     goToHome() {
       NavigationService.navigateToHome()
@@ -60,10 +66,17 @@ export default {
     goToCart() {
       NavigationService.navigateToCart()
     },
-    logout() {
-      AuthHelper.clearUser()
+    goToLogin() {
       NavigationService.navigateToLogin()
     },
+    logout() {
+      AuthHelper.clearUser()
+      this.isLoggedIn = false
+      NavigationService.navigateToLogin()
+    },
+  },
+  beforeMount() {
+    this.isLoggedIn = AuthHelper.isLoggedIn()
   },
 }
 </script>

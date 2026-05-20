@@ -38,14 +38,20 @@ public class EventService {
     private final UserRepository userRepository;
     private final CityService cityService;
     private final SkillTagService skillTagService;
+    private final UserValidationService userValidationService;
     private final EventMapper eventMapper;
 
     @Transactional(readOnly = true)
     public List<EventResponseDto> getFilteredEvents(Integer cityId, Integer skillTagId, LocalDate fromDate) {
-        return eventRepository.findFilteredEvents(cityId, skillTagId, fromDate)
+        return eventRepository.findFilteredEvents(cityId, skillTagId, fromDate, null, null, false)
                 .stream()
                 .map(this::toEventResponseDto)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Event> findOrganizedEvents(Integer organizerId, Integer cityId, Integer skillTagId, LocalDate date) {
+        return eventRepository.findFilteredEvents(cityId, skillTagId, date, date, organizerId, true);
     }
 
     @Transactional(readOnly = true)
@@ -192,9 +198,7 @@ public class EventService {
     }
 
     private void validateUserId(Integer userId) {
-        if (userId == null) {
-            throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
-        }
+        userValidationService.validateActiveUser(userId);
     }
 
     private boolean isBlank(String value) {

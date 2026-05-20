@@ -3,7 +3,6 @@ package ee.bcs.valitalgud.service;
 import ee.bcs.valitalgud.controller.myevents.dto.MyEventResponseDto;
 import ee.bcs.valitalgud.infrastructure.error.ErrorResponse;
 import ee.bcs.valitalgud.infrastructure.exception.BadRequestException;
-import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
 import ee.bcs.valitalgud.persistence.registration.MyEventProjection;
 import ee.bcs.valitalgud.persistence.registration.RegistrationRepository;
 import java.time.DayOfWeek;
@@ -22,6 +21,7 @@ public class MyEventsService {
     private static final String FILTER_ALL_FUTURE = "ALL_FUTURE";
 
     private final RegistrationRepository registrationRepository;
+    private final UserValidationService userValidationService;
 
     @Transactional(readOnly = true)
     public List<MyEventResponseDto> findMyEvents(Integer userId, String filter) {
@@ -52,9 +52,7 @@ public class MyEventsService {
     }
 
     private void validateUserId(Integer userId) {
-        if (userId == null) {
-            throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
-        }
+        userValidationService.validateActiveUser(userId);
     }
 
     private void validateFilter(String filter) {

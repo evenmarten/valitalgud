@@ -19,9 +19,6 @@ public class LoginResponseDto {
     @Schema(description = "Eesnimi", example = "Mari")
     private String firstName;
 
-    @Schema(description = "Keskmine nimi (võib olla null)", example = "Liis", nullable = true)
-    private String middleName;
-
     @Schema(description = "Perekonnanimi", example = "Maasikas")
     private String lastName;
 

@@ -27,6 +27,7 @@ public class ProfileService {
 
     private final UserRepository userRepository;
     private final ContactRepository contactRepository;
+    private final UserValidationService userValidationService;
 
     @Transactional(readOnly = true)
     public ProfileResponseDto getProfile(Integer userId, Integer requesterId) {
@@ -88,6 +89,7 @@ public class ProfileService {
         if (requesterId == null) {
             throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
         }
+        userValidationService.ensureExistsAndActive(requesterId);
         if (!requesterId.equals(userId)) {
             throw new ForbiddenException(ErrorResponse.NOT_PROFILE_OWNER);
         }
@@ -97,6 +99,7 @@ public class ProfileService {
         if (requesterId == null) {
             throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
         }
+        userValidationService.ensureExistsAndActive(requesterId);
         if (requesterId.equals(userId)) {
             return;
         }
@@ -166,12 +169,7 @@ public class ProfileService {
     }
 
     private String buildFullName(UpdateProfileDto dto) {
-        StringBuilder sb = new StringBuilder(dto.getFirstName().trim());
-        if (!isBlank(dto.getMiddleName())) {
-            sb.append(' ').append(dto.getMiddleName().trim());
-        }
-        sb.append(' ').append(dto.getLastName().trim());
-        return sb.toString();
+        return dto.getFirstName().trim() + ' ' + dto.getLastName().trim();
     }
 
     private boolean isBlank(String value) {

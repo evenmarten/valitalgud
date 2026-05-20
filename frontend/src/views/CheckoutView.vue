@@ -83,16 +83,17 @@ export default {
   components: { AppNavbar, AlertError },
   data() {
     return {
+      // AJUTINE: eeltäidetud testväärtused kiiremaks testimiseks — eemalda enne tootmist
       form: {
-        firstName: '',
-        lastName: '',
-        companyName: '',
+        firstName: 'Mari',
+        lastName: 'Maasikas',
+        companyName: 'Test OÜ',
         country: 'Eesti',
-        street: '',
-        postalCode: '',
-        city: '',
-        phone: '',
-        email: '',
+        street: 'Testi tänav 5',
+        postalCode: '10115',
+        city: 'Tallinn',
+        phone: '+372 5555 1234',
+        email: 'mari.maasikas@example.com',
       },
       errorMessage: '',
     }

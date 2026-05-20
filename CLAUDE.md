@@ -14,15 +14,36 @@ Täisstack ürituste halduse rakendus (**valitalgud**) — Vue 3 frontend + Spri
 ## Andmebaas (PostgreSQL)
 
 Käivita SQL skriptid järjekorras `postgres` andmebaasi vastu:
-1. `docs/database/1_reset_database.sql` — kustuta ja loo uuesti `valitalgud` skeem
-2. `docs/database/2_create.sql` — loo tabelid
-3. `docs/database/3_import.sql` — impordi algandmed
+1. `backend/database/1_reset_database.sql` — kustuta ja loo uuesti `public` skeem
+2. `backend/database/2_create.sql` — loo tabelid
+3. `backend/database/3_import.sql` — impordi algandmed
 
 Ühendusandmed: host `localhost`, andmebaas `postgres`, kasutaja `postgres`, parool `student123`.
 
 ## Andmebaasskeem
 
-Viis tabelit `valitalgud` PostgreSQL skeemis: `users`, `events`, `tags`, `event_tags` (vahendajatabel), `registrations`. Kõik primaarvõtmed on UUID-d (`gen_random_uuid()`). Registreerumise staatus on piiratud väärtustega `LAHEB | VOIB_OLLA | EI_LAHE`. Kasutaja roll on piiratud väärtustega `USER | ADMIN`.
+15 tabelit `postgres` andmebaasi `public` skeemis. Kõik primaarvõtmed on `serial` (automaatselt kasvav täisarv).
+
+**Kasutajad ja õigused**
+- `roles` — rollid (`name` UNIQUE; algandmetes `USER`, `ADMIN`).
+- `users` — kasutajad; `role_id` viitab `roles`-le (vaikimisi 1), `status IN ('ACTIVE', 'PENDING_ACTIVATION', 'DELETED')`.
+- `contacts` — kasutaja kontaktandmed (1:1, `user_id` UNIQUE).
+
+**Üritused**
+- `cities` — linnad (`name` UNIQUE).
+- `events` — üritused; `organizer_id` → `users`, `city_id` → `cities`.
+- `skill_tags` — oskuste sildid (`name` UNIQUE).
+- `event_skill_tags` — `events` ↔ `skill_tags` vahendajatabel.
+- `registrations` — registreerumised; UNIQUE(`user_id`, `event_id`), `status IN ('LAHEB', 'VOIB_OLLA', 'EI_LAHE')`.
+- `comments` — ürituse kommentaarid; `event_id` → `events`, `user_id` → `users`.
+
+**Pood**
+- `products` — tooted (hind, laoseis).
+- `carts` — ostukorvid (üks kasutaja kohta, `user_id` UNIQUE).
+- `cart_items` — ostukorvi read; UNIQUE(`cart_id`, `product_id`).
+- `billings` — arve-/tarneandmed.
+- `orders` — tellimused; `billing_id` → `billings`, `status IN ('PENDING', 'PAID', 'SHIPPED', 'DELIVERED', 'CANCELLED')`.
+- `order_items` — tellimuse read (säilitab `product_name` ja `price_at_purchase` ostuhetkest).
 
 
 ## Workflow Orchestration\

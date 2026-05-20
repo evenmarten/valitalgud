@@ -59,7 +59,7 @@ backend/
 
 - **MapStruct** haldab entiteet↔DTO teisendusi; mapperi liidesed kasutavad `@Mapper` annotatsiooni parameetriga `componentModel = "spring"` (seadistatud globaalselt `build.gradle`'is). Kaardistamata sihtväljad ignoreeritakse vaikselt.
 - **P6Spy** mähib PostgreSQL draiveri arenduses, et logida vormindatud SQL stdout'i (`spy.properties`).
-- JPA DDL on keelatud (`ddl-auto=none`); skeemi haldatakse ainult `docs/database/` SQL skriptide kaudu.
+- JPA DDL on keelatud (`ddl-auto=none`); skeemi haldatakse ainult `backend/database/` SQL skriptide kaudu.
 
 ---
 

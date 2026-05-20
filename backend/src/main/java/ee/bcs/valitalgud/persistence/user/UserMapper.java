@@ -13,7 +13,6 @@ public interface UserMapper {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.role.name", target = "role")
     @Mapping(target = "firstName", ignore = true)
-    @Mapping(target = "middleName", ignore = true)
     @Mapping(target = "lastName", ignore = true)
     LoginResponseDto toLoginResponseDto(User user, Contact contact);
 
@@ -26,23 +25,13 @@ public interface UserMapper {
             dto.setLastName("");
             return;
         }
-        String[] parts = trimmed.split("\\s+");
-        if (parts.length == 1) {
-            dto.setFirstName(parts[0]);
+        int firstSpace = trimmed.indexOf(' ');
+        if (firstSpace < 0) {
+            dto.setFirstName(trimmed);
             dto.setLastName("");
             return;
         }
-        if (parts.length == 2) {
-            dto.setFirstName(parts[0]);
-            dto.setLastName(parts[1]);
-            return;
-        }
-        dto.setFirstName(parts[0]);
-        dto.setLastName(parts[parts.length - 1]);
-        StringBuilder middle = new StringBuilder(parts[1]);
-        for (int i = 2; i < parts.length - 1; i++) {
-            middle.append(' ').append(parts[i]);
-        }
-        dto.setMiddleName(middle.toString());
+        dto.setFirstName(trimmed.substring(0, firstSpace));
+        dto.setLastName(trimmed.substring(firstSpace + 1).trim());
     }
 }

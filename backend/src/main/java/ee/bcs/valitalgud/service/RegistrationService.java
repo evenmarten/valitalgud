@@ -5,7 +5,6 @@ import ee.bcs.valitalgud.controller.registration.dto.RegistrationResponseDto;
 import ee.bcs.valitalgud.infrastructure.error.ErrorResponse;
 import ee.bcs.valitalgud.infrastructure.exception.BadRequestException;
 import ee.bcs.valitalgud.infrastructure.exception.ConflictException;
-import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
 import ee.bcs.valitalgud.persistence.event.Event;
 import ee.bcs.valitalgud.persistence.registration.Registration;
 import ee.bcs.valitalgud.persistence.registration.RegistrationRepository;
@@ -26,6 +25,7 @@ public class RegistrationService {
 
     private final RegistrationRepository registrationRepository;
     private final EventService eventService;
+    private final UserValidationService userValidationService;
 
     @Transactional
     public RegistrationResponseDto register(Integer eventId, Integer userId, RegistrationDto registrationDto) {
@@ -67,9 +67,7 @@ public class RegistrationService {
     }
 
     private void validateUserId(Integer userId) {
-        if (userId == null) {
-            throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
-        }
+        userValidationService.validateActiveUser(userId);
     }
 
     private void validateStatus(String status) {

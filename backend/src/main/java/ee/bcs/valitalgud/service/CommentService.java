@@ -4,7 +4,6 @@ import ee.bcs.valitalgud.controller.comment.dto.CommentResponseDto;
 import ee.bcs.valitalgud.controller.comment.dto.CreateCommentDto;
 import ee.bcs.valitalgud.infrastructure.error.ErrorResponse;
 import ee.bcs.valitalgud.infrastructure.exception.BadRequestException;
-import ee.bcs.valitalgud.infrastructure.exception.UnauthorizedException;
 import ee.bcs.valitalgud.persistence.comment.Comment;
 import ee.bcs.valitalgud.persistence.comment.CommentRepository;
 import ee.bcs.valitalgud.persistence.contact.ContactRepository;
@@ -24,6 +23,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ContactRepository contactRepository;
     private final EventService eventService;
+    private final UserValidationService userValidationService;
 
     @Transactional(readOnly = true)
     public List<CommentResponseDto> getComments(Integer eventId, Integer userId) {
@@ -65,9 +65,7 @@ public class CommentService {
     }
 
     private void validateUserId(Integer userId) {
-        if (userId == null) {
-            throw new UnauthorizedException(ErrorResponse.NOT_AUTHENTICATED);
-        }
+        userValidationService.validateActiveUser(userId);
     }
 
     private void validateContent(String content) {
