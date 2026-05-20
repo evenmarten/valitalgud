@@ -5,15 +5,32 @@
         <img :src="logo" alt="Valitalgud" height="84" />
       </a>
       <div class="d-flex gap-3 align-items-center">
-        <a href="#" @click.prevent="goToHome" class="nav-link text-white">Homepage</a>
-        <a v-if="isLoggedIn" href="#" @click.prevent="goToProfile" class="nav-link text-white">Profile</a>
-        <a href="#" @click.prevent="goToEvents" class="nav-link text-white">Events</a>
-        <a v-if="isLoggedIn" href="#" @click.prevent="goToMyEvents" class="nav-link text-white">My Events</a>
-        <a v-if="isLoggedIn" href="#" @click.prevent="goToCalendar" class="nav-link text-white">Calendar</a>
-        <a href="#" @click.prevent="goToShop" class="nav-link text-white">Shop</a>
-        <a href="#" @click.prevent="goToCart" class="nav-link text-white">Cart</a>
-        <a v-if="isLoggedIn" href="#" @click.prevent="logout" class="nav-link text-white">Logout</a>
-        <a v-else href="#" @click.prevent="goToLogin" class="nav-link text-white">Login</a>
+        <a href="#" @click.prevent="goToHome" class="nav-link text-white">Avaleht</a>
+        <div class="dropdown">
+          <a
+            href="#"
+            class="nav-link text-white dropdown-toggle"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >Mängi</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="https://dos.zone/q3/" target="_blank" rel="noopener noreferrer">Quake</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="https://play-cs.com/en/" target="_blank" rel="noopener noreferrer">Counter Strike 1.6</a>
+            </li>
+          </ul>
+        </div>
+        <a v-if="isLoggedIn" href="#" @click.prevent="goToProfile" class="nav-link text-white">Profiil</a>
+        <a href="#" @click.prevent="goToEvents" class="nav-link text-white">Sündmused</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="goToMyEvents" class="nav-link text-white">Minu sündmused</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="goToCalendar" class="nav-link text-white">Kalender</a>
+        <a href="#" @click.prevent="goToShop" class="nav-link text-white">e-pood</a>
+        <a href="#" @click.prevent="goToCart" class="nav-link text-white">Ostukorv</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="logout" class="nav-link text-white">Logi välja</a>
+        <a v-else href="#" @click.prevent="goToLogin" class="nav-link text-white">Logi sisse</a>
       </div>
     </div>
   </nav>
@@ -80,3 +97,30 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.dropdown-menu {
+  background-color: var(--nb-black);
+  border: 3px solid var(--nb-yellow);
+  border-radius: 0;
+  box-shadow: var(--nb-shadow);
+  padding: 0.3rem;
+  margin-top: 0.6rem;
+}
+
+.dropdown-item {
+  color: var(--nb-white);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 0.4rem 0.8rem;
+  border: 2px solid transparent;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--nb-yellow);
+  color: var(--nb-black);
+  border: 2px solid var(--nb-black);
+}
+</style>

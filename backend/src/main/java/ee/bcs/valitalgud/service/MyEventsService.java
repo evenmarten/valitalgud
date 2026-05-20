@@ -24,13 +24,14 @@ public class MyEventsService {
     private final UserValidationService userValidationService;
 
     @Transactional(readOnly = true)
-    public List<MyEventResponseDto> findMyEvents(Integer userId, String filter) {
+    public List<MyEventResponseDto> findMyEvents(Integer userId, String filter, Integer cityId,
+            Integer skillTagId, LocalDate fromDate) {
         validateUserId(userId);
         validateFilter(filter);
 
         DateRange range = buildDateRange(filter);
         List<MyEventProjection> projections = registrationRepository
-                .findMyEventsBy(userId, range.fromDate(), range.toDate());
+                .findMyEventsBy(userId, range.fromDate(), range.toDate(), cityId, skillTagId, fromDate);
         return projections.stream().map(this::toMyEventResponseDto).toList();
     }
 

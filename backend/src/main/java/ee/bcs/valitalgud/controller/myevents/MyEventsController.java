@@ -10,8 +10,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +44,10 @@ public class MyEventsController {
     })
     public List<MyEventResponseDto> findMyEvents(
             @RequestParam Integer userId,
-            @RequestParam String filter) {
-        return myEventsService.findMyEvents(userId, filter);
+            @RequestParam String filter,
+            @RequestParam(required = false) Integer cityId,
+            @RequestParam(required = false) Integer skillTagId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate) {
+        return myEventsService.findMyEvents(userId, filter, cityId, skillTagId, fromDate);
     }
 }

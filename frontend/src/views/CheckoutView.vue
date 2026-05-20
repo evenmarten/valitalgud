@@ -67,12 +67,18 @@
         </p>
 
         <p class="fw-semibold mb-2">Maksa pangalingiga:</p>
-        <div class="d-flex gap-2 flex-wrap mb-3">
-          <button type="button" class="btn badge fs-6 fw-bold bg-warning text-dark px-3 py-2">Swedbank</button>
-          <button type="button" class="btn badge fs-6 fw-bold bg-success px-3 py-2">SEB</button>
-          <button type="button" class="btn badge fs-6 fw-bold bg-dark px-3 py-2">LHV</button>
-          <button type="button" class="btn badge fs-6 fw-bold bg-primary px-3 py-2">Luminor</button>
-          <button type="button" class="btn badge fs-6 fw-bold bg-danger px-3 py-2">Coop</button>
+        <div class="d-flex gap-3 flex-wrap mb-3">
+          <button
+            v-for="bank in banks"
+            :key="bank.id"
+            type="button"
+            class="bank-btn"
+            :class="{ 'bank-btn--selected': selectedBank === bank.id }"
+            @click="selectBank(bank.id)"
+          >
+            <img :src="bank.logo" :alt="bank.name" class="bank-logo" />
+            <span v-if="selectedBank === bank.id" class="bank-check">✓</span>
+          </button>
         </div>
 
         <button type="submit" class="btn btn-primary w-100 btn-lg">Maksma</button>
@@ -87,12 +93,25 @@ import AlertError from '@/components/common/AlertError.vue'
 import OrderService from '@/api-services/OrderService.js'
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
+import swedbankLogo from '@/assets/banks/swedbank.svg'
+import sebLogo from '@/assets/banks/seb.svg'
+import lhvLogo from '@/assets/banks/lhv.svg'
+import luminorLogo from '@/assets/banks/luminor.svg'
+import coopLogo from '@/assets/banks/coop.svg'
 
 export default {
   name: 'CheckoutView',
   components: { AppNavbar, AlertError },
   data() {
     return {
+      banks: [
+        { id: 'swedbank', name: 'Swedbank', logo: swedbankLogo },
+        { id: 'seb', name: 'SEB', logo: sebLogo },
+        { id: 'lhv', name: 'LHV', logo: lhvLogo },
+        { id: 'luminor', name: 'Luminor', logo: luminorLogo },
+        { id: 'coop', name: 'Coop Pank', logo: coopLogo },
+      ],
+      selectedBank: '',
       // AJUTINE: eeltäidetud testväärtused kiiremaks testimiseks — eemalda enne tootmist
       form: {
         firstName: 'Mari',
@@ -109,6 +128,10 @@ export default {
     }
   },
   methods: {
+    selectBank(bankId) {
+      this.selectedBank = bankId
+    },
+
     submitOrder() {
       this.errorMessage = ''
       OrderService.sendCreateOrderRequest(this.buildCreateOrderDto())
@@ -159,3 +182,54 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.bank-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 132px;
+  height: 60px;
+  padding: 8px 18px;
+  background: var(--nb-white);
+  border: var(--nb-border);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--nb-black);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.bank-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--nb-black);
+}
+
+.bank-btn--selected {
+  border-color: var(--nb-blue);
+  box-shadow: 5px 5px 0 var(--nb-blue);
+}
+
+.bank-logo {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+.bank-check {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 24px;
+  height: 24px;
+  background: var(--nb-blue);
+  color: var(--nb-white);
+  border: 2px solid var(--nb-black);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+</style>

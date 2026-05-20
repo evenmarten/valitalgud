@@ -57,13 +57,14 @@
               <div class="mb-3">
                 <label class="form-label">Minu osavõtuplaan</label>
                 <select v-model="selectedStatus" class="form-select" style="max-width: 280px;">
+                  <option value="">Tee valik</option>
                   <option value="LAHEB">Lähen</option>
                   <option value="VOIB_OLLA">Võib-olla</option>
                   <option value="EI_LAHE">Ei lähe</option>
                 </select>
               </div>
               <div class="d-flex gap-2">
-                <button class="btn btn-primary" @click="register">
+                <button class="btn btn-primary" :disabled="!selectedStatus" @click="register">
                   {{ isRegistered ? 'Muuda valikut' : 'Kinnita' }}
                 </button>
                 <button v-if="isRegistered" class="btn btn-outline-danger" @click="cancelRegistration">
@@ -144,7 +145,7 @@ export default {
         userRegistrationStatus: null,
       },
       comments: [],
-      selectedStatus: 'LAHEB',
+      selectedStatus: '',
       newComment: '',
       errorMessage: '',
       userId: null,
@@ -240,7 +241,7 @@ export default {
 
     handleCancelRegistrationResponse() {
       this.event.userRegistrationStatus = null
-      this.selectedStatus = 'LAHEB'
+      this.selectedStatus = ''
       this.errorMessage = ''
       this.getEventDetails()
     },

@@ -15,7 +15,7 @@
           <div class="row g-3">
             <div class="col-md-4">
               <label for="cityFilter" class="form-label">Linn</label>
-              <select id="cityFilter" v-model="filter.cityId" class="form-select" @change="getEvents">
+              <select id="cityFilter" v-model="filter.cityId" class="form-select">
                 <option :value="null">-- Kõik linnad --</option>
                 <option v-for="city in cityOptions" :key="city.id" :value="city.id">
                   {{ city.name }}
@@ -24,24 +24,26 @@
             </div>
 
             <div class="col-md-4">
-              <label for="tagFilter" class="form-label">Oskuse-tag</label>
-              <select id="tagFilter" v-model="filter.skillTagId" class="form-select" @change="getEvents">
-                <option :value="null">-- Kõik tagid --</option>
-                <option v-for="tag in skillTagOptions" :key="tag.id" :value="tag.id">
-                  {{ tag.name }}
-                </option>
-              </select>
+              <label class="form-label">Oskuse-tag</label>
+              <SkillTagFilter
+                :tags="skillTagOptions"
+                :selected-id="filter.skillTagId"
+                @event-tag-selected="filter.skillTagId = $event"
+              />
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-2">
               <label for="fromDateFilter" class="form-label">Alates kuupäevast</label>
               <input
                 id="fromDateFilter"
                 v-model="filter.fromDate"
                 type="date"
                 class="form-control"
-                @change="getEvents"
               />
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-primary w-100" @click="getEvents">Kinnita</button>
             </div>
           </div>
         </div>
@@ -100,12 +102,14 @@
 <script>
 import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
+import SkillTagFilter from '@/components/forms/SkillTagFilter.vue'
 import EventService from '@/api-services/EventService.js'
+import SkillTagService from '@/api-services/SkillTagService.js'
 import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
   name: 'EventsView',
-  components: { AppNavbar, AlertError },
+  components: { AppNavbar, AlertError, SkillTagFilter },
   data() {
     return {
       events: [],
@@ -129,7 +133,14 @@ export default {
 
     handleGetEventsResponse(events) {
       this.events = events
-      this.populateFilterOptions(events)
+      this.populateCityOptions(events)
+    },
+
+    getSkillTags() {
+      SkillTagService.sendGetSkillTagsRequest()
+        .then((response) => (this.skillTagOptions = response.data))
+        .catch(() => NavigationService.navigateToErrorView())
+        .finally()
     },
 
     handleGetEventsError(error) {
@@ -151,26 +162,15 @@ export default {
       return params
     },
 
-    populateFilterOptions(events) {
+    populateCityOptions(events) {
       if (this.cityOptions.length === 0) {
         this.cityOptions = this.collectUniqueCities(events)
-      }
-      if (this.skillTagOptions.length === 0) {
-        this.skillTagOptions = this.collectUniqueSkillTags(events)
       }
     },
 
     collectUniqueCities(events) {
       const map = new Map()
       events.forEach((event) => map.set(event.cityId, event.city))
-      return Array.from(map, ([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name))
-    },
-
-    collectUniqueSkillTags(events) {
-      const map = new Map()
-      events.forEach((event) => {
-        event.skillTagIds.forEach((id, index) => map.set(id, event.skillTags[index]))
-      })
       return Array.from(map, ([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name))
     },
 
@@ -188,6 +188,7 @@ export default {
     },
   },
   beforeMount() {
+    this.getSkillTags()
     this.getEvents()
   },
 }

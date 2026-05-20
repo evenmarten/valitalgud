@@ -21,11 +21,12 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label for="skillTagFilter" class="form-label">Oskuse-tag</label>
-              <select id="skillTagFilter" v-model="filter.skillTagId" class="form-select">
-                <option :value="null">-- Kõik tagid --</option>
-                <option v-for="tag in skillTags" :key="tag.id" :value="tag.id">{{ tag.name }}</option>
-              </select>
+              <label class="form-label">Oskuse-tag</label>
+              <SkillTagFilter
+                :tags="skillTags"
+                :selected-id="filter.skillTagId"
+                @event-tag-selected="filter.skillTagId = $event"
+              />
             </div>
             <div class="col-md-3">
               <label for="dateFilter" class="form-label">Kuupäev</label>
@@ -96,6 +97,7 @@
 <script>
 import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
+import SkillTagFilter from '@/components/forms/SkillTagFilter.vue'
 import MyOrganizedEventsService from '@/api-services/MyOrganizedEventsService.js'
 import EventService from '@/api-services/EventService.js'
 import CityService from '@/api-services/CityService.js'
@@ -105,7 +107,7 @@ import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
   name: 'MyOrganizedEventsView',
-  components: { AppNavbar, AlertError },
+  components: { AppNavbar, AlertError, SkillTagFilter },
   data() {
     return {
       organizedEvents: [],

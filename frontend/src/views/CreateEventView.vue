@@ -69,10 +69,11 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Oskuse-tagid</label>
-              <select v-model="createEventDto.skillTagIds" multiple class="form-select">
-                <option v-for="tag in skillTags" :key="tag.id" :value="tag.id">{{ tag.name }}</option>
-              </select>
-              <small class="text-muted">Hoia Ctrl/Cmd, et valida mitu</small>
+              <SkillTagMultiSelect
+                :tags="skillTags"
+                :selected-ids="createEventDto.skillTagIds"
+                @event-tags-changed="createEventDto.skillTagIds = $event"
+              />
             </div>
           </div>
 
@@ -161,6 +162,7 @@
 <script>
 import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
+import SkillTagMultiSelect from '@/components/forms/SkillTagMultiSelect.vue'
 import CityService from '@/api-services/CityService.js'
 import SkillTagService from '@/api-services/SkillTagService.js'
 import EventService from '@/api-services/EventService.js'
@@ -169,7 +171,7 @@ import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
   name: 'CreateEventView',
-  components: { AppNavbar, AlertError },
+  components: { AppNavbar, AlertError, SkillTagMultiSelect },
   data() {
     return {
       currentStep: 1,
