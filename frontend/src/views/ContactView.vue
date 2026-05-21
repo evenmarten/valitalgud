@@ -50,7 +50,9 @@
                   ></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-dark w-100">Saada</button>
+                <button type="submit" class="btn btn-dark w-100" :disabled="isSending">
+                  {{ isSending ? 'Saadan…' : 'Saada' }}
+                </button>
               </form>
             </div>
           </div>
@@ -63,6 +65,7 @@
 <script>
 import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
+import ContactService from '@/api-services/ContactService.js'
 
 export default {
   name: 'ContactView',
@@ -71,6 +74,7 @@ export default {
     return {
       successMessage: '',
       errorMessage: '',
+      isSending: false,
       contactForm: {
         nameOrCompany: '',
         email: '',
@@ -87,10 +91,23 @@ export default {
         return
       }
 
-      // TODO: ühenda Resend API-ga, et päring meiliaadressile saata.
-      // Praegu kinnitame esitamise kohe frontendis.
+      this.isSending = true
+      ContactService.sendContactMessage(this.contactForm)
+        .then(() => this.handleSendSuccess())
+        .catch((error) => this.handleSendError(error))
+        .finally(() => {
+          this.isSending = false
+        })
+    },
+
+    handleSendSuccess() {
       this.successMessage = 'Aitäh! Sinu sõnum on saadetud — vastame esimesel võimalusel.'
       this.resetForm()
+    },
+
+    handleSendError(error) {
+      this.errorMessage =
+        error.response?.data?.message ?? 'Sõnumi saatmine ebaõnnestus. Proovi hetke pärast uuesti.'
     },
 
     isFormValid() {
