@@ -25,6 +25,7 @@
             class="calendar-cell"
             :class="{
               'calendar-cell--active': !!day,
+              'calendar-cell--today': day && isToday(day),
               'calendar-cell--selected': day && isSelected(day),
               'calendar-cell--has-events': day && daysWithEvents.includes(day),
             }"
@@ -42,7 +43,12 @@
           <span v-if="dayEvents.length > 0" class="events-count-badge">{{ dayEvents.length }} sündmust</span>
         </div>
 
-        <div v-if="dayEvents.length === 0" class="no-events-box">
+        <div v-if="loadingEvents" class="loading-box">
+          <span class="loading-spinner"></span>
+          Laen sündmusi...
+        </div>
+
+        <div v-else-if="dayEvents.length === 0" class="no-events-box">
           Sel päeval pole sündmusi
         </div>
 
@@ -91,9 +97,13 @@ export default {
     return {
       currentMonth: new Date().getMonth() + 1,
       currentYear: new Date().getFullYear(),
+      todayDay: new Date().getDate(),
+      todayMonth: new Date().getMonth() + 1,
+      todayYear: new Date().getFullYear(),
       daysWithEvents: [],
       selectedDate: null,
       dayEvents: [],
+      loadingEvents: false,
       errorMessage: '',
       userId: null,
       weekDays: ['E', 'T', 'K', 'N', 'R', 'L', 'P'],
@@ -150,10 +160,12 @@ export default {
     },
 
     getDayEvents(date) {
+      this.loadingEvents = true
+      this.dayEvents = []
       CalendarService.sendGetDayEventsRequest(date, this.userId)
         .then((response) => this.handleGetDayEventsResponse(response.data))
         .catch((error) => this.handleGetDayEventsError(error))
-        .finally()
+        .finally(() => { this.loadingEvents = false })
     },
 
     handleGetDayEventsResponse(events) {
@@ -204,6 +216,14 @@ export default {
 
     isSelected(day) {
       return this.selectedDate === this.buildDateString(day)
+    },
+
+    isToday(day) {
+      return (
+        day === this.todayDay &&
+        this.currentMonth === this.todayMonth &&
+        this.currentYear === this.todayYear
+      )
     },
 
     buildDateString(day) {
@@ -285,6 +305,17 @@ export default {
   background-color: #fdf0c0;
 }
 
+.calendar-cell--today .day-number {
+  background-color: var(--nb-pink);
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--nb-black);
+}
+
 .calendar-cell--selected {
   background-color: var(--nb-blue) !important;
   color: #fff;
@@ -342,6 +373,32 @@ export default {
   text-transform: uppercase;
   padding: 0.2em 0.6em;
   letter-spacing: 0.3px;
+}
+
+.loading-box {
+  border: 3px solid var(--nb-black);
+  padding: 1.2rem 1rem;
+  font-weight: 600;
+  color: #444;
+  background: var(--nb-white);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--nb-black);
+  border-top-color: var(--nb-blue);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .no-events-box {
