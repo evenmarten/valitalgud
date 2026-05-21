@@ -21,7 +21,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getAllAvailableProducts() {
-        return productRepository.findAllByStockQuantityGreaterThan(0)
+        return productRepository.findAll()
                 .stream()
                 .map(productMapper::toProductResponseDto)
                 .toList();

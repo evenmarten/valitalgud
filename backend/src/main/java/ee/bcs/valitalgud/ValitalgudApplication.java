@@ -1,3 +1,4 @@
+
 package ee.bcs.valitalgud;
 
 import org.springframework.boot.SpringApplication;

@@ -19,4 +19,7 @@ public class ProductResponseDto {
 
     @Schema(description = "Toote pildi URL", example = "/images/products/water-bottle.png")
     private String imageUrl;
+
+    @Schema(description = "Laojääk", example = "10")
+    private Integer stockQuantity;
 }
