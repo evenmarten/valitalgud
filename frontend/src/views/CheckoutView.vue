@@ -2,11 +2,23 @@
   <div>
     <AppNavbar />
 
-    <div class="hero-banner">
-      <div class="container" style="max-width: 860px;">
-        <div>
-          <p class="hero-label">Viimane samm</p>
-          <h1 class="hero-title">Kassa</h1>
+    <div class="step-bar">
+      <div class="container">
+        <div class="step-list">
+          <div class="step step--done">
+            <div class="step-circle">✓</div>
+            <span class="step-label">Ostukorv</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" :class="currentStep === 2 ? 'step--active' : 'step--done'">
+            <div class="step-circle">{{ currentStep > 2 ? '✓' : '2' }}</div>
+            <span class="step-label">Tarneviis</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" :class="currentStep === 3 ? 'step--active' : 'step--upcoming'">
+            <div class="step-circle">3</div>
+            <span class="step-label">Maksmine</span>
+          </div>
         </div>
       </div>
     </div>
@@ -221,6 +233,10 @@ export default {
     }
   },
   computed: {
+    currentStep() {
+      return this.selectedBank ? 3 : 2
+    },
+
     subtotal() {
       return this.cartItems.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0)
     },
@@ -293,28 +309,81 @@ export default {
 </script>
 
 <style scoped>
-.hero-banner {
-  background-color: var(--nb-yellow);
+.step-bar {
+  background: var(--nb-bg);
   border-bottom: var(--nb-border);
-  box-shadow: 0 5px 0 var(--nb-black);
-  padding: 2.5rem 0 2rem;
+  box-shadow: 0 4px 0 var(--nb-black);
+  padding: 1.25rem 0;
 }
 
-.hero-label {
-  font-size: 0.8rem;
+.step-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.step-circle {
+  width: 38px;
+  height: 38px;
+  border: 2.5px solid var(--nb-black);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.step-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.step--done .step-circle {
+  background: var(--nb-black);
+  color: var(--nb-yellow);
+  border-color: var(--nb-black);
+}
+
+.step--done .step-label {
+  color: var(--nb-black);
+  opacity: 0.5;
+}
+
+.step--active .step-circle {
+  background: var(--nb-black);
+  color: #fff;
+  border-color: var(--nb-black);
+}
+
+.step--active .step-label {
+  color: var(--nb-black);
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--nb-black);
-  opacity: 0.6;
-  margin: 0 0 0.2rem;
 }
 
-.hero-title {
-  font-size: 3rem;
-  color: var(--nb-black);
-  margin: 0;
-  line-height: 1;
+.step--upcoming .step-circle {
+  background: transparent;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+.step--upcoming .step-label {
+  color: #aaa;
+}
+
+.step-line {
+  width: 80px;
+  height: 2px;
+  background: #ccc;
+  margin: 0 1rem;
 }
 
 .section-block {

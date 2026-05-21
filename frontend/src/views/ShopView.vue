@@ -16,9 +16,17 @@
         {{ successMessage }}
       </div>
 
+      <div class="d-flex justify-content-end mb-3">
+        <select v-model="sortOrder" class="sort-select">
+          <option value="default">Vaikejärjestus</option>
+          <option value="price-asc">Hind: odavamast kallimale</option>
+          <option value="price-desc">Hind: kallimast odavamale</option>
+        </select>
+      </div>
+
       <div class="row g-4">
         <div
-          v-for="product in products"
+          v-for="product in sortedProducts"
           :key="product.productId"
           class="col-sm-6 col-md-4"
         >
@@ -55,6 +63,7 @@
                 <button
                   v-if="!isInCart(product.productId)"
                   class="btn btn-success btn-sm flex-grow-1"
+                  :class="{ 'btn-flash': addedProductId === product.productId }"
                   @click="addToCart(product, 1)"
                 >
                   Lisa korvi
@@ -198,6 +207,8 @@ export default {
       },
       isPanelOpen: false,
       quantity: 1,
+      sortOrder: 'default',
+      addedProductId: null,
       errorMessage: '',
       successMessage: '',
     }
@@ -208,6 +219,15 @@ export default {
     },
     cartTotal() {
       return this.cartItems.reduce((sum, item) => sum + item.lineTotal, 0).toFixed(2)
+    },
+    sortedProducts() {
+      if (this.sortOrder === 'price-asc') {
+        return [...this.products].sort((a, b) => Number(a.price) - Number(b.price))
+      }
+      if (this.sortOrder === 'price-desc') {
+        return [...this.products].sort((a, b) => Number(b.price) - Number(a.price))
+      }
+      return this.products
     },
   },
   methods: {
@@ -284,6 +304,8 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart))
       this.cartItems = cart
       window.dispatchEvent(new CustomEvent('cart-updated'))
+      this.addedProductId = product.productId
+      setTimeout(() => (this.addedProductId = null), 500)
       this.successMessage = `${product.name} lisatud ostukorvi!`
       setTimeout(() => (this.successMessage = ''), 2500)
     },
@@ -352,6 +374,39 @@ export default {
   font-weight: 600;
   margin: 0;
   opacity: 0.85;
+}
+
+/* Sorteerimine */
+.sort-select {
+  background-color: var(--nb-bg);
+  border: var(--nb-border);
+  box-shadow: 3px 3px 0 var(--nb-black);
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1rem;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.2rem;
+}
+
+.sort-select:focus {
+  outline: none;
+  box-shadow: 5px 5px 0 var(--nb-black);
+}
+
+/* Korvi lisamise animatsioon */
+@keyframes btn-pop {
+  0%   { transform: scale(1); background-color: #198754; }
+  40%  { transform: scale(1.08); background-color: var(--nb-green); }
+  100% { transform: scale(1); background-color: #198754; }
+}
+
+.btn-flash {
+  animation: btn-pop 0.45s ease-out;
 }
 
 /* Kaardid */
