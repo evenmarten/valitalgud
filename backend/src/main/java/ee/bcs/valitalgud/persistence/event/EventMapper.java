@@ -14,6 +14,8 @@ public interface EventMapper {
     @Mapping(source = "id", target = "eventId")
     @Mapping(source = "city.id", target = "cityId")
     @Mapping(source = "city.name", target = "city")
+    @Mapping(source = "city.county.id", target = "countyId")
+    @Mapping(source = "city.county.name", target = "county")
     @Mapping(source = "organizer.id", target = "organizerId")
     @Mapping(target = "organizerName", ignore = true)
     @Mapping(target = "skillTags", ignore = true)
@@ -23,6 +25,7 @@ public interface EventMapper {
 
     @Mapping(source = "id", target = "eventId")
     @Mapping(source = "city.name", target = "city")
+    @Mapping(source = "city.county.name", target = "county")
     @Mapping(source = "organizer.id", target = "organizerId")
     @Mapping(target = "organizerName", ignore = true)
     @Mapping(target = "organizerEmail", ignore = true)

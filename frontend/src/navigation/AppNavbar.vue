@@ -16,7 +16,10 @@
           >Mängi</a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="https://dos.zone/q3/" target="_blank" rel="noopener noreferrer">Quake</a>
+              <a class="dropdown-item" href="https://dos.zone/mp/?lobby=q3" target="_blank" rel="noopener noreferrer">Quake</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="https://dos.zone/mp/?lobby=ut" target="_blank" rel="noopener noreferrer">Unreal Tournament</a>
             </li>
             <li>
               <a class="dropdown-item" href="https://play-cs.com/en/" target="_blank" rel="noopener noreferrer">Counter Strike 1.6</a>

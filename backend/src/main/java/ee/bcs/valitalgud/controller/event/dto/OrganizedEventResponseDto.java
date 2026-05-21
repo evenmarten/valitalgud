@@ -24,6 +24,9 @@ public class OrganizedEventResponseDto {
     @Schema(description = "Linn", example = "Tallinn")
     private String city;
 
+    @Schema(description = "Maakond", example = "Harju maakond")
+    private String county;
+
     @Schema(description = "Sündmuse staatus", example = "Aktiivne",
             allowableValues = {"Aktiivne", "Lõppenud", "Tühistatud"})
     private String status;

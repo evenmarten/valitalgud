@@ -25,9 +25,9 @@ public class MyOrganizedEventsService {
     private final UserValidationService userValidationService;
 
     @Transactional(readOnly = true)
-    public List<OrganizedEventResponseDto> findMyOrganizedEvents(Integer userId, Integer cityId, Integer skillTagId, LocalDate date) {
+    public List<OrganizedEventResponseDto> findMyOrganizedEvents(Integer userId, Integer cityId, Integer countyId, Integer skillTagId, LocalDate date) {
         validateUserId(userId);
-        List<Event> events = eventService.findOrganizedEvents(userId, cityId, skillTagId, date);
+        List<Event> events = eventService.findOrganizedEvents(userId, cityId, countyId, skillTagId, date);
         return events.stream().map(this::toOrganizedEventResponseDto).toList();
     }
 
@@ -44,6 +44,7 @@ public class MyOrganizedEventsService {
                 event.getTitle(),
                 event.getEventDate(),
                 event.getCity().getName(),
+                event.getCity().getCounty().getName(),
                 buildStatus(event),
                 (int) registrationRepository.countByEventIdAndStatus(event.getId(), REGISTRATION_GOING),
                 event.getMaxParticipants()

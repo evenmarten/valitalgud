@@ -12,10 +12,12 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query(value = """
             SELECT DISTINCT e.* FROM events e
+            JOIN cities c ON c.id = e.city_id
             LEFT JOIN event_skill_tags est ON est.event_id = e.id
             WHERE (CAST(:organizerId AS integer) IS NULL OR e.organizer_id = :organizerId)
               AND (:includeCancelled = true OR e.is_cancelled = false)
               AND (CAST(:cityId AS integer) IS NULL OR e.city_id = :cityId)
+              AND (CAST(:countyId AS integer) IS NULL OR c.county_id = :countyId)
               AND (CAST(:skillTagId AS integer) IS NULL OR est.skill_tag_id = :skillTagId)
               AND (CAST(:fromDate AS date) IS NULL OR e.event_date >= CAST(:fromDate AS date))
               AND (CAST(:toDate AS date) IS NULL OR e.event_date <= CAST(:toDate AS date))
@@ -23,6 +25,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             """, nativeQuery = true)
     List<Event> findFilteredEvents(
             @Param("cityId") Integer cityId,
+            @Param("countyId") Integer countyId,
             @Param("skillTagId") Integer skillTagId,
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,

@@ -43,6 +43,10 @@ dependencies {
 
     // SQL with parameter values
     implementation 'p6spy:p6spy:3.9.1'
+
+    // .env file support (loads GROQ_API_KEY from backend/.env)
+    implementation platform('me.paulschwarz:spring-dotenv-bom:5.1.0')
+    implementation 'me.paulschwarz:springboot4-dotenv'
 }
 
 compileJava {

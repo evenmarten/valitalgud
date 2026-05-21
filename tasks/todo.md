@@ -243,3 +243,64 @@ Täisstack ürituste halduse rakendus: Vue 3 + Spring Boot + PostgreSQL.
 | GET | /api/products | Tooted |
 | GET | /api/products/:id | Toote detailid |
 | POST | /api/orders | Loo tellimus |
+| GET | /api/counties | Maakondade nimekiri |
+
+---
+
+## Ülesanne: Maakonnad + linna/maakonna filtreerimine (2026-05-21)
+
+### Eesmärk
+Lisada andmebaasi 15 linna ja 15 maakonda. Sündmusel on lisaks linnale ka maakond
+(`county_id` veerg `events` tabelis). Kõik filtrid, kus on linna valik, peavad lubama
+filtreerida kas ainult linna, ainult maakonna või mõlema järgi (kaks sõltumatut valikut →
+3 sisukat varianti + "kõik"). Sündmuse loomise vormi lisada maakonna valik.
+
+### Andmemudeli otsus (lõplik — normaliseeritud)
+Eraldi `counties` tabel + `cities.county_id` FK (NOT NULL). Iga linn kuulub ühte maakonda;
+`events` viitab AINULT linnale (`city_id`), maakond tuletatakse linna kaudu (`event.city.county`).
+Põhjus: Eestis on linn↔maakond fikseeritud hierarhia → vastuolu (Tartu Harjumaal) on võimatu,
+liiasus puudub, üks tõeallikas. (Esimene mustand kasutas `events.county_id` sõltumatut veergu —
+see lubas vastuolulisi andmeid, seega normaliseerisime.)
+
+### Sammud
+- [ ] **SQL** `2_create.sql`: lisa `counties` tabel, `events.county_id` veerg + FK + indeks
+- [ ] **SQL** `3_import.sql`: 15 linna + 15 maakonda, sündmustele `county_id`
+- [ ] **Backend** uus `county` ressurss: `County`, `CountyRepository`, `CountyMapper`,
+      `CountyResponseDto`, `CountyController` (GET /api/counties), `CountyService`
+- [ ] **Backend** `Event` entiteet: lisa `@ManyToOne County county`
+- [ ] **Backend** `EventMapper`: county mappingud (response + details + ignore loomisel/uuendamisel)
+- [ ] **Backend** `EventRepository.findFilteredEvents`: lisa `countyId` parameeter + tingimus
+- [ ] **Backend** `EventService`: `countyId` filtris, county valideerimine+määramine loomisel
+- [ ] **Backend** DTO-d: `CreateEventDto.countyId`, `EventResponseDto.countyId/county`,
+      `EventDetailsResponseDto.county`, `OrganizedEventResponseDto.county`
+- [ ] **Backend** `EventController` + `MyOrganizedEventsController` + `MyEventsController`: `countyId`
+- [ ] **Backend** `MyEventsService` + `RegistrationRepository.findMyEventsBy` + projektsioon: county
+- [ ] **Backend** `ErrorResponse`: `COUNTY_NOT_FOUND`
+- [ ] **Frontend** `CountyService.js`
+- [ ] **Frontend** `EventsView`, `MyEventsView`, `MyOrganizedEventsView`: maakonna filter
+- [ ] **Frontend** `CreateEventView`: maakonna valik + valideerimine + kinnitusvaade
+- [ ] **Frontend** `EditEventView`: maakond (lukus, nagu linn)
+- [ ] **Verify**: `./gradlew build`, `npm run build`, käivita SQL skriptid andmebaasi vastu
+
+### Review (valmis)
+**Andmebaas:** `counties` tabel (15 maakonda), `cities.county_id` FK (15 linna, kõik seotud).
+`events` säilitab ainult `city_id`. SQL skriptid (`2_create.sql`, `3_import.sql`) uuendatud ja
+andmebaasi vastu käivitatud (reset → create → import).
+
+**Backend:** uus `county` ressurss (`GET /api/counties`); `City` entiteet → `@ManyToOne County`;
+`CityResponseDto` annab `countyId`+`county`; `EventMapper` tuletab maakonna `city.county` kaudu;
+`findFilteredEvents` ja `findMyEventsBy` filtreerivad maakonda läbi `cities.county_id` JOIN-i;
+`OrganizedEventResponseDto`/`MyEventResponseDto` saavad maakonna; `countyId` lisatud kõigi
+sündmuste-loendite controlleritesse/teenustesse.
+
+**Frontend:** `CountyService.js`; maakonna filter `EventsView`/`MyEventsView`/`MyOrganizedEventsView`
+(linna ja maakonna rippmenüü sõltumatud → 3 varianti); loomisvormis maakond → piirab linnade valikut
+(saadab ainult `cityId`); muutmisvaates linn+maakond lukus.
+
+**Verifitseeritud (live curl):** `/api/counties`=15, `/api/cities`=15 (countyId tuletatud),
+filter linn=2, maakond=2, mõlemad kooskõlas=2, mõlemad vastuolus=0 (AND korrektne), loomine ilma
+countyId-ta tuletab maakonna õigesti. Backend `compileJava` ✓, frontend `npm run build` ✓.
+
+**NB! Mitteseotud:** `ValitalgudbackApplicationTests` ebaõnnestub (`@SpringBootTest` ei leia
+konfiguratsiooni, sest testi pakett on `ee.valiit.valitalgudback`, mitte `ee.bcs.valitalgud`) —
+see on eelnevalt olemas olnud viga, ei puuduta seda ülesannet.

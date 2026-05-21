@@ -34,14 +34,21 @@
           </div>
 
           <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Linn *</label>
-              <select v-model="createEventDto.cityId" class="form-select">
-                <option :value="null">-- Vali linn --</option>
-                <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
+            <div class="col-md-4">
+              <label class="form-label">Maakond *</label>
+              <select v-model="selectedCountyId" class="form-select" @change="onCountyChange">
+                <option :value="null">-- Vali maakond --</option>
+                <option v-for="county in counties" :key="county.id" :value="county.id">{{ county.name }}</option>
               </select>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <label class="form-label">Linn *</label>
+              <select v-model="createEventDto.cityId" class="form-select" :disabled="!selectedCountyId">
+                <option :value="null">-- Vali linn --</option>
+                <option v-for="city in filteredCities" :key="city.id" :value="city.id">{{ city.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
               <label class="form-label">Aadress *</label>
               <input v-model="createEventDto.address" type="text" class="form-control" />
             </div>
@@ -130,6 +137,9 @@
             <dt class="col-sm-3">Linn</dt>
             <dd class="col-sm-9">{{ selectedCityName }}</dd>
 
+            <dt class="col-sm-3">Maakond</dt>
+            <dd class="col-sm-9">{{ selectedCountyName }}</dd>
+
             <dt class="col-sm-3">Aadress</dt>
             <dd class="col-sm-9">{{ createEventDto.address }}</dd>
 
@@ -164,6 +174,7 @@ import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
 import SkillTagMultiSelect from '@/components/forms/SkillTagMultiSelect.vue'
 import CityService from '@/api-services/CityService.js'
+import CountyService from '@/api-services/CountyService.js'
 import SkillTagService from '@/api-services/SkillTagService.js'
 import EventService from '@/api-services/EventService.js'
 import AuthHelper from '@/auth/auth.js'
@@ -181,6 +192,7 @@ export default {
         { id: 3, label: 'Kinnitus' },
       ],
       // AJUTINE: eeltäidetud testväärtused kiiremaks testimiseks — eemalda enne tootmist
+      selectedCountyId: 1,
       createEventDto: {
         title: 'Test Sündmus',
         description: 'Test sündmuse kirjeldus, mis tutvustab üritust.',
@@ -194,6 +206,7 @@ export default {
         skillTagIds: [1],
       },
       cities: [],
+      counties: [],
       skillTags: [],
       errorMessage: '',
     }
@@ -202,6 +215,14 @@ export default {
     selectedCityName() {
       const city = this.cities.find((c) => c.id === this.createEventDto.cityId)
       return city ? city.name : '—'
+    },
+    selectedCountyName() {
+      const county = this.counties.find((c) => c.id === this.selectedCountyId)
+      return county ? county.name : '—'
+    },
+    filteredCities() {
+      if (!this.selectedCountyId) return []
+      return this.cities.filter((city) => city.countyId === this.selectedCountyId)
     },
     selectedSkillTagNames() {
       return this.skillTags
@@ -220,6 +241,24 @@ export default {
 
     handleGetCitiesResponse(cities) {
       this.cities = cities
+    },
+
+    getCounties() {
+      CountyService.sendGetCountiesRequest()
+        .then((response) => this.handleGetCountiesResponse(response.data))
+        .catch(() => NavigationService.navigateToErrorView())
+        .finally()
+    },
+
+    handleGetCountiesResponse(counties) {
+      this.counties = counties
+    },
+
+    onCountyChange() {
+      const cityStillValid = this.filteredCities.some((city) => city.id === this.createEventDto.cityId)
+      if (!cityStillValid) {
+        this.createEventDto.cityId = null
+      }
     },
 
     getSkillTags() {
@@ -251,7 +290,7 @@ export default {
 
     validateStep1Fields() {
       const dto = this.createEventDto
-      if (!dto.title || !dto.cityId || !dto.address || !dto.date || !dto.startTime || !dto.endTime || !dto.maxParticipants) {
+      if (!dto.title || !this.selectedCountyId || !dto.cityId || !dto.address || !dto.date || !dto.startTime || !dto.endTime || !dto.maxParticipants) {
         this.errorMessage = 'Palun täitke kõik kohustuslikud väljad (*)'
         return false
       }
@@ -320,6 +359,7 @@ export default {
   },
   beforeMount() {
     this.getCities()
+    this.getCounties()
     this.getSkillTags()
   },
 }

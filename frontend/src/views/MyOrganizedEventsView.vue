@@ -21,6 +21,13 @@
               </select>
             </div>
             <div class="col-md-4">
+              <label for="countyFilter" class="form-label">Maakond</label>
+              <select id="countyFilter" v-model="filter.countyId" class="form-select">
+                <option :value="null">-- Kõik maakonnad --</option>
+                <option v-for="county in counties" :key="county.id" :value="county.id">{{ county.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
               <label class="form-label">Oskuse-tag</label>
               <SkillTagFilter
                 :tags="skillTags"
@@ -32,7 +39,7 @@
               <label for="dateFilter" class="form-label">Kuupäev</label>
               <input id="dateFilter" v-model="filter.date" type="date" class="form-control" />
             </div>
-            <div class="col-md-1 d-flex align-items-end">
+            <div class="col-md-2 d-flex align-items-end">
               <button class="btn btn-primary w-100" @click="getMyOrganizedEvents">Filtreeri</button>
             </div>
           </div>
@@ -51,6 +58,7 @@
                 <th>Pealkiri</th>
                 <th>Kuupäev</th>
                 <th>Linn</th>
+                <th>Maakond</th>
                 <th>Staatus</th>
                 <th>Osalejaid</th>
                 <th class="text-end">Tegevused</th>
@@ -61,6 +69,7 @@
                 <td>{{ organizedEvent.title }}</td>
                 <td>{{ formatDate(organizedEvent.date) }}</td>
                 <td>{{ organizedEvent.city }}</td>
+                <td>{{ organizedEvent.county }}</td>
                 <td>
                   <span class="badge" :class="statusBadgeClass(organizedEvent.status)">
                     {{ organizedEvent.status }}
@@ -101,6 +110,7 @@ import SkillTagFilter from '@/components/forms/SkillTagFilter.vue'
 import MyOrganizedEventsService from '@/api-services/MyOrganizedEventsService.js'
 import EventService from '@/api-services/EventService.js'
 import CityService from '@/api-services/CityService.js'
+import CountyService from '@/api-services/CountyService.js'
 import SkillTagService from '@/api-services/SkillTagService.js'
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
@@ -112,9 +122,11 @@ export default {
     return {
       organizedEvents: [],
       cities: [],
+      counties: [],
       skillTags: [],
       filter: {
         cityId: null,
+        countyId: null,
         skillTagId: null,
         date: '',
       },
@@ -151,6 +163,7 @@ export default {
     buildQueryParams() {
       const params = {}
       if (this.filter.cityId) params.cityId = this.filter.cityId
+      if (this.filter.countyId) params.countyId = this.filter.countyId
       if (this.filter.skillTagId) params.skillTagId = this.filter.skillTagId
       if (this.filter.date) params.date = this.filter.date
       return params
@@ -159,6 +172,13 @@ export default {
     getCities() {
       CityService.sendGetCitiesRequest()
         .then((response) => (this.cities = response.data))
+        .catch(() => NavigationService.navigateToErrorView())
+        .finally()
+    },
+
+    getCounties() {
+      CountyService.sendGetCountiesRequest()
+        .then((response) => (this.counties = response.data))
         .catch(() => NavigationService.navigateToErrorView())
         .finally()
     },
@@ -243,6 +263,7 @@ export default {
   },
   beforeMount() {
     this.getCities()
+    this.getCounties()
     this.getSkillTags()
     this.getMyOrganizedEvents()
   },

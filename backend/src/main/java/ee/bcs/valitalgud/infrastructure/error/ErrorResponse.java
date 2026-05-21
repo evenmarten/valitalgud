@@ -45,7 +45,10 @@ public enum ErrorResponse {
     INVALID_EMAIL_FORMAT("INVALID_EMAIL_FORMAT", "Vigane e-posti formaat", HttpStatus.BAD_REQUEST),
     WRONG_OLD_PASSWORD("WRONG_OLD_PASSWORD", "Praegune parool on vale", HttpStatus.BAD_REQUEST),
     PASSWORDS_DO_NOT_MATCH("PASSWORDS_DO_NOT_MATCH", "Uued paroolid ei ühti", HttpStatus.BAD_REQUEST),
-    PASSWORD_TOO_SHORT("PASSWORD_TOO_SHORT", "Parool peab olema vähemalt 8 tähemärki", HttpStatus.BAD_REQUEST);
+    PASSWORD_TOO_SHORT("PASSWORD_TOO_SHORT", "Parool peab olema vähemalt 8 tähemärki", HttpStatus.BAD_REQUEST),
+    CHAT_MESSAGE_REQUIRED("CHAT_MESSAGE_REQUIRED", "Sõnum ei tohi olla tühi", HttpStatus.BAD_REQUEST),
+    CHAT_NOT_CONFIGURED("CHAT_NOT_CONFIGURED", "AI vestlusrobot pole seadistatud (puudub API võti)", HttpStatus.SERVICE_UNAVAILABLE),
+    CHAT_REQUEST_FAILED("CHAT_REQUEST_FAILED", "AI vestlusroboti päring ebaõnnestus, proovi hiljem uuesti", HttpStatus.BAD_GATEWAY);
 
     private final String code;
     private final String message;

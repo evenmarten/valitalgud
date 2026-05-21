@@ -24,6 +24,16 @@
             </div>
 
             <div class="col-md-4">
+              <label for="countyFilter" class="form-label">Maakond</label>
+              <select id="countyFilter" v-model="filter.countyId" class="form-select">
+                <option :value="null">-- Kõik maakonnad --</option>
+                <option v-for="county in countyOptions" :key="county.id" :value="county.id">
+                  {{ county.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
               <label class="form-label">Oskuse-tag</label>
               <SkillTagFilter
                 :tags="skillTagOptions"
@@ -32,7 +42,7 @@
               />
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-3">
               <label for="fromDateFilter" class="form-label">Alates kuupäevast</label>
               <input
                 id="fromDateFilter"
@@ -72,7 +82,7 @@
             <div class="card-body d-flex flex-column">
               <h5 class="card-title">{{ event.title }}</h5>
               <p class="text-muted small mb-2">
-                {{ formatDate(event.eventDate) }} · {{ event.city }}
+                {{ formatDate(event.eventDate) }} · {{ event.city }}<span v-if="event.county"> · {{ event.county }}</span>
               </p>
               <p class="card-text text-truncate-3">{{ event.description }}</p>
 
@@ -114,9 +124,11 @@ export default {
     return {
       events: [],
       cityOptions: [],
+      countyOptions: [],
       skillTagOptions: [],
       filter: {
         cityId: null,
+        countyId: null,
         skillTagId: null,
         fromDate: '',
       },
@@ -134,6 +146,7 @@ export default {
     handleGetEventsResponse(events) {
       this.events = events
       this.populateCityOptions(events)
+      this.populateCountyOptions(events)
     },
 
     getSkillTags() {
@@ -157,6 +170,7 @@ export default {
     buildQueryParams() {
       const params = {}
       if (this.filter.cityId) params.cityId = this.filter.cityId
+      if (this.filter.countyId) params.countyId = this.filter.countyId
       if (this.filter.skillTagId) params.skillTagId = this.filter.skillTagId
       if (this.filter.fromDate) params.fromDate = this.filter.fromDate
       return params
@@ -164,13 +178,19 @@ export default {
 
     populateCityOptions(events) {
       if (this.cityOptions.length === 0) {
-        this.cityOptions = this.collectUniqueCities(events)
+        this.cityOptions = this.collectUniqueOptions(events, 'cityId', 'city')
       }
     },
 
-    collectUniqueCities(events) {
+    populateCountyOptions(events) {
+      if (this.countyOptions.length === 0) {
+        this.countyOptions = this.collectUniqueOptions(events, 'countyId', 'county')
+      }
+    },
+
+    collectUniqueOptions(events, idField, nameField) {
       const map = new Map()
-      events.forEach((event) => map.set(event.cityId, event.city))
+      events.forEach((event) => map.set(event[idField], event[nameField]))
       return Array.from(map, ([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name))
     },
 

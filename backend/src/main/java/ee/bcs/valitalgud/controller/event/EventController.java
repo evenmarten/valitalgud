@@ -40,7 +40,7 @@ public class EventController {
 
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Tagasta sündmuste loend",
-            description = "Tagastab kõik aktiivsed (is_cancelled = false) sündmused. Toetab linna, oskuse-tagi ja kuupäeva filtreid.")
+            description = "Tagastab kõik aktiivsed (is_cancelled = false) sündmused. Toetab linna, maakonna, oskuse-tagi ja kuupäeva filtreid.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sündmused edukalt tagastatud",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -51,9 +51,10 @@ public class EventController {
     })
     public List<EventResponseDto> getEvents(
             @RequestParam(required = false) Integer cityId,
+            @RequestParam(required = false) Integer countyId,
             @RequestParam(required = false) Integer skillTagId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate) {
-        return eventService.getFilteredEvents(cityId, skillTagId, fromDate);
+        return eventService.getFilteredEvents(cityId, countyId, skillTagId, fromDate);
     }
 
     @GetMapping(value = "/events/{eventId}", produces = MediaType.APPLICATION_JSON_VALUE)

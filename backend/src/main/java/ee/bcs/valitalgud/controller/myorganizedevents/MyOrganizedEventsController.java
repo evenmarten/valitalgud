@@ -30,7 +30,7 @@ public class MyOrganizedEventsController {
 
     @GetMapping(value = "/my-organized-events", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Tagasta minu korraldatud sündmused",
-            description = "Tagastab sisselogitud kasutaja korraldatud sündmused tabelivormingus. Toetab linna, oskuse-tagi ja kuupäeva filtreid.")
+            description = "Tagastab sisselogitud kasutaja korraldatud sündmused tabelivormingus. Toetab linna, maakonna, oskuse-tagi ja kuupäeva filtreid.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sündmused edukalt tagastatud",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -42,8 +42,9 @@ public class MyOrganizedEventsController {
     public List<OrganizedEventResponseDto> findMyOrganizedEvents(
             @RequestParam(required = false) Integer userId,
             @RequestParam(required = false) Integer cityId,
+            @RequestParam(required = false) Integer countyId,
             @RequestParam(required = false) Integer skillTagId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return myOrganizedEventsService.findMyOrganizedEvents(userId, cityId, skillTagId, date);
+        return myOrganizedEventsService.findMyOrganizedEvents(userId, cityId, countyId, skillTagId, date);
     }
 }

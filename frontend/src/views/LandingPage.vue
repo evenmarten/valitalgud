@@ -268,17 +268,21 @@
         <p class="footer-bottom mb-0">© 2026 Valitalgud · Sündmused ja talgud kogukonnale</p>
       </div>
     </footer>
+
+    <!-- ===== AI VESTLUSROBOT (ainult landing lehel) ===== -->
+    <ChatbotWidget />
   </div>
 </template>
 
 <script>
 import AppNavbar from '@/navigation/AppNavbar.vue'
+import ChatbotWidget from '@/components/common/ChatbotWidget.vue'
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
   name: 'LandingPage',
-  components: { AppNavbar },
+  components: { AppNavbar, ChatbotWidget },
   data() {
     return {
       isLoggedIn: false,

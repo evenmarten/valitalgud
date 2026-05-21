@@ -42,16 +42,16 @@ public class EventService {
     private final EventMapper eventMapper;
 
     @Transactional(readOnly = true)
-    public List<EventResponseDto> getFilteredEvents(Integer cityId, Integer skillTagId, LocalDate fromDate) {
-        return eventRepository.findFilteredEvents(cityId, skillTagId, fromDate, null, null, false)
+    public List<EventResponseDto> getFilteredEvents(Integer cityId, Integer countyId, Integer skillTagId, LocalDate fromDate) {
+        return eventRepository.findFilteredEvents(cityId, countyId, skillTagId, fromDate, null, null, false)
                 .stream()
                 .map(this::toEventResponseDto)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<Event> findOrganizedEvents(Integer organizerId, Integer cityId, Integer skillTagId, LocalDate date) {
-        return eventRepository.findFilteredEvents(cityId, skillTagId, date, date, organizerId, true);
+    public List<Event> findOrganizedEvents(Integer organizerId, Integer cityId, Integer countyId, Integer skillTagId, LocalDate date) {
+        return eventRepository.findFilteredEvents(cityId, countyId, skillTagId, date, date, organizerId, true);
     }
 
     @Transactional(readOnly = true)

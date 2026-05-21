@@ -12,6 +12,8 @@ public interface MyEventProjection {
 
     String getLocation();
 
+    String getCounty();
+
     String getDescription();
 
     String getUserRegistrationStatus();

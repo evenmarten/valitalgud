@@ -46,8 +46,9 @@ public class MyEventsController {
             @RequestParam Integer userId,
             @RequestParam String filter,
             @RequestParam(required = false) Integer cityId,
+            @RequestParam(required = false) Integer countyId,
             @RequestParam(required = false) Integer skillTagId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate) {
-        return myEventsService.findMyEvents(userId, filter, cityId, skillTagId, fromDate);
+        return myEventsService.findMyEvents(userId, filter, cityId, countyId, skillTagId, fromDate);
     }
 }

@@ -24,7 +24,7 @@
             </span>
           </p>
           <p class="text-muted mb-0">
-            {{ event.city }}<span v-if="event.address"> · {{ event.address }}</span>
+            {{ event.city }}<span v-if="event.county"> · {{ event.county }}</span><span v-if="event.address"> · {{ event.address }}</span>
           </p>
         </div>
 
@@ -131,6 +131,7 @@ export default {
         title: '',
         description: '',
         city: '',
+        county: '',
         address: '',
         eventDate: '',
         startTime: '',

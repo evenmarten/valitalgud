@@ -33,6 +33,14 @@
             </div>
 
             <div class="col-md-4">
+              <label for="countyFilter" class="form-label">Maakond</label>
+              <select id="countyFilter" v-model="filterParams.countyId" class="form-select">
+                <option :value="null">-- Kõik maakonnad --</option>
+                <option v-for="county in counties" :key="county.id" :value="county.id">{{ county.name }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
               <label class="form-label">Oskuse-tag</label>
               <SkillTagFilter
                 :tags="skillTags"
@@ -41,7 +49,7 @@
               />
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-3">
               <label for="fromDateFilter" class="form-label">Alates kuupäevast</label>
               <input id="fromDateFilter" v-model="filterParams.fromDate" type="date" class="form-control" />
             </div>
@@ -72,7 +80,7 @@
                 </span>
               </div>
               <p class="text-muted small mb-2">
-                {{ formatDate(myEvent.date) }} · {{ myEvent.location }}
+                {{ formatDate(myEvent.date) }} · {{ myEvent.location }}<span v-if="myEvent.county"> · {{ myEvent.county }}</span>
               </p>
               <p class="card-text text-truncate-3">{{ myEvent.description }}</p>
               <button class="btn btn-outline-primary mt-auto" @click="goToEventDetails(myEvent.eventId)">
@@ -92,6 +100,7 @@ import AlertError from '@/components/common/AlertError.vue'
 import SkillTagFilter from '@/components/forms/SkillTagFilter.vue'
 import MyEventsService from '@/api-services/MyEventsService.js'
 import CityService from '@/api-services/CityService.js'
+import CountyService from '@/api-services/CountyService.js'
 import SkillTagService from '@/api-services/SkillTagService.js'
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
@@ -109,9 +118,11 @@ export default {
       ],
       myEvents: [],
       cities: [],
+      counties: [],
       skillTags: [],
       filterParams: {
         cityId: null,
+        countyId: null,
         skillTagId: null,
         fromDate: '',
       },
@@ -130,6 +141,7 @@ export default {
     buildFilterParams() {
       const params = {}
       if (this.filterParams.cityId) params.cityId = this.filterParams.cityId
+      if (this.filterParams.countyId) params.countyId = this.filterParams.countyId
       if (this.filterParams.skillTagId) params.skillTagId = this.filterParams.skillTagId
       if (this.filterParams.fromDate) params.fromDate = this.filterParams.fromDate
       return params
@@ -138,6 +150,13 @@ export default {
     getCities() {
       CityService.sendGetCitiesRequest()
         .then((response) => (this.cities = response.data))
+        .catch(() => NavigationService.navigateToErrorView())
+        .finally()
+    },
+
+    getCounties() {
+      CountyService.sendGetCountiesRequest()
+        .then((response) => (this.counties = response.data))
         .catch(() => NavigationService.navigateToErrorView())
         .finally()
     },
@@ -199,6 +218,7 @@ export default {
   },
   beforeMount() {
     this.getCities()
+    this.getCounties()
     this.getSkillTags()
     this.getMyEvents()
   },

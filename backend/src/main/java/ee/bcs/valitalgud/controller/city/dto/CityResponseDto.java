@@ -12,4 +12,10 @@ public class CityResponseDto {
 
     @Schema(description = "Linna nimi", example = "Tallinn")
     private String name;
+
+    @Schema(description = "Maakonna ID, kuhu linn kuulub", example = "1")
+    private Integer countyId;
+
+    @Schema(description = "Maakonna nimi, kuhu linn kuulub", example = "Harju maakond")
+    private String county;
 }

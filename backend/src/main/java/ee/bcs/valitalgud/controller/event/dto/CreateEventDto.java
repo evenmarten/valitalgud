@@ -17,7 +17,7 @@ public class CreateEventDto {
     @Schema(description = "Sündmuse kirjeldus", example = "Sündmuse kirjeldus")
     private String description;
 
-    @Schema(description = "Linna ID", example = "1")
+    @Schema(description = "Linna ID (maakond tuletatakse linnast)", example = "1")
     private Integer cityId;
 
     @Schema(description = "Aadress", example = "Uus tänav 1")

@@ -26,6 +26,12 @@ public class EventResponseDto {
     @Schema(description = "Linn", example = "Tallinn")
     private String city;
 
+    @Schema(description = "Maakonna ID", example = "1")
+    private Integer countyId;
+
+    @Schema(description = "Maakond", example = "Harju maakond")
+    private String county;
+
     @Schema(description = "Aadress", example = "Näidis tänav 123")
     private String address;
 

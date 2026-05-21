@@ -21,13 +21,19 @@
           </div>
 
           <div class="row g-3 mt-1">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label">Linn (ei saa muuta)</label>
               <select :value="cityId" disabled class="form-select">
                 <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
               </select>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <label class="form-label">Maakond (ei saa muuta)</label>
+              <select :value="countyId" disabled class="form-select">
+                <option v-for="county in counties" :key="county.id" :value="county.id">{{ county.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
               <label class="form-label">Aadress *</label>
               <input v-model="updateEventDto.address" type="text" class="form-control" />
             </div>
@@ -108,6 +114,7 @@ import AlertError from '@/components/common/AlertError.vue'
 import SkillTagMultiSelect from '@/components/forms/SkillTagMultiSelect.vue'
 import EventService from '@/api-services/EventService.js'
 import CityService from '@/api-services/CityService.js'
+import CountyService from '@/api-services/CountyService.js'
 import SkillTagService from '@/api-services/SkillTagService.js'
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
@@ -119,6 +126,7 @@ export default {
     return {
       eventId: 0,
       cityId: null,
+      countyId: null,
       currentParticipants: 0,
       updateEventDto: {
         title: '',
@@ -132,6 +140,7 @@ export default {
         bannerImageUrl: '',
       },
       cities: [],
+      counties: [],
       skillTags: [],
       isCancelModalOpen: false,
       errorMessage: '',
@@ -141,6 +150,13 @@ export default {
     getCities() {
       CityService.sendGetCitiesRequest()
         .then((response) => (this.cities = response.data))
+        .catch(() => NavigationService.navigateToErrorView())
+        .finally()
+    },
+
+    getCounties() {
+      CountyService.sendGetCountiesRequest()
+        .then((response) => (this.counties = response.data))
         .catch(() => NavigationService.navigateToErrorView())
         .finally()
     },
@@ -162,6 +178,7 @@ export default {
 
     handleGetEventResponse(event) {
       this.cityId = event.cityId
+      this.countyId = event.countyId
       this.currentParticipants = event.currentParticipants ?? 0
       this.updateEventDto = {
         title: event.title ?? '',
@@ -273,6 +290,7 @@ export default {
   beforeMount() {
     this.eventId = Number(this.$route.params.id)
     this.getCities()
+    this.getCounties()
     this.getSkillTags()
     this.getEvent()
   },

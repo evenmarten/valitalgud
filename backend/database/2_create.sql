@@ -44,8 +44,17 @@ CREATE TABLE carts (
 CREATE TABLE cities (
                         id serial  NOT NULL,
                         name varchar(100)  NOT NULL,
+                        county_id integer  NOT NULL,
                         CONSTRAINT AK_0 UNIQUE (name) NOT DEFERRABLE  INITIALLY IMMEDIATE,
                         CONSTRAINT cities_pk PRIMARY KEY (id)
+);
+
+-- Table: counties
+CREATE TABLE counties (
+                          id serial  NOT NULL,
+                          name varchar(100)  NOT NULL,
+                          CONSTRAINT counties_name_unique UNIQUE (name) NOT DEFERRABLE  INITIALLY IMMEDIATE,
+                          CONSTRAINT counties_pk PRIMARY KEY (id)
 );
 
 -- Table: comments
@@ -289,6 +298,15 @@ ALTER TABLE events ADD CONSTRAINT FK_2
 ALTER TABLE events ADD CONSTRAINT FK_3
     FOREIGN KEY (city_id)
         REFERENCES cities (id)
+        ON DELETE  RESTRICT
+        NOT DEFERRABLE
+            INITIALLY IMMEDIATE
+;
+
+-- Reference: cities_county_fk (table: cities)
+ALTER TABLE cities ADD CONSTRAINT cities_county_fk
+    FOREIGN KEY (county_id)
+        REFERENCES counties (id)
         ON DELETE  RESTRICT
         NOT DEFERRABLE
             INITIALLY IMMEDIATE

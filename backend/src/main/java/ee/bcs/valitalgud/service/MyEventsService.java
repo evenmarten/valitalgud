@@ -25,13 +25,13 @@ public class MyEventsService {
 
     @Transactional(readOnly = true)
     public List<MyEventResponseDto> findMyEvents(Integer userId, String filter, Integer cityId,
-            Integer skillTagId, LocalDate fromDate) {
+            Integer countyId, Integer skillTagId, LocalDate fromDate) {
         validateUserId(userId);
         validateFilter(filter);
 
         DateRange range = buildDateRange(filter);
         List<MyEventProjection> projections = registrationRepository
-                .findMyEventsBy(userId, range.fromDate(), range.toDate(), cityId, skillTagId, fromDate);
+                .findMyEventsBy(userId, range.fromDate(), range.toDate(), cityId, countyId, skillTagId, fromDate);
         return projections.stream().map(this::toMyEventResponseDto).toList();
     }
 
@@ -71,6 +71,7 @@ public class MyEventsService {
                 projection.getTitle(),
                 projection.getDate(),
                 projection.getLocation(),
+                projection.getCounty(),
                 projection.getDescription(),
                 projection.getUserRegistrationStatus()
         );

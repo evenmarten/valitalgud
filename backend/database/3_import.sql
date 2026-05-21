@@ -2,11 +2,41 @@
 -- Näidisandmed
 -- ============================================
 
--- Linnad
-INSERT INTO cities (name) VALUES
-    ('Tallinn'),
-    ('Tartu'),
-    ('Pärnu');
+-- Maakonnad (linnad viitavad maakondadele, seega lisame maakonnad enne linnu)
+INSERT INTO counties (name) VALUES
+    ('Harju maakond'),
+    ('Hiiu maakond'),
+    ('Ida-Viru maakond'),
+    ('Järva maakond'),
+    ('Jõgeva maakond'),
+    ('Lääne maakond'),
+    ('Lääne-Viru maakond'),
+    ('Põlva maakond'),
+    ('Pärnu maakond'),
+    ('Rapla maakond'),
+    ('Saare maakond'),
+    ('Tartu maakond'),
+    ('Valga maakond'),
+    ('Viljandi maakond'),
+    ('Võru maakond');
+
+-- Linnad (iga linn kuulub ühte maakonda)
+INSERT INTO cities (name, county_id) VALUES
+    ('Tallinn',    (SELECT id FROM counties WHERE name = 'Harju maakond')),
+    ('Kärdla',     (SELECT id FROM counties WHERE name = 'Hiiu maakond')),
+    ('Jõhvi',      (SELECT id FROM counties WHERE name = 'Ida-Viru maakond')),
+    ('Paide',      (SELECT id FROM counties WHERE name = 'Järva maakond')),
+    ('Jõgeva',     (SELECT id FROM counties WHERE name = 'Jõgeva maakond')),
+    ('Haapsalu',   (SELECT id FROM counties WHERE name = 'Lääne maakond')),
+    ('Rakvere',    (SELECT id FROM counties WHERE name = 'Lääne-Viru maakond')),
+    ('Põlva',      (SELECT id FROM counties WHERE name = 'Põlva maakond')),
+    ('Pärnu',      (SELECT id FROM counties WHERE name = 'Pärnu maakond')),
+    ('Rapla',      (SELECT id FROM counties WHERE name = 'Rapla maakond')),
+    ('Kuressaare', (SELECT id FROM counties WHERE name = 'Saare maakond')),
+    ('Tartu',      (SELECT id FROM counties WHERE name = 'Tartu maakond')),
+    ('Valga',      (SELECT id FROM counties WHERE name = 'Valga maakond')),
+    ('Viljandi',   (SELECT id FROM counties WHERE name = 'Viljandi maakond')),
+    ('Võru',       (SELECT id FROM counties WHERE name = 'Võru maakond'));
 
 -- Rollid
 INSERT INTO roles (name) VALUES ('USER'), ('ADMIN');
@@ -38,7 +68,7 @@ INSERT INTO skill_tags (name) VALUES
     ('React'),
     ('Design');
 
--- Sündmused
+-- Sündmused (maakond tuleneb linnast — events viitab ainult linnale)
 INSERT INTO events (organizer_id, city_id, title, description, address, event_date, start_time, end_time, max_participants, banner_image_url) VALUES
     ((SELECT u.id FROM users u JOIN contacts c ON c.user_id = u.id WHERE c.email = 'organizer@example.com'),
      (SELECT id FROM cities WHERE name = 'Tallinn'),
