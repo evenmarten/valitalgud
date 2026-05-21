@@ -20,11 +20,26 @@
 }
 
 /* ---------- Alus ---------- */
+html,
+body {
+  height: 100%;
+}
+
 body {
   background-color: var(--nb-bg);
   font-family: 'Space Grotesk', system-ui, sans-serif;
   color: var(--nb-black);
   font-weight: 500;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-wrapper {
+  flex: 1;
 }
 
 h1, h2, h3, h4, h5, h6 {

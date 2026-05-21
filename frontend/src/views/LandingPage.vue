@@ -759,57 +759,6 @@ export default {
   margin: 0 auto 1.75rem;
 }
 
-/* ---------- Footer ---------- */
-.landing-footer {
-  background: var(--nb-black);
-  border-top: 6px solid var(--nb-yellow);
-  color: var(--nb-white);
-}
-
-.footer-brand {
-  font-family: 'Archivo Black', sans-serif;
-  color: var(--nb-yellow);
-  letter-spacing: 1px;
-}
-
-.footer-heading {
-  text-transform: uppercase;
-  color: var(--nb-yellow);
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-}
-
-.footer-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-links li {
-  margin-bottom: 0.4rem;
-}
-
-.footer-links a {
-  color: var(--nb-white);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.footer-links a:hover {
-  color: var(--nb-yellow);
-}
-
-.footer-divider {
-  border-color: var(--nb-yellow);
-  opacity: 0.5;
-  margin: 2rem 0 1rem;
-}
-
-.footer-bottom {
-  font-size: 0.9rem;
-  color: #bbb;
-}
-
 @media (max-width: 992px) {
   .hero-title {
     font-size: 2.3rem;
