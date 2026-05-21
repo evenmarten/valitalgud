@@ -28,7 +28,10 @@
         <a v-if="isLoggedIn" href="#" @click.prevent="goToMyEvents" class="nav-link text-white">Minu sündmused</a>
         <a v-if="isLoggedIn" href="#" @click.prevent="goToCalendar" class="nav-link text-white">Kalender</a>
         <a href="#" @click.prevent="goToShop" class="nav-link text-white">e-pood</a>
-        <a href="#" @click.prevent="goToCart" class="nav-link text-white">Ostukorv</a>
+        <a href="#" @click.prevent="goToCart" class="nav-link text-white cart-link">
+          Ostukorv
+          <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+        </a>
         <a v-if="isLoggedIn" href="#" @click.prevent="logout" class="nav-link text-white">Logi välja</a>
         <a v-else href="#" @click.prevent="goToLogin" class="nav-link text-white">Logi sisse</a>
       </div>
@@ -46,6 +49,7 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      cartCount: 0,
       logo,
     }
   },
@@ -91,9 +95,18 @@ export default {
       this.isLoggedIn = false
       NavigationService.navigateToLogin()
     },
+    loadCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+      this.cartCount = cart.reduce((sum, item) => sum + item.quantity, 0)
+    },
   },
   beforeMount() {
     this.isLoggedIn = AuthHelper.isLoggedIn()
+    this.loadCartCount()
+    window.addEventListener('cart-updated', this.loadCartCount)
+  },
+  beforeUnmount() {
+    window.removeEventListener('cart-updated', this.loadCartCount)
   },
 }
 </script>
@@ -122,5 +135,28 @@ export default {
   background-color: var(--nb-yellow);
   color: var(--nb-black);
   border: 2px solid var(--nb-black);
+}
+
+.cart-link {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background-color: var(--nb-pink);
+  color: var(--nb-white);
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 900;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0 var(--nb-black);
 }
 </style>

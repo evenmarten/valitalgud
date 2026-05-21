@@ -2,11 +2,19 @@
   <div>
     <AppNavbar />
 
-    <div class="container py-4">
-      <h2 class="mb-4">Meie pakutavad Tooted</h2>
+    <div class="hero-banner">
+      <div class="container">
+        <h1 class="hero-title">Valitalgud Merch</h1>
+        <p class="hero-sub">Kanna oma kirge — kvaliteetne kraam tõelistele üritussõpradele</p>
+      </div>
+    </div>
 
+    <div class="container py-4">
       <AlertError :error-message="errorMessage" />
-      <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+      <div v-if="successMessage" class="alert-success-nb mb-4">
+        {{ successMessage }}
+      </div>
 
       <div class="row g-4">
         <div
@@ -14,25 +22,58 @@
           :key="product.productId"
           class="col-sm-6 col-md-4"
         >
-          <div class="card h-100 shadow-sm">
-            <img
-              v-if="product.imageUrl"
-              :src="product.imageUrl"
-              :alt="product.name"
-              class="card-img-top"
-              style="height: 260px; object-fit: contain; background: #ffffff; padding: 16px;"
-            />
-            <div v-else class="bg-light d-flex align-items-center justify-content-center" style="height: 260px;">
-              <span class="text-muted small">Pilt puudub</span>
+          <div
+            class="card h-100 product-card"
+            :class="{ 'in-cart': isInCart(product.productId) }"
+          >
+            <div class="card-img-wrapper" @click="openDetails(product.productId)">
+              <img
+                v-if="product.imageUrl"
+                :src="product.imageUrl"
+                :alt="product.name"
+                class="card-img-top product-img"
+                style="height: 240px; object-fit: contain; background: #ffffff; padding: 16px;"
+              />
+              <div
+                v-else
+                class="d-flex align-items-center justify-content-center"
+                style="height: 240px; background: #f0ede0;"
+              >
+                <span class="text-muted small">Pilt puudub</span>
+              </div>
+
+              <span v-if="isInCart(product.productId)" class="badge-in-cart">
+                KORVIS ✓
+              </span>
             </div>
+
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title fw-semibold">{{ product.name }}</h5>
-              <p class="card-text fw-bold fs-5 text-success">{{ Number(product.price).toFixed(2) }} €</p>
-              <div class="d-flex gap-4 mt-auto">
-                <button class="btn btn-success btn-sm" @click="addToCart(product, 1)">
-                  Lisa ostukorvi
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="product-price">{{ Number(product.price).toFixed(2) }} €</p>
+
+              <div class="d-flex gap-3 mt-auto align-items-center">
+                <button
+                  v-if="!isInCart(product.productId)"
+                  class="btn btn-success btn-sm flex-grow-1"
+                  @click="addToCart(product, 1)"
+                >
+                  Lisa korvi
                 </button>
-                <button class="btn btn-outline-dark btn-sm fw-bold" @click="openDetails(product.productId)">
+                <div v-else class="d-flex align-items-center gap-1 flex-grow-1">
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    @click="decrementCartQty(product.productId)"
+                  >–</button>
+                  <span class="fw-bold px-2">{{ cartQty(product.productId) }}</span>
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    @click="incrementCartQty(product.productId)"
+                  >+</button>
+                </div>
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  @click="openDetails(product.productId)"
+                >
                   Detailid
                 </button>
               </div>
@@ -42,38 +83,78 @@
       </div>
     </div>
 
+    <button
+      v-if="cartCount > 0"
+      class="cart-float"
+      @click="goToCart"
+    >
+      🛒 {{ cartCount }} tk &nbsp;·&nbsp; {{ cartTotal }} €
+    </button>
+
     <div v-if="isPanelOpen" class="panel-overlay" @click.self="closePanel">
       <div class="panel-content p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="mb-0">Product Details</h5>
+          <h5 class="mb-0">Toote detailid</h5>
           <button type="button" class="btn-close" @click="closePanel"></button>
         </div>
 
-        <img
-          v-if="selectedProduct.imageUrl"
-          :src="selectedProduct.imageUrl"
-          :alt="selectedProduct.name"
-          class="img-fluid rounded mb-3"
-          style="height: 280px; object-fit: contain; width: 100%; background: #ffffff; padding: 16px;"
-        />
-        <div v-else class="bg-light rounded mb-3 d-flex align-items-center justify-content-center" style="height: 280px;">
-          <span class="text-muted small">Pilt puudub</span>
+        <div class="card-img-wrapper mb-3">
+          <img
+            v-if="selectedProduct.imageUrl"
+            :src="selectedProduct.imageUrl"
+            :alt="selectedProduct.name"
+            class="img-fluid rounded"
+            style="height: 280px; object-fit: contain; width: 100%; background: #ffffff; padding: 16px;"
+          />
+          <div
+            v-else
+            class="d-flex align-items-center justify-content-center"
+            style="height: 280px; background: #f0ede0;"
+          >
+            <span class="text-muted small">Pilt puudub</span>
+          </div>
         </div>
 
         <h4 class="fw-bold mb-2">{{ selectedProduct.name }}</h4>
-        <p class="text-muted fs-5 mb-3">{{ selectedProduct.description }}</p>
-        <p class="fs-3 fw-bold text-success mb-2">{{ Number(selectedProduct.price).toFixed(2) }} €</p>
-        <p class="text-muted mb-4">Laoseis: {{ selectedProduct.stockQuantity }} tk</p>
+        <p class="text-muted mb-3">{{ selectedProduct.description }}</p>
+        <p class="product-price mb-2">{{ Number(selectedProduct.price).toFixed(2) }} €</p>
 
-        <div class="d-flex align-items-center gap-3 mb-4">
-          <span>Kogus:</span>
+        <p
+          class="mb-4"
+          :class="selectedProduct.stockQuantity <= 5 ? 'stock-low' : 'stock-ok'"
+        >
+          <span v-if="selectedProduct.stockQuantity <= 5">
+            ⚠ Viimased {{ selectedProduct.stockQuantity }} tk laos!
+          </span>
+          <span v-else>
+            Laoseis: {{ selectedProduct.stockQuantity }} tk
+          </span>
+        </p>
+
+        <div v-if="isInCart(selectedProduct.productId)" class="panel-cart-control mb-4">
+          <button
+            class="panel-cart-btn"
+            @click="decrementCartQty(selectedProduct.productId)"
+          >–</button>
+          <div class="panel-cart-info">
+            <span class="panel-cart-qty">{{ cartQty(selectedProduct.productId) }}</span>
+            <span class="panel-cart-label">korvis</span>
+          </div>
+          <button
+            class="panel-cart-btn"
+            @click="incrementCartQty(selectedProduct.productId)"
+          >+</button>
+        </div>
+
+        <div v-else class="d-flex align-items-center gap-3 mb-4">
+          <span class="fw-bold text-uppercase" style="font-size: 0.85rem;">Kogus:</span>
           <div class="d-flex align-items-center gap-2">
             <button
               class="btn btn-outline-secondary btn-sm"
               :disabled="quantity <= 1"
               @click="decrementQuantity"
-            >-</button>
-            <span class="px-2">{{ quantity }}</span>
+            >–</button>
+            <span class="px-3 fw-bold fs-5">{{ quantity }}</span>
             <button
               class="btn btn-outline-secondary btn-sm"
               :disabled="quantity >= selectedProduct.stockQuantity"
@@ -82,7 +163,13 @@
           </div>
         </div>
 
-        <button class="btn btn-success w-100" @click="addToCartFromPanel">Lisa ostukorvi</button>
+        <button
+          v-if="!isInCart(selectedProduct.productId)"
+          class="btn btn-success w-100"
+          @click="addToCartFromPanel"
+        >
+          Lisa ostukorvi
+        </button>
       </div>
     </div>
   </div>
@@ -100,6 +187,7 @@ export default {
   data() {
     return {
       products: [],
+      cartItems: [],
       selectedProduct: {
         productId: 0,
         name: '',
@@ -113,6 +201,14 @@ export default {
       errorMessage: '',
       successMessage: '',
     }
+  },
+  computed: {
+    cartCount() {
+      return this.cartItems.reduce((sum, item) => sum + item.quantity, 0)
+    },
+    cartTotal() {
+      return this.cartItems.reduce((sum, item) => sum + item.lineTotal, 0).toFixed(2)
+    },
   },
   methods: {
     getProducts() {
@@ -151,6 +247,15 @@ export default {
       this.quantity--
     },
 
+    isInCart(productId) {
+      return this.cartItems.some((item) => item.productId === productId)
+    },
+
+    cartQty(productId) {
+      const item = this.cartItems.find((item) => item.productId === productId)
+      return item ? item.quantity : 0
+    },
+
     addToCart(product, quantity) {
       this.addToCartLocalStorage(product, quantity)
     },
@@ -177,29 +282,260 @@ export default {
         })
       }
       localStorage.setItem('cart', JSON.stringify(cart))
-      this.successMessage = 'Toode lisatud ostukorvi!'
-      setTimeout(() => (this.successMessage = ''), 2000)
+      this.cartItems = cart
+      window.dispatchEvent(new CustomEvent('cart-updated'))
+      this.successMessage = `${product.name} lisatud ostukorvi!`
+      setTimeout(() => (this.successMessage = ''), 2500)
+    },
+
+    decrementCartQty(productId) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+      const item = cart.find((i) => i.productId === productId)
+      if (!item) return
+      if (item.quantity <= 1) {
+        const filtered = cart.filter((i) => i.productId !== productId)
+        localStorage.setItem('cart', JSON.stringify(filtered))
+        this.cartItems = filtered
+        window.dispatchEvent(new CustomEvent('cart-updated'))
+      } else {
+        item.quantity--
+        item.lineTotal = Number((item.price * item.quantity).toFixed(2))
+        localStorage.setItem('cart', JSON.stringify(cart))
+        this.cartItems = cart
+        window.dispatchEvent(new CustomEvent('cart-updated'))
+      }
+    },
+
+    incrementCartQty(productId) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+      const item = cart.find((i) => i.productId === productId)
+      if (!item) return
+      item.quantity++
+      item.lineTotal = Number((item.price * item.quantity).toFixed(2))
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.cartItems = cart
+      window.dispatchEvent(new CustomEvent('cart-updated'))
+    },
+
+    goToCart() {
+      NavigationService.navigateToCart()
+    },
+
+    loadCart() {
+      this.cartItems = JSON.parse(localStorage.getItem('cart') || '[]')
     },
   },
   beforeMount() {
     this.getProducts()
+    this.loadCart()
   },
 }
 </script>
 
 <style scoped>
+/* Hero */
+.hero-banner {
+  background-color: var(--nb-yellow);
+  border-bottom: var(--nb-border);
+  box-shadow: 0 5px 0 var(--nb-black);
+  padding: 2.5rem 0 2rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* Kaardid */
+.product-card {
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  cursor: default;
+}
+
+.product-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--nb-black) !important;
+}
+
+.product-card.in-cart {
+  border-color: var(--nb-green) !important;
+  box-shadow: 5px 5px 0 var(--nb-green) !important;
+}
+
+.product-card.in-cart:hover {
+  box-shadow: 8px 8px 0 var(--nb-green) !important;
+}
+
+/* Pildi wrapper */
+.card-img-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.product-img {
+  display: block;
+}
+
+/* "KORVIS ✓" badge pildil */
+.badge-in-cart {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--nb-green);
+  color: var(--nb-black);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0 var(--nb-black);
+}
+
+/* Hind */
+.product-price {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.4rem;
+  color: var(--nb-black);
+  margin-bottom: 0;
+}
+
+/* Success teade */
+.alert-success-nb {
+  background-color: var(--nb-green);
+  border: var(--nb-border);
+  box-shadow: var(--nb-shadow);
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+/* Laoseis */
+.stock-low {
+  color: var(--nb-pink);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.stock-ok {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.panel-cart-control {
+  display: flex;
+  align-items: stretch;
+  border: var(--nb-border);
+  box-shadow: var(--nb-shadow);
+}
+
+.panel-cart-btn {
+  background-color: var(--nb-yellow);
+  border: none;
+  border-right: var(--nb-border);
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  width: 56px;
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+  flex-shrink: 0;
+}
+
+.panel-cart-btn:last-child {
+  border-right: none;
+  border-left: var(--nb-border);
+}
+
+.panel-cart-btn:hover {
+  background-color: var(--nb-black);
+  color: var(--nb-yellow);
+}
+
+.panel-cart-btn:active {
+  background-color: var(--nb-black);
+  color: var(--nb-yellow);
+}
+
+.panel-cart-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--nb-green);
+  padding: 0.6rem 0;
+}
+
+.panel-cart-qty {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.panel-cart-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.75;
+}
+
+/* Ujuv ostukorv */
+.cart-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background-color: var(--nb-black);
+  color: var(--nb-yellow);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 0.75rem 1.4rem;
+  border: 3px solid var(--nb-yellow);
+  box-shadow: 5px 5px 0 var(--nb-yellow);
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+.cart-float:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--nb-yellow);
+}
+
+.cart-float:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--nb-yellow);
+}
+
+/* Paneel */
 .panel-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1050;
   display: flex;
   justify-content: flex-end;
 }
 
 .panel-content {
-  background: white;
-  width: 420px;
+  background: var(--nb-bg);
+  border-left: var(--nb-border);
+  width: 440px;
   height: 100%;
   overflow-y: auto;
 }
