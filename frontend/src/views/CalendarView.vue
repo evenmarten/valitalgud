@@ -5,61 +5,65 @@
     <div class="container py-4">
       <AlertError :error-message="errorMessage" />
 
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <button class="btn btn-outline-secondary" @click="prevMonth">&lsaquo; Eelmine</button>
-        <h4 class="mb-0">{{ monthName }} {{ currentYear }}</h4>
-        <button class="btn btn-outline-secondary" @click="nextMonth">Järgmine &rsaquo;</button>
-      </div>
-
-      <div class="calendar-grid mb-1">
-        <div v-for="weekDay in weekDays" :key="weekDay" class="text-center fw-bold text-muted small py-1">
-          {{ weekDay }}
+      <div class="calendar-frame">
+        <div class="calendar-header">
+          <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">&lsaquo; Eelmine</button>
+          <h4 class="mb-0">{{ monthName }} {{ currentYear }}</h4>
+          <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">Järgmine &rsaquo;</button>
         </div>
-      </div>
 
-      <div class="calendar-grid">
-        <div
-          v-for="(day, index) in calendarGrid"
-          :key="index"
-          class="calendar-cell"
-          :class="{
-            'calendar-cell--active': !!day,
-            'calendar-cell--selected': day && isSelected(day),
-            'calendar-cell--has-events': day && daysWithEvents.includes(day),
-          }"
-          @click="day && selectDay(day)"
-        >
-          <span v-if="day">{{ day }}</span>
-          <span v-if="day && daysWithEvents.includes(day)" class="event-dot"></span>
+        <div class="calendar-weekdays">
+          <div v-for="weekDay in weekDays" :key="weekDay" class="weekday-label">
+            {{ weekDay }}
+          </div>
+        </div>
+
+        <div class="calendar-grid">
+          <div
+            v-for="(day, index) in calendarGrid"
+            :key="index"
+            class="calendar-cell"
+            :class="{
+              'calendar-cell--active': !!day,
+              'calendar-cell--selected': day && isSelected(day),
+              'calendar-cell--has-events': day && daysWithEvents.includes(day),
+            }"
+            @click="day && selectDay(day)"
+          >
+            <span v-if="day" class="day-number">{{ day }}</span>
+            <span v-if="day && daysWithEvents.includes(day)" class="event-pip"></span>
+          </div>
         </div>
       </div>
 
       <div v-if="selectedDate" class="mt-4">
-        <h5 class="mb-3">{{ formattedSelectedDate }} sündmused</h5>
+        <div class="events-section-header">
+          <h5 class="mb-0">{{ formattedSelectedDate }}</h5>
+          <span v-if="dayEvents.length > 0" class="events-count-badge">{{ dayEvents.length }} sündmust</span>
+        </div>
 
-        <div v-if="dayEvents.length === 0" class="text-muted py-2">
+        <div v-if="dayEvents.length === 0" class="no-events-box">
           Sel päeval pole sündmusi
         </div>
 
-        <div v-for="event in dayEvents" :key="event.eventId" class="card mb-2">
-          <div class="card-body py-2">
-            <div class="d-flex justify-content-between align-items-start gap-3">
-              <div class="flex-grow-1 overflow-hidden">
-                <h6 class="card-title mb-1">{{ event.title }}</h6>
-                <p class="text-muted small mb-1">
-                  {{ event.startTime }}<span v-if="event.endTime">–{{ event.endTime }}</span>
+        <div v-else class="event-btn-list">
+          <div
+            v-for="event in dayEvents"
+            :key="event.eventId"
+            class="event-btn-card"
+            @click="goToEventDetails(event.eventId)"
+          >
+            <div class="event-btn-inner">
+              <div class="event-btn-left">
+                <div class="event-btn-title">{{ event.title }}</div>
+                <div class="event-btn-meta">
+                  <span v-if="event.startTime">{{ event.startTime }}</span>
+                  <span v-if="event.endTime">–{{ event.endTime }}</span>
                   <span v-if="event.city"> · {{ event.city }}</span>
-                </p>
-                <p v-if="event.description" class="card-text small text-truncate-2 mb-0">
-                  {{ event.description }}
-                </p>
+                </div>
+                <div v-if="event.description" class="event-btn-desc">{{ event.description }}</div>
               </div>
-              <button
-                class="btn btn-outline-primary btn-sm flex-shrink-0"
-                @click="goToEventDetails(event.eventId)"
-              >
-                Näita rohkem
-              </button>
+              <span class="event-btn-arrow">&rarr;</span>
             </div>
           </div>
         </div>
@@ -216,59 +220,205 @@ export default {
 </script>
 
 <style scoped>
+/* ---- Kalender raam ---- */
+.calendar-frame {
+  border: 3px solid var(--nb-black);
+  box-shadow: 6px 6px 0 var(--nb-black);
+  background: var(--nb-white);
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.2rem;
+  border-bottom: 3px solid var(--nb-black);
+  background: var(--nb-yellow);
+}
+
+/* ---- Nädalapäevad ---- */
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--nb-black);
+}
+
+.weekday-label {
+  text-align: center;
+  padding: 0.5rem 0;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+/* ---- Kalendriruudustik ---- */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
 }
 
 .calendar-cell {
-  min-height: 52px;
+  min-height: 62px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 4px 2px;
-  gap: 3px;
+  border-right: 2px solid var(--nb-black);
+  border-bottom: 2px solid var(--nb-black);
+  padding: 6px 4px;
+  gap: 4px;
+  background: var(--nb-white);
+}
+
+.calendar-cell:nth-child(7n) {
+  border-right: none;
 }
 
 .calendar-cell--active {
-  border-color: #dee2e6;
   cursor: pointer;
 }
 
 .calendar-cell--active:hover {
-  background-color: #f8f9fa;
+  background-color: #fdf0c0;
 }
 
 .calendar-cell--selected {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-  color: white;
+  background-color: var(--nb-blue) !important;
+  color: #fff;
 }
 
 .calendar-cell--selected:hover {
-  background-color: #0b5ed7;
+  background-color: #2470e8 !important;
 }
 
-.event-dot {
-  width: 6px;
-  height: 6px;
+.day-number {
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ---- Sündmusepunkt ---- */
+.event-pip {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background-color: #0d6efd;
+  background-color: var(--nb-pink);
+  border: 1px solid var(--nb-black);
   display: block;
+  flex-shrink: 0;
 }
 
-.calendar-cell--selected .event-dot {
-  background-color: white;
+.calendar-cell--selected .event-pip {
+  background-color: #fff;
+  border-color: #fff;
 }
 
-.text-truncate-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+/* ---- Sündmuste jaotis ---- */
+.events-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--nb-yellow);
+  border: 3px solid var(--nb-black);
+  box-shadow: 4px 4px 0 var(--nb-black);
+  margin-bottom: 1rem;
+}
+
+.events-section-header h5 {
+  font-family: 'Archivo Black', sans-serif;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.events-count-badge {
+  background: var(--nb-black);
+  color: var(--nb-yellow);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  padding: 0.2em 0.6em;
+  letter-spacing: 0.3px;
+}
+
+.no-events-box {
+  border: 3px solid var(--nb-black);
+  padding: 1.2rem 1rem;
+  font-weight: 600;
+  color: #555;
+  background: var(--nb-white);
+}
+
+/* ---- Sündmusepupp ---- */
+.event-btn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.event-btn-card {
+  border: 3px solid var(--nb-black);
+  box-shadow: 4px 4px 0 var(--nb-black);
+  background: var(--nb-white);
+  cursor: pointer;
+  padding: 1rem 1.1rem;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+.event-btn-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--nb-black);
+  background-color: #fdf0c0;
+}
+
+.event-btn-card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--nb-black);
+}
+
+.event-btn-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.event-btn-left {
+  flex: 1;
   overflow: hidden;
+}
+
+.event-btn-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  margin-bottom: 0.2rem;
+}
+
+.event-btn-meta {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 0.2rem;
+}
+
+.event-btn-desc {
+  font-size: 0.83rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-btn-arrow {
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
 }
 </style>
