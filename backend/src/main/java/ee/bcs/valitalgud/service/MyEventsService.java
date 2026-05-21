@@ -5,7 +5,6 @@ import ee.bcs.valitalgud.infrastructure.error.ErrorResponse;
 import ee.bcs.valitalgud.infrastructure.exception.BadRequestException;
 import ee.bcs.valitalgud.persistence.registration.MyEventProjection;
 import ee.bcs.valitalgud.persistence.registration.RegistrationRepository;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MyEventsService {
 
-    private static final String FILTER_THIS_WEEK = "THIS_WEEK";
     private static final String FILTER_UPCOMING = "UPCOMING";
     private static final String FILTER_ALL_FUTURE = "ALL_FUTURE";
 
@@ -38,18 +36,10 @@ public class MyEventsService {
     private DateRange buildDateRange(String filter) {
         LocalDate today = LocalDate.now();
         return switch (filter) {
-            case FILTER_THIS_WEEK -> buildThisWeekRange(today);
             case FILTER_UPCOMING -> new DateRange(today.plusDays(1), null);
             case FILTER_ALL_FUTURE -> new DateRange(today, null);
             default -> throw new BadRequestException(ErrorResponse.INVALID_FILTER);
         };
-    }
-
-    private DateRange buildThisWeekRange(LocalDate today) {
-        LocalDate monday = today.with(DayOfWeek.MONDAY);
-        LocalDate sunday = today.with(DayOfWeek.SUNDAY);
-        LocalDate fromDate = today.isAfter(monday) ? today : monday;
-        return new DateRange(fromDate, sunday);
     }
 
     private void validateUserId(Integer userId) {
@@ -58,8 +48,7 @@ public class MyEventsService {
 
     private void validateFilter(String filter) {
         if (filter == null
-                || (!FILTER_THIS_WEEK.equals(filter)
-                && !FILTER_UPCOMING.equals(filter)
+                || (!FILTER_UPCOMING.equals(filter)
                 && !FILTER_ALL_FUTURE.equals(filter))) {
             throw new BadRequestException(ErrorResponse.INVALID_FILTER);
         }

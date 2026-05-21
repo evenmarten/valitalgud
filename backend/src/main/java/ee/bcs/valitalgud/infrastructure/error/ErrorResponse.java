@@ -34,6 +34,7 @@ public enum ErrorResponse {
     INVALID_EVENT_DATE("INVALID_EVENT_DATE", "Sündmuse kuupäev peab olema tulevikus", HttpStatus.BAD_REQUEST),
     INVALID_PARTICIPANTS_COUNT("INVALID_PARTICIPANTS_COUNT", "Maksimaalne osalejate arv peab olema suurem kui 0", HttpStatus.BAD_REQUEST),
     CITY_NOT_FOUND("CITY_NOT_FOUND", "Valitud linna ei leitud", HttpStatus.BAD_REQUEST),
+    COUNTY_NOT_FOUND("COUNTY_NOT_FOUND", "Valitud maakonda ei leitud", HttpStatus.BAD_REQUEST),
     SKILL_TAG_NOT_FOUND("SKILL_TAG_NOT_FOUND", "Valitud oskuse-tagi ei leitud", HttpStatus.BAD_REQUEST),
     NOT_EVENT_OWNER("NOT_EVENT_OWNER", "Teil pole õigust seda sündmust muuta/tühistada", HttpStatus.FORBIDDEN),
     MAX_PARTICIPANTS_BELOW_CURRENT("MAX_PARTICIPANTS_BELOW_CURRENT", "Maksimaalne osalejate arv ei saa olla väiksem kui registreerunute arv", HttpStatus.BAD_REQUEST),

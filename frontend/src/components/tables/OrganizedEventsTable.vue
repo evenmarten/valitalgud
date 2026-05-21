@@ -1,92 +1,83 @@
 <template>
   <div>
-    <AppNavbar />
+    <AlertError :error-message="errorMessage" />
 
-    <div class="container py-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Minu loodud sündmused</h2>
-        <button class="btn btn-primary" @click="goToCreateEvent">Loo uus sündmus</button>
-      </div>
-
-      <AlertError :error-message="errorMessage" />
-
-      <div class="card mb-4">
-        <div class="card-body">
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label for="cityFilter" class="form-label">Linn</label>
-              <select id="cityFilter" v-model="filter.cityId" class="form-select">
-                <option :value="null">-- Kõik linnad --</option>
-                <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label for="countyFilter" class="form-label">Maakond</label>
-              <select id="countyFilter" v-model="filter.countyId" class="form-select">
-                <option :value="null">-- Kõik maakonnad --</option>
-                <option v-for="county in counties" :key="county.id" :value="county.id">{{ county.name }}</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Oskuse-tag</label>
-              <SkillTagFilter
-                :tags="skillTags"
-                :selected-id="filter.skillTagId"
-                @event-tag-selected="filter.skillTagId = $event"
-              />
-            </div>
-            <div class="col-md-3">
-              <label for="dateFilter" class="form-label">Kuupäev</label>
-              <input id="dateFilter" v-model="filter.date" type="date" class="form-control" />
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-              <button class="btn btn-primary w-100" @click="getMyOrganizedEvents">Filtreeri</button>
-            </div>
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="organizedCityFilter" class="form-label">Linn</label>
+            <select id="organizedCityFilter" v-model="filter.cityId" class="form-select">
+              <option :value="null">-- Kõik linnad --</option>
+              <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="organizedCountyFilter" class="form-label">Maakond</label>
+            <select id="organizedCountyFilter" v-model="filter.countyId" class="form-select">
+              <option :value="null">-- Kõik maakonnad --</option>
+              <option v-for="county in counties" :key="county.id" :value="county.id">{{ county.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Oskuse-tag</label>
+            <SkillTagFilter
+              :tags="skillTags"
+              :selected-id="filter.skillTagId"
+              @event-tag-selected="filter.skillTagId = $event"
+            />
+          </div>
+          <div class="col-md-3">
+            <label for="organizedDateFilter" class="form-label">Kuupäev</label>
+            <input id="organizedDateFilter" v-model="filter.date" type="date" class="form-control" />
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100" @click="getMyOrganizedEvents">Filtreeri</button>
           </div>
         </div>
       </div>
+    </div>
 
-      <div v-if="organizedEvents.length === 0" class="text-center py-5">
-        <p class="text-muted fs-5">Sa pole veel ühtegi sündmust loonud</p>
-      </div>
+    <div v-if="organizedEvents.length === 0" class="text-center py-5">
+      <p class="text-muted fs-5">Sa pole veel ühtegi sündmust loonud</p>
+    </div>
 
-      <div v-else class="card">
-        <div class="table-responsive">
-          <table class="table mb-0 align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>Pealkiri</th>
-                <th>Kuupäev</th>
-                <th>Linn</th>
-                <th>Maakond</th>
-                <th>Staatus</th>
-                <th>Osalejaid</th>
-                <th class="text-end">Tegevused</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="organizedEvent in organizedEvents" :key="organizedEvent.eventId">
-                <td>{{ organizedEvent.title }}</td>
-                <td>{{ formatDate(organizedEvent.date) }}</td>
-                <td>{{ organizedEvent.city }}</td>
-                <td>{{ organizedEvent.county }}</td>
-                <td>
-                  <span class="badge" :class="statusBadgeClass(organizedEvent.status)">
-                    {{ organizedEvent.status }}
-                  </span>
-                </td>
-                <td>{{ formatParticipants(organizedEvent) }}</td>
-                <td class="text-end">
-                  <div class="d-flex gap-2 justify-content-end">
-                    <button class="btn btn-sm btn-outline-primary" @click="goToEventDetails(organizedEvent.eventId)">Detail</button>
-                    <button class="btn btn-sm btn-outline-secondary" @click="goToEditEvent(organizedEvent.eventId)">Muuda</button>
-                    <button class="btn btn-sm btn-outline-danger" @click="openDeleteModal(organizedEvent)">Kustuta sündmus</button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div v-else class="card">
+      <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Pealkiri</th>
+              <th>Kuupäev</th>
+              <th>Linn</th>
+              <th>Maakond</th>
+              <th>Staatus</th>
+              <th>Osalejaid</th>
+              <th class="text-end">Tegevused</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="organizedEvent in organizedEvents" :key="organizedEvent.eventId">
+              <td>{{ organizedEvent.title }}</td>
+              <td>{{ formatDate(organizedEvent.date) }}</td>
+              <td>{{ organizedEvent.city }}</td>
+              <td>{{ organizedEvent.county }}</td>
+              <td>
+                <span class="badge" :class="statusBadgeClass(organizedEvent.status)">
+                  {{ organizedEvent.status }}
+                </span>
+              </td>
+              <td>{{ formatParticipants(organizedEvent) }}</td>
+              <td class="text-end">
+                <div class="d-flex gap-2 justify-content-end">
+                  <button class="btn btn-sm btn-outline-primary" @click="goToEventDetails(organizedEvent.eventId)">Detail</button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="goToEditEvent(organizedEvent.eventId)">Muuda</button>
+                  <button class="btn btn-sm btn-outline-danger" @click="openDeleteModal(organizedEvent)">Kustuta sündmus</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -104,7 +95,6 @@
 </template>
 
 <script>
-import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
 import SkillTagFilter from '@/components/forms/SkillTagFilter.vue'
 import MyOrganizedEventsService from '@/api-services/MyOrganizedEventsService.js'
@@ -116,8 +106,8 @@ import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
-  name: 'MyOrganizedEventsView',
-  components: { AppNavbar, AlertError, SkillTagFilter },
+  name: 'OrganizedEventsTable',
+  components: { AlertError, SkillTagFilter },
   data() {
     return {
       organizedEvents: [],
@@ -196,10 +186,6 @@ export default {
 
     goToEditEvent(eventId) {
       NavigationService.navigateToEditEvent(eventId)
-    },
-
-    goToCreateEvent() {
-      NavigationService.navigateToCreateEvent()
     },
 
     openDeleteModal(organizedEvent) {

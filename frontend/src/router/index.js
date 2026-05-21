@@ -13,8 +13,8 @@ import CreateEventView from '@/views/CreateEventView.vue'
 import EditEventView from '@/views/EditEventView.vue'
 import MyEventsView from '@/views/MyEventsView.vue'
 import CalendarView from '@/views/CalendarView.vue'
-import MyOrganizedEventsView from '@/views/MyOrganizedEventsView.vue'
 import ProfileView from '@/views/ProfileView.vue'
+import ContactView from '@/views/ContactView.vue'
 import ErrorView from '@/views/ErrorView.vue'
 import AuthHelper from '@/auth/auth.js'
 
@@ -24,7 +24,6 @@ const protectedRouteNames = [
   'my-events',
   'calendar',
   'profile',
-  'my-organized-events',
   'event-create',
   'event-edit',
 ]
@@ -93,11 +92,6 @@ const routes = [
     component: MyEventsView,
   },
   {
-    path: '/my-organized-events',
-    name: 'my-organized-events',
-    component: MyOrganizedEventsView,
-  },
-  {
     path: '/calendar',
     name: 'calendar',
     component: CalendarView,
@@ -106,6 +100,11 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: ProfileView,
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: ContactView,
   },
   {
     path: '/unauthorized',

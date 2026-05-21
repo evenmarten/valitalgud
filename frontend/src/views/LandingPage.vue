@@ -6,7 +6,7 @@
     <section class="hero">
       <div class="container py-5 position-relative">
         <div class="row align-items-center g-5">
-          <div class="col-lg-7">
+          <div class="col-lg-5">
             <span class="hero-eyebrow">Sündmused · Talgud · Kogukond</span>
             <h1 class="hero-title">
               Too inimesed
@@ -38,24 +38,8 @@
             </div>
           </div>
 
-          <div class="col-lg-5">
-            <div class="hero-card">
-              <span class="sticker">100%<br />TASUTA</span>
-              <div class="hero-card-banner">VALITALGUD</div>
-              <div class="p-4">
-                <h5 class="mb-1">Järgmine talgupäev</h5>
-                <p class="text-muted small mb-3">Sinu kogukond ootab sind</p>
-                <div class="d-flex justify-content-between hero-stat">
-                  <span>Eelseisvad sündmused</span><strong>{{ demoEvents.length }}+</strong>
-                </div>
-                <div class="d-flex justify-content-between hero-stat">
-                  <span>Linnad üle Eesti</span><strong>3+</strong>
-                </div>
-                <div class="d-flex justify-content-between hero-stat">
-                  <span>Liitumine</span><strong>Tasuta</strong>
-                </div>
-              </div>
-            </div>
+          <div class="col-lg-7">
+            <img :src="heroImage" alt="Valitalgud kogukond" class="hero-img" />
           </div>
         </div>
       </div>
@@ -236,39 +220,6 @@
       </div>
     </section>
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="landing-footer">
-      <div class="container py-5">
-        <div class="row g-4">
-          <div class="col-md-5">
-            <h4 class="footer-brand mb-2">VALITALGUD</h4>
-            <p class="mb-0">
-              Platvorm sündmuste ja talgute korraldamiseks ning avastamiseks.
-              Too kogukond kokku — leia, registreeru ja korralda.
-            </p>
-          </div>
-          <div class="col-md-3">
-            <h6 class="footer-heading">Avasta</h6>
-            <ul class="footer-links">
-              <li><a href="#" @click.prevent="browseEvents">Sündmused</a></li>
-              <li><a href="#" @click.prevent="goToShop">e-pood</a></li>
-            </ul>
-          </div>
-          <div class="col-md-4">
-            <h6 class="footer-heading">Alusta</h6>
-            <ul class="footer-links">
-              <li v-if="!isLoggedIn"><a href="#" @click.prevent="goToRegister">Loo konto</a></li>
-              <li v-if="!isLoggedIn"><a href="#" @click.prevent="goToLogin">Logi sisse</a></li>
-              <li v-if="isLoggedIn"><a href="#" @click.prevent="goToCreateEvent">Loo sündmus</a></li>
-              <li v-if="isLoggedIn"><a href="#" @click.prevent="goToMyEvents">Minu sündmused</a></li>
-            </ul>
-          </div>
-        </div>
-        <hr class="footer-divider" />
-        <p class="footer-bottom mb-0">© 2026 Valitalgud · Sündmused ja talgud kogukonnale</p>
-      </div>
-    </footer>
-
     <!-- ===== AI VESTLUSROBOT (ainult landing lehel) ===== -->
     <ChatbotWidget />
   </div>
@@ -279,6 +230,7 @@ import AppNavbar from '@/navigation/AppNavbar.vue'
 import ChatbotWidget from '@/components/common/ChatbotWidget.vue'
 import AuthHelper from '@/auth/auth.js'
 import NavigationService from '@/navigation/NavigationService.js'
+import heroImage from '@/assets/hero/hero.png'
 
 export default {
   name: 'LandingPage',
@@ -286,6 +238,7 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      heroImage,
       marqueeWords: ['Sündmused', 'Talgud', 'Kogukond', 'Korralda', 'Osale'],
       steps: [
         {
@@ -500,52 +453,10 @@ export default {
   padding: 0.3rem 0.8rem;
 }
 
-.hero-card {
-  position: relative;
-  background: var(--nb-white);
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow-lg);
-}
-
-.sticker {
-  position: absolute;
-  top: -22px;
-  right: -18px;
-  z-index: 2;
-  width: 78px;
-  height: 78px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: var(--nb-green);
-  color: var(--nb-black);
-  border: var(--nb-border);
-  border-radius: 50%;
-  box-shadow: 4px 4px 0 var(--nb-black);
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 0.85rem;
-  line-height: 1;
-  transform: rotate(12deg);
-}
-
-.hero-card-banner {
-  background: linear-gradient(135deg, var(--nb-pink) 0%, var(--nb-blue) 100%);
-  border-bottom: var(--nb-border);
-  color: var(--nb-white);
-  font-family: 'Archivo Black', sans-serif;
-  letter-spacing: 0.2em;
-  text-align: center;
-  padding: 2.5rem 1rem;
-}
-
-.hero-stat {
-  border-top: 2px solid var(--nb-black);
-  padding: 0.6rem 0;
-}
-
-.hero-stat:first-of-type {
-  border-top: none;
+.hero-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* ---------- Marquee ---------- */

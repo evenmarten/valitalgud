@@ -30,7 +30,7 @@ public class MyEventsController {
 
     @GetMapping(value = "/my-events", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Tagasta minu registreerunud sündmused",
-            description = "Tagastab sisselogitud kasutaja registreerunud sündmused filtreeritult (THIS_WEEK / UPCOMING / ALL_FUTURE). Tühistatud ja möödunud sündmusi ei tagastata.")
+            description = "Tagastab sisselogitud kasutaja registreerunud sündmused filtreeritult (UPCOMING / ALL_FUTURE). Tühistatud ja möödunud sündmusi ei tagastata.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sündmused edukalt tagastatud",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

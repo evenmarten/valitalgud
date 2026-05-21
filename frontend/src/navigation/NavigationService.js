@@ -41,10 +41,6 @@ export default {
     router.push(`/events/${eventId}/edit`)
   },
 
-  navigateToMyOrganizedEvents() {
-    router.push('/my-organized-events')
-  },
-
   navigateToMyEvents() {
     router.push('/my-events')
   },
@@ -55,6 +51,10 @@ export default {
 
   navigateToProfile() {
     router.push('/profile')
+  },
+
+  navigateToContact() {
+    router.push('/contact')
   },
 
   navigateToUnauthorized() {

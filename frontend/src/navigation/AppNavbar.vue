@@ -16,24 +16,42 @@
           >Mängi</a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="https://dos.zone/mp/?lobby=q3" target="_blank" rel="noopener noreferrer">Quake</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="https://dos.zone/mp/?lobby=ut" target="_blank" rel="noopener noreferrer">Unreal Tournament</a>
-            </li>
-            <li>
               <a class="dropdown-item" href="https://play-cs.com/en/" target="_blank" rel="noopener noreferrer">Counter Strike 1.6</a>
             </li>
             <li>
               <a class="dropdown-item" href="https://dos.zone/doom-dec-1993/" target="_blank" rel="noopener noreferrer">Doom</a>
             </li>
+            <li>
+              <a class="dropdown-item" href="https://dos.zone/mp/?lobby=q3" target="_blank" rel="noopener noreferrer">Quake</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="https://dos.zone/mp/?lobby=ut" target="_blank" rel="noopener noreferrer">Unreal Tournament</a>
+            </li>
           </ul>
         </div>
         <a v-if="isLoggedIn" href="#" @click.prevent="goToProfile" class="nav-link text-white">Profiil</a>
-        <a href="#" @click.prevent="goToEvents" class="nav-link text-white">Sündmused</a>
-        <a v-if="isLoggedIn" href="#" @click.prevent="goToMyEvents" class="nav-link text-white">Minu sündmused</a>
-        <a v-if="isLoggedIn" href="#" @click.prevent="goToCalendar" class="nav-link text-white">Kalender</a>
+        <div class="dropdown">
+          <a
+            href="#"
+            class="nav-link text-white dropdown-toggle"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >Sündmused</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="#" @click.prevent="goToEvents">Kõik sündmused</a>
+            </li>
+            <li v-if="isLoggedIn">
+              <a class="dropdown-item" href="#" @click.prevent="goToMyEvents">Minu sündmused</a>
+            </li>
+            <li v-if="isLoggedIn">
+              <a class="dropdown-item" href="#" @click.prevent="goToCalendar">Kalender</a>
+            </li>
+          </ul>
+        </div>
         <a href="#" @click.prevent="goToShop" class="nav-link text-white">e-pood</a>
+        <a href="#" @click.prevent="goToContact" class="nav-link text-white">Kontakt</a>
         <a href="#" @click.prevent="goToCart" class="nav-link text-white cart-link">
           Ostukorv
           <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
@@ -89,6 +107,9 @@ export default {
     },
     goToShop() {
       NavigationService.navigateToShop()
+    },
+    goToContact() {
+      NavigationService.navigateToContact()
     },
     goToCart() {
       NavigationService.navigateToCart()

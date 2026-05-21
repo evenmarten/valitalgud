@@ -5,7 +5,7 @@
     <div class="container py-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Minu sündmused</h2>
-        <button class="btn btn-outline-primary" @click="goToMyOrganizedEvents">Minu loodud sündmused</button>
+        <button class="btn btn-primary" @click="goToCreateEvent">Loo uus sündmus</button>
       </div>
 
       <AlertError :error-message="errorMessage" />
@@ -15,12 +15,13 @@
           <a
             href="#"
             class="nav-link"
-            :class="{ active: filter === tab.value }"
-            @click.prevent="changeFilter(tab.value)"
+            :class="{ active: activeTab === tab.value }"
+            @click.prevent="changeTab(tab.value)"
           >{{ tab.label }}</a>
         </li>
       </ul>
 
+      <template v-if="!isOrganizedTab">
       <div class="card mb-4">
         <div class="card-body">
           <div class="row g-3">
@@ -90,6 +91,9 @@
           </div>
         </div>
       </div>
+      </template>
+
+      <OrganizedEventsTable v-else />
     </div>
   </div>
 </template>
@@ -98,6 +102,7 @@
 import AppNavbar from '@/navigation/AppNavbar.vue'
 import AlertError from '@/components/common/AlertError.vue'
 import SkillTagFilter from '@/components/forms/SkillTagFilter.vue'
+import OrganizedEventsTable from '@/components/tables/OrganizedEventsTable.vue'
 import MyEventsService from '@/api-services/MyEventsService.js'
 import CityService from '@/api-services/CityService.js'
 import CountyService from '@/api-services/CountyService.js'
@@ -107,14 +112,14 @@ import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
   name: 'MyEventsView',
-  components: { AppNavbar, AlertError, SkillTagFilter },
+  components: { AppNavbar, AlertError, SkillTagFilter, OrganizedEventsTable },
   data() {
     return {
-      filter: 'THIS_WEEK',
+      activeTab: 'UPCOMING',
       tabs: [
-        { value: 'THIS_WEEK', label: 'Sel nädalal' },
         { value: 'UPCOMING', label: 'Tulevased' },
         { value: 'ALL_FUTURE', label: 'Kõik' },
+        { value: 'ORGANIZED', label: 'Minu loodud sündmused' },
       ],
       myEvents: [],
       cities: [],
@@ -129,10 +134,16 @@ export default {
       errorMessage: '',
     }
   },
+  computed: {
+    isOrganizedTab() {
+      return this.activeTab === 'ORGANIZED'
+    },
+  },
   methods: {
     getMyEvents() {
+      if (this.isOrganizedTab) return
       const userId = AuthHelper.getUser()?.userId
-      MyEventsService.sendGetMyEventsRequest(userId, this.filter, this.buildFilterParams())
+      MyEventsService.sendGetMyEventsRequest(userId, this.activeTab, this.buildFilterParams())
         .then((response) => this.handleGetMyEventsResponse(response.data))
         .catch((error) => this.handleGetMyEventsError(error))
         .finally()
@@ -184,17 +195,19 @@ export default {
       }
     },
 
-    changeFilter(filter) {
-      this.filter = filter
-      this.getMyEvents()
+    changeTab(tab) {
+      this.activeTab = tab
+      if (!this.isOrganizedTab) {
+        this.getMyEvents()
+      }
     },
 
     goToEventDetails(eventId) {
       NavigationService.navigateToEventDetails(eventId)
     },
 
-    goToMyOrganizedEvents() {
-      NavigationService.navigateToMyOrganizedEvents()
+    goToCreateEvent() {
+      NavigationService.navigateToCreateEvent()
     },
 
     statusLabel(status) {

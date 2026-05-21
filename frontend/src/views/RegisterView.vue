@@ -15,7 +15,7 @@
               <form @submit.prevent="register">
                 <div class="mb-3">
                   <label for="fullName" class="form-label">
-                    Täisnimi <span class="text-danger">***</span>
+                    Täisnimi <span class="text-danger">*</span>
                   </label>
                   <input
                     id="fullName"
@@ -28,7 +28,7 @@
 
                 <div class="mb-3">
                   <label for="email" class="form-label">
-                    E-post <span class="text-danger">***</span>
+                    E-post <span class="text-danger">*</span>
                   </label>
                   <input
                     id="email"
@@ -41,7 +41,7 @@
 
                 <div class="mb-3">
                   <label for="password" class="form-label">
-                    Parool <span class="text-danger">***</span>
+                    Parool <span class="text-danger">*</span>
                   </label>
                   <input
                     id="password"
@@ -54,7 +54,7 @@
 
                 <div class="mb-3">
                   <label for="repeatPassword" class="form-label">
-                    Korda parooli <span class="text-danger">***</span>
+                    Korda parooli <span class="text-danger">*</span>
                   </label>
                   <input
                     id="repeatPassword"
