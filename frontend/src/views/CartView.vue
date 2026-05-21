@@ -55,7 +55,13 @@
                 <td class="py-3">
                   <div class="d-flex align-items-center gap-2">
                     <button class="btn btn-secondary btn-sm" @click="decrementQuantity(item)">–</button>
-                    <span class="px-2 fw-bold">{{ item.quantity }}</span>
+                    <input
+                      type="number"
+                      class="qty-input"
+                      :value="item.quantity"
+                      min="1"
+                      @change="updateQuantity(item, $event.target.value)"
+                    />
                     <button class="btn btn-secondary btn-sm" @click="incrementQuantity(item)">+</button>
                   </div>
                 </td>
@@ -68,6 +74,10 @@
               </tr>
             </tbody>
           </table>
+
+          <div class="d-flex justify-content-start mt-1">
+            <button class="btn-clear-cart" @click="clearCart">Tühjenda korv</button>
+          </div>
         </div>
 
         <div class="col-lg-4">
@@ -234,6 +244,18 @@ export default {
       this.saveCart()
     },
 
+    clearCart() {
+      this.items = []
+      this.saveCart()
+    },
+
+    updateQuantity(item, value) {
+      const qty = Math.max(1, parseInt(value, 10) || 1)
+      item.quantity = qty
+      this.recalculateLineTotal(item)
+      this.saveCart()
+    },
+
     openDetails(productId) {
       ProductService.sendGetProductDetailsRequest(productId)
         .then((response) => this.handleGetProductDetailsResponse(response.data))
@@ -337,6 +359,49 @@ export default {
 
 .product-link {
   cursor: pointer;
+}
+
+.qty-input {
+  width: 60px;
+  text-align: center;
+  border: var(--nb-border);
+  box-shadow: 2px 2px 0 var(--nb-black);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.25rem 0.4rem;
+  background-color: var(--nb-bg);
+  -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.qty-input:focus {
+  outline: none;
+  box-shadow: 4px 4px 0 var(--nb-black);
+}
+
+.btn-clear-cart {
+  background: none;
+  border: var(--nb-border);
+  box-shadow: 2px 2px 0 var(--nb-black);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  color: var(--nb-pink);
+  transition: background-color 0.08s ease, color 0.08s ease;
+}
+
+.btn-clear-cart:hover {
+  background-color: var(--nb-pink);
+  color: var(--nb-black);
 }
 
 .product-price {
