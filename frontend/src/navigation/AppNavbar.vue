@@ -21,6 +21,9 @@
             <li>
               <a class="dropdown-item" href="https://play-cs.com/en/" target="_blank" rel="noopener noreferrer">Counter Strike 1.6</a>
             </li>
+            <li>
+              <a class="dropdown-item" href="https://dos.zone/doom-dec-1993/" target="_blank" rel="noopener noreferrer">Doom</a>
+            </li>
           </ul>
         </div>
         <a v-if="isLoggedIn" href="#" @click.prevent="goToProfile" class="nav-link text-white">Profiil</a>
