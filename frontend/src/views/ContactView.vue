@@ -75,10 +75,11 @@ export default {
       successMessage: '',
       errorMessage: '',
       isSending: false,
+      // TEMP: prefilled test values for faster testing — remove before delivery
       contactForm: {
-        nameOrCompany: '',
-        email: '',
-        message: '',
+        nameOrCompany: 'Test Testija',
+        email: 'test@example.com',
+        message: 'Tere! See on testpäring kontaktivormist.',
       },
     }
   },
