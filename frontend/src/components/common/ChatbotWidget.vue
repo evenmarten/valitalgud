@@ -4,7 +4,7 @@
     <transition name="chat-panel">
       <div v-if="isOpen" class="chat-window" role="dialog" aria-label="AI vestlusrobot">
         <div class="chat-header">
-          <span class="chat-title">Talgubot</span>
+          <span class="chat-title">Pam</span>
           <button class="chat-close" aria-label="Sulge vestlus" @click="close">×</button>
         </div>
 
@@ -65,7 +65,7 @@ export default {
       messages: [
         {
           role: 'assistant',
-          content: 'Tere! Olen Talgubot. Küsi minult valitalgud kohta — sündmused, registreerumine, e-pood.',
+          content: 'Tere! Olen Pam. Küsi minult valitalgud kohta — sündmused, registreerumine, e-pood.',
         },
       ],
     }
