@@ -26,7 +26,7 @@
                 <button class="btn btn-secondary btn-lg" @click="goToMyEvents">Minu sündmused</button>
               </template>
               <template v-else>
-                <button class="btn btn-primary btn-lg" @click="goToRegister">Loo tasuta konto</button>
+                <button class="btn btn-primary btn-lg" @click="goToRegister">Loo konto</button>
                 <button class="btn btn-secondary btn-lg" @click="goToLogin">Logi sisse</button>
               </template>
             </div>
@@ -203,7 +203,7 @@
           <template v-else>
             <h2 class="cta-title">Valmis alustama?</h2>
             <p class="cta-text">Loo tasuta konto ja avasta sündmusi, mis su kogukonda elavdavad.</p>
-            <button class="btn btn-secondary btn-lg" @click="goToRegister">Loo tasuta konto</button>
+            <button class="btn btn-secondary btn-lg" @click="goToRegister">Loo konto</button>
           </template>
         </div>
       </div>
