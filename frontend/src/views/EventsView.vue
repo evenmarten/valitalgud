@@ -99,7 +99,7 @@
               </p>
 
               <button class="btn btn-outline-primary mt-auto" @click="goToEventDetails(event.eventId)">
-                View Details
+                Näita rohkem
               </button>
             </div>
           </div>

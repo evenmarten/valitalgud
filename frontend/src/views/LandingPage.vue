@@ -174,17 +174,11 @@
             class="col-sm-6 col-md-4"
           >
             <div class="card h-100 shop-card" @click="goToShop">
-              <div class="card-img-top demo-banner" :style="bannerStyle(product)">
-                <img :src="product.image" :alt="product.name" class="demo-banner-img" />
-              </div>
-
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="text-muted small mb-2">{{ product.category }}</p>
-                <p class="card-text text-truncate-3">{{ product.description }}</p>
-
-                <p class="fw-bold fs-5 mb-0 mt-auto">{{ product.price }} €</p>
-              </div>
+              <img
+                :src="product.image"
+                :alt="product.name"
+                class="card-img-top demo-product-img"
+              />
             </div>
           </div>
         </div>
@@ -301,30 +295,27 @@ export default {
       demoProducts: [
         {
           productId: 'demo-product-1',
-          name: 'Ürituse T-särk',
-          description: 'Pehme puuvillane T-särk valitalgud logoga. Sobib nii üritusele kui igapäevaseks kandmiseks.',
-          category: 'Riided',
-          price: '19.90',
-          bannerColor: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
-          image: '/images/products/t-shirt.jpg',
+          name: 'Nokamüts',
+          description: 'Reguleeritava rihmaga nokamüts Valitalgud logoga — kaitseb päikese eest talgupäeval.',
+          category: 'Aksessuaarid',
+          price: '18.00',
+          image: '/images/products/cap.png',
         },
         {
           productId: 'demo-product-2',
-          name: 'Joogipudel',
-          description: 'Roostevabast terasest joogipudel mahuga 500 ml. Hoia jook käeulatuses kogu ürituse vältel.',
+          name: 'Termopudel',
+          description: 'Roostevabast terasest termopudel (500 ml) — hoiab joogi kuuma või külmana terve päeva.',
           category: 'Jooginõud',
-          price: '15.99',
-          bannerColor: 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
-          image: '/images/products/water-bottle.jpg',
+          price: '22.50',
+          image: '/images/products/bottle.png',
         },
         {
           productId: 'demo-product-3',
-          name: 'Seljakott',
-          description: 'Kerge ja vastupidav seljakott igapäevaseks kasutuseks ning matkadeks.',
-          category: 'Reisitarbed',
-          price: '45.00',
-          bannerColor: 'linear-gradient(135deg, #f97316 0%, #eab308 100%)',
-          image: '/images/products/seljakott1.jpg',
+          name: 'Kapuutspusa',
+          description: 'Pehme ja soe kapuutspusa Valitalgud logoga — ideaalne jahedaks talgupäevaks.',
+          category: 'Riided',
+          price: '39.90',
+          image: '/images/products/hoodie.png',
         },
       ],
     }
@@ -618,6 +609,14 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Toote pilt landingul — täissuuruses nagu e-poe lehel (ei kärbita) */
+.demo-product-img {
+  height: 240px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 16px;
 }
 
 .text-truncate-3 {

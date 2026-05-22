@@ -131,14 +131,17 @@ INSERT INTO event_skill_tags (event_id, skill_tag_id) VALUES
     ((SELECT id FROM events     WHERE title = 'Disainikonverents'),
      (SELECT id FROM skill_tags WHERE name  = 'Design'));
 
--- Näidis-tooted (e-commerce)
+-- Näidis-tooted (e-commerce). Järjekord = kuvamise järjekord poes (sorteeritud id järgi).
 INSERT INTO products (name, description, price, image_url, stock_quantity) VALUES
-    ('Joogipudel', 'Roostevabast terasest joogipudel, mahutavusega 500ml.',         15.99, '/images/products/water-bottle.jpg', 50),
-    ('Sall',       'Pehme villasall talviseks ilmaks.',                            25.00, '/images/products/scarf.jpg',        30),
-    ('Kindad',     'Tugevad nahk-kindad ekstreemspordi harrastajatele.',           35.50, '/images/products/gauntlets.jpg',    20),
-    ('T-särk',     'Puuvillane T-särk Event Management App logoga.',               20.00, '/images/products/t-shirt.jpg',    100),
-    ('Nokamüts',   'Reguleeritav nokamüts päikese ja vihma eest kaitseks.',        18.75, '/images/products/cap.jpg',          40),
-    ('Seljakott',  'Kerge ja vastupidav seljakott igapäevaseks kasutuseks.',       45.00, '/images/products/seljakott1.jpg',   25);
+    ('Nokamüts',    'Reguleeritava rihmaga nokamüts Valitalgud logoga — kaitseb päikese eest talgupäeval.', 18.00, '/images/products/cap.png',    40),
+    ('Kapuutspusa', 'Pehme ja soe kapuutspusa Valitalgud logoga — ideaalne jahedaks talgupäevaks.',         39.90, '/images/products/hoodie.png', 35),
+    ('T-särk',      'Puuvillane T-särk Valitalgud logoga — mugav ja hingav igaks talguks.',                  20.00, '/images/products/shirt.png',  100),
+    ('Seljakott',   'Vastupidav ja avar seljakott talgutarvikute ja varustuse kandmiseks.',                 45.00, '/images/products/bag.png',    25),
+    ('Termopudel',  'Roostevabast terasest termopudel (500 ml) — hoiab joogi kuuma või külmana terve päeva.', 22.50, '/images/products/bottle.png', 50),
+    ('Võtmehoidja', 'Vastupidav Valitalgud võtmehoidja — väike meene, mis hoiab võtmed alati käeulatuses.',  6.90, '/images/products/hanger.png', 80),
+    ('Kruus',       'Keraamiline kruus Valitalgud logoga — sobib hommikukohvile ja talgupäeva soojenduseks.', 12.00, '/images/products/cup.png',    60),
+    ('Lauamatt',    'Suur lauamatt Valitalgud logoga — sile pind hiirele ja klaviatuurile, korrastab töölaua.', 24.00, '/images/products/mat.png',    45),
+    ('Sülearvuti ümbris', 'Pehme vooderdusega sülearvuti ümbris Valitalgud logoga — kaitseb kriimustuste eest.', 29.90, '/images/products/sleeve.png', 30);
 
 -- Registreerimised (eri statustega — testimaks "Minu sündmused" ja "View Participants" vaateid)
 INSERT INTO registrations (user_id, event_id, status) VALUES

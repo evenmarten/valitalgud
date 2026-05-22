@@ -9,6 +9,7 @@ import ee.bcs.valitalgud.persistence.product.ProductMapper;
 import ee.bcs.valitalgud.persistence.product.ProductRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getAllAvailableProducts() {
-        return productRepository.findAll()
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .stream()
                 .map(productMapper::toProductResponseDto)
                 .toList();

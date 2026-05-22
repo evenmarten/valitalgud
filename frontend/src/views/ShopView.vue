@@ -62,7 +62,7 @@
               <div class="d-flex gap-3 mt-auto align-items-center">
                 <button
                   v-if="!isInCart(product.productId)"
-                  class="btn btn-success btn-sm flex-grow-1"
+                  class="btn btn-outline-secondary btn-sm flex-grow-1"
                   :class="{ 'btn-flash': addedProductId === product.productId }"
                   @click="addToCart(product, 1)"
                 >
@@ -70,12 +70,12 @@
                 </button>
                 <div v-else class="d-flex align-items-center gap-1 flex-grow-1">
                   <button
-                    class="btn btn-secondary btn-sm"
+                    class="btn btn-outline-secondary btn-sm"
                     @click="decrementCartQty(product.productId)"
                   >–</button>
                   <span class="fw-bold px-2">{{ cartQty(product.productId) }}</span>
                   <button
-                    class="btn btn-secondary btn-sm"
+                    class="btn btn-outline-secondary btn-sm"
                     @click="incrementCartQty(product.productId)"
                   >+</button>
                 </div>
@@ -112,8 +112,10 @@
             v-if="selectedProduct.imageUrl"
             :src="selectedProduct.imageUrl"
             :alt="selectedProduct.name"
-            class="img-fluid rounded"
+            class="img-fluid rounded zoomable-img"
             style="height: 280px; object-fit: contain; width: 100%; background: #ffffff; padding: 16px;"
+            title="Vajuta pildi suurendamiseks"
+            @click="zoomImage"
           />
           <div
             v-else
@@ -181,6 +183,15 @@
         </button>
       </div>
     </div>
+
+    <!-- Pildi suurendus (lightbox) — vajuta sulgemiseks -->
+    <div v-if="isImageZoomed" class="image-lightbox" @click="closeZoom">
+      <img
+        :src="selectedProduct.imageUrl"
+        :alt="selectedProduct.name"
+        class="image-lightbox-img"
+      />
+    </div>
   </div>
 </template>
 
@@ -206,6 +217,7 @@ export default {
         stockQuantity: 0,
       },
       isPanelOpen: false,
+      isImageZoomed: false,
       quantity: 1,
       sortOrder: 'default',
       addedProductId: null,
@@ -257,6 +269,17 @@ export default {
 
     closePanel() {
       this.isPanelOpen = false
+      this.isImageZoomed = false
+    },
+
+    zoomImage() {
+      if (this.selectedProduct.imageUrl) {
+        this.isImageZoomed = true
+      }
+    },
+
+    closeZoom() {
+      this.isImageZoomed = false
     },
 
     incrementQuantity() {
@@ -609,6 +632,34 @@ export default {
   z-index: 1050;
   display: flex;
   justify-content: flex-end;
+}
+
+/* Klikitav pilt detailide paneelis — vihjab suurendusele */
+.zoomable-img {
+  cursor: zoom-in;
+}
+
+/* Pildi suurendus (lightbox) üle terve ekraani */
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+
+.image-lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .panel-content {
