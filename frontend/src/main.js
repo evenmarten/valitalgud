@@ -9,6 +9,7 @@ import AuthHelper from '@/auth/auth.js'
 // Bootstrap (laaditakse ENNE main.css-i, et Neobrutalism teema saaks Bootstrapi üle kirjutada)
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.js'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import './assets/main.css'
 
 // Auto-logout: kui mõni päring tagastab 401 (NOT_AUTHENTICATED), siis

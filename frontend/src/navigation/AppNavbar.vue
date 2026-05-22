@@ -52,11 +52,13 @@
         </div>
         <a href="#" @click.prevent="goToShop" class="nav-link text-white">e-pood</a>
         <a href="#" @click.prevent="goToContact" class="nav-link text-white">Kontakt</a>
-        <a href="#" @click.prevent="goToCart" class="nav-link text-white cart-link">
-          Ostukorv
+        <a href="#" @click.prevent="goToCart" class="nav-link text-white cart-link" aria-label="Ostukorv" title="Ostukorv">
+          <i class="bi bi-cart nav-icon"></i>
           <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
         </a>
-        <a v-if="isLoggedIn" href="#" @click.prevent="logout" class="nav-link text-white">Logi välja</a>
+        <a v-if="isLoggedIn" href="#" @click.prevent="logout" class="nav-link text-white" aria-label="Logi välja" title="Logi välja">
+          <i class="bi bi-box-arrow-right nav-icon"></i>
+        </a>
         <a v-else href="#" @click.prevent="goToLogin" class="nav-link text-white">Logi sisse</a>
       </div>
     </div>
@@ -166,6 +168,12 @@ export default {
 
 .cart-link {
   position: relative;
+}
+
+/* Navbari ikoonid (ostukorv, logi välja) — pisut suuremad kui tekst */
+.nav-icon {
+  font-size: 1.3rem;
+  vertical-align: -0.15em;
 }
 
 .cart-badge {
