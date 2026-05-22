@@ -598,7 +598,8 @@ export default {
 .cart-float {
   position: fixed;
   bottom: 28px;
-  right: 28px;
+  /* Chatboti nupp on paremas servas (24px + 60px lai), seega hoia banner sellest vasakul, et need ei kattuks */
+  right: 96px;
   background-color: var(--corp-blue);
   color: #fff;
   font-family: 'Space Grotesk', sans-serif;
