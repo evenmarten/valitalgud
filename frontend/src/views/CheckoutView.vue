@@ -310,9 +310,8 @@ export default {
 
 <style scoped>
 .step-bar {
-  background: var(--nb-bg);
-  border-bottom: var(--nb-border);
-  box-shadow: 0 4px 0 var(--nb-black);
+  background: var(--nb-white);
+  border-bottom: 1px solid var(--corp-line);
   padding: 1.25rem 0;
 }
 
@@ -331,7 +330,7 @@ export default {
 .step-circle {
   width: 38px;
   height: 38px;
-  border: 2.5px solid var(--nb-black);
+  border: 2px solid var(--corp-line);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -348,24 +347,24 @@ export default {
 }
 
 .step--done .step-circle {
-  background: var(--nb-black);
-  color: var(--nb-yellow);
-  border-color: var(--nb-black);
+  background: var(--corp-blue);
+  color: #fff;
+  border-color: var(--corp-blue);
 }
 
 .step--done .step-label {
-  color: var(--nb-black);
+  color: var(--corp-ink);
   opacity: 0.5;
 }
 
 .step--active .step-circle {
-  background: var(--nb-black);
+  background: var(--corp-blue);
   color: #fff;
-  border-color: var(--nb-black);
+  border-color: var(--corp-blue);
 }
 
 .step--active .step-label {
-  color: var(--nb-black);
+  color: var(--corp-ink);
   font-weight: 800;
 }
 
@@ -382,13 +381,14 @@ export default {
 .step-line {
   width: 80px;
   height: 2px;
-  background: #ccc;
+  background: var(--corp-line);
   margin: 0 1rem;
 }
 
 .section-block {
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
+  box-shadow: var(--corp-shadow);
   background: var(--nb-white);
   padding: 1.75rem;
 }
@@ -397,14 +397,15 @@ export default {
   font-family: 'Archivo Black', sans-serif;
   text-transform: uppercase;
   font-size: 1rem;
-  border-bottom: var(--nb-border);
+  border-bottom: 1px solid var(--corp-line);
   padding-bottom: 0.75rem;
   margin-bottom: 1.25rem;
 }
 
 .summary-card {
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow-lg);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
+  box-shadow: var(--corp-shadow-lg);
   background: var(--nb-white);
   padding: 1.75rem;
   position: sticky;
@@ -429,7 +430,8 @@ export default {
   height: 56px;
   object-fit: contain;
   background: #f0ede0;
-  border: 2px solid var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: 8px;
   flex-shrink: 0;
 }
 
@@ -460,7 +462,7 @@ export default {
 }
 
 .summary-totals {
-  border-top: var(--nb-border);
+  border-top: 1px solid var(--corp-line);
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
@@ -475,12 +477,12 @@ export default {
 }
 
 .summary-row--total {
-  border-top: var(--nb-border);
+  border-top: 1px solid var(--corp-line);
   padding-top: 0.75rem;
   margin-top: 0.25rem;
   font-family: 'Archivo Black', sans-serif;
   font-size: 1.2rem;
-  color: var(--nb-black);
+  color: var(--corp-ink);
 }
 
 .delivery-option {
@@ -490,20 +492,22 @@ export default {
   gap: 1rem;
   padding: 0.9rem 1.1rem;
   background: var(--nb-white);
-  border: var(--nb-border);
-  box-shadow: 3px 3px 0 var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: 10px;
+  box-shadow: var(--corp-shadow);
   cursor: pointer;
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 
 .delivery-option:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 var(--nb-black);
+  transform: translateY(-2px);
+  box-shadow: var(--corp-shadow-lg);
 }
 
 .delivery-option--selected {
-  background-color: var(--nb-yellow);
-  box-shadow: 5px 5px 0 var(--nb-black);
+  background-color: var(--corp-blue-soft);
+  border-color: var(--corp-blue);
+  box-shadow: 0 0 0 2px var(--corp-blue);
 }
 
 .delivery-option-info {
@@ -515,7 +519,7 @@ export default {
 .delivery-option-name {
   font-weight: 800;
   font-size: 0.95rem;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.2px;
 }
 
@@ -526,7 +530,7 @@ export default {
 }
 
 .delivery-option--selected .delivery-option-desc {
-  color: var(--nb-black);
+  color: var(--corp-ink);
 }
 
 .delivery-option-price {
@@ -544,21 +548,22 @@ export default {
   height: 56px;
   padding: 8px 16px;
   background: var(--nb-white);
-  border: var(--nb-border);
-  border-radius: 0;
-  box-shadow: 3px 3px 0 var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: 10px;
+  box-shadow: var(--corp-shadow);
   cursor: pointer;
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 
 .bank-btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 var(--nb-black);
+  transform: translateY(-2px);
+  box-shadow: var(--corp-shadow-lg);
 }
 
 .bank-btn--selected {
-  background-color: var(--nb-yellow);
-  box-shadow: 5px 5px 0 var(--nb-black);
+  background-color: var(--corp-blue-soft);
+  border-color: var(--corp-blue);
+  box-shadow: 0 0 0 2px var(--corp-blue);
 }
 
 .bank-logo {
@@ -573,9 +578,10 @@ export default {
   right: -9px;
   width: 22px;
   height: 22px;
-  background: var(--nb-black);
-  color: var(--nb-yellow);
-  border: 2px solid var(--nb-black);
+  background: var(--corp-blue);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;

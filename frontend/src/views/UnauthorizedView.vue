@@ -62,16 +62,15 @@ export default {
 
 <style scoped>
 .hero-banner {
-  background-color: var(--nb-pink);
-  border-bottom: var(--nb-border);
-  box-shadow: 0 5px 0 var(--nb-black);
+  background-color: var(--corp-surface);
+  border-bottom: 1px solid var(--corp-line);
   padding: 2.5rem 0 2rem;
 }
 
 
 .hero-title {
   font-size: 3rem;
-  color: var(--nb-white);
+  color: var(--corp-ink);
   margin: 0 0 0.4rem;
   line-height: 1;
 }
@@ -79,14 +78,15 @@ export default {
 .hero-sub {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--nb-white);
+  color: var(--corp-muted);
   opacity: 0.85;
   margin: 0;
 }
 
 .action-card {
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow-lg);
+  border: 1px solid var(--corp-line);
+  box-shadow: var(--corp-shadow);
+  border-radius: var(--corp-radius);
   background: var(--nb-white);
   padding: 1.75rem;
   height: 100%;
@@ -99,14 +99,13 @@ export default {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--nb-black);
-  opacity: 0.45;
+  color: var(--corp-muted);
   margin: 0 0 0.3rem;
 }
 
 .action-title {
   font-family: 'Archivo Black', sans-serif;
-  text-transform: uppercase;
+  text-transform: none;
   font-size: 1.6rem;
   margin: 0 0 0.75rem;
 }

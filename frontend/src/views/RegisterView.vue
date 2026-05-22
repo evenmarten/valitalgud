@@ -111,14 +111,15 @@ export default {
   components: { AppNavbar, AlertError },
   data() {
     return {
+      // TEMP: prefilled registration fields for faster testing — remove before delivery
       registerDto: {
-        fullName: '',
-        email: '',
-        password: '',
-        phone: '',
+        fullName: 'Mari Maasikas',
+        email: 'mari.maasikas@example.com',
+        password: 'timmumimmu123',
+        phone: '+372 555 1234',
         description: '',
       },
-      repeatPassword: '',
+      repeatPassword: 'timmumimmu123',
       errorMessage: '',
     }
   },
@@ -153,7 +154,7 @@ export default {
     },
 
     handleRegisterResponse() {
-      NavigationService.navigateToLogin()
+      NavigationService.navigateToRegisterSuccess(this.registerDto.fullName)
     },
 
     handleRegisterError(error) {
@@ -163,7 +164,9 @@ export default {
       } else if (statusCode === 409) {
         this.errorMessage = 'See e-post on juba kasutusel'
       } else {
-        NavigationService.navigateToErrorView()
+        // Ootamatu viga (nt server kättesaamatu) — jää vormile ja näita teadet,
+        // selle asemel et suunata kasutaja eksitavale 404-lehele.
+        this.errorMessage = 'Registreerimine ebaõnnestus. Palun proovi hiljem uuesti.'
       }
     },
   },

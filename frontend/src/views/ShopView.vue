@@ -12,7 +12,7 @@
     <div class="container py-4">
       <AlertError :error-message="errorMessage" />
 
-      <div v-if="successMessage" class="alert-success-nb mb-4">
+      <div v-if="successMessage" class="alert-success-nb">
         {{ successMessage }}
       </div>
 
@@ -306,7 +306,7 @@ export default {
       window.dispatchEvent(new CustomEvent('cart-updated'))
       this.addedProductId = product.productId
       setTimeout(() => (this.addedProductId = null), 500)
-      this.successMessage = `${product.name} lisatud ostukorvi!`
+      this.successMessage = 'Toode lisatud ostukorvi'
       setTimeout(() => (this.successMessage = ''), 2500)
     },
 
@@ -357,9 +357,8 @@ export default {
 <style scoped>
 /* Hero */
 .hero-banner {
-  background-color: var(--nb-yellow);
-  border-bottom: var(--nb-border);
-  box-shadow: 0 5px 0 var(--nb-black);
+  background-color: var(--corp-surface);
+  border-bottom: 1px solid var(--corp-line);
   padding: 2.5rem 0 2rem;
 }
 
@@ -378,10 +377,11 @@ export default {
 
 /* Sorteerimine */
 .sort-select {
-  background-color: var(--nb-bg);
-  border: var(--nb-border);
-  box-shadow: 3px 3px 0 var(--nb-black);
-  font-family: 'Archivo Black', sans-serif;
+  background-color: var(--nb-white);
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
   font-size: 1rem;
   padding: 0.45rem 0.75rem;
   cursor: pointer;
@@ -395,7 +395,8 @@ export default {
 
 .sort-select:focus {
   outline: none;
-  box-shadow: 5px 5px 0 var(--nb-black);
+  border-color: var(--corp-blue);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
 }
 
 /* Korvi lisamise animatsioon */
@@ -416,17 +417,17 @@ export default {
 }
 
 .product-card:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 8px 8px 0 var(--nb-black) !important;
+  transform: translateY(-4px);
+  box-shadow: var(--corp-shadow-lg) !important;
 }
 
 .product-card.in-cart {
   border-color: var(--nb-green) !important;
-  box-shadow: 5px 5px 0 var(--nb-green) !important;
+  box-shadow: 0 0 0 2px var(--nb-green) !important;
 }
 
 .product-card.in-cart:hover {
-  box-shadow: 8px 8px 0 var(--nb-green) !important;
+  box-shadow: var(--corp-shadow-lg) !important;
 }
 
 /* Pildi wrapper */
@@ -452,8 +453,8 @@ export default {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   padding: 3px 8px;
-  border: 2px solid var(--nb-black);
-  box-shadow: 2px 2px 0 var(--nb-black);
+  border-radius: 999px;
+  box-shadow: var(--corp-shadow);
 }
 
 /* Hind */
@@ -465,14 +466,34 @@ export default {
 }
 
 /* Success teade */
+/* Teavitus-toast: ilmub rangelt headeri all, üleval paremas nurgas.
+   Navbar on ~125px kõrge + 6px vari, seega top hoiab toasti sellest allpool. */
 .alert-success-nb {
+  position: fixed;
+  top: 140px;
+  right: 24px;
+  z-index: 1080;
+  max-width: 320px;
   background-color: var(--nb-green);
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow);
-  padding: 0.75rem 1.25rem;
+  color: var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: 10px;
+  box-shadow: var(--corp-shadow-lg);
+  padding: 0.85rem 1.25rem;
   font-weight: 700;
-  text-transform: uppercase;
   font-size: 0.9rem;
+  animation: toast-in 0.25s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Laoseis */
@@ -491,14 +512,16 @@ export default {
 .panel-cart-control {
   display: flex;
   align-items: stretch;
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
+  box-shadow: var(--corp-shadow);
 }
 
 .panel-cart-btn {
-  background-color: var(--nb-yellow);
+  background-color: var(--corp-surface);
+  color: var(--corp-blue);
   border: none;
-  border-right: var(--nb-border);
+  border-right: 1px solid var(--corp-line);
   font-family: 'Archivo Black', sans-serif;
   font-size: 1.4rem;
   font-weight: 900;
@@ -510,17 +533,17 @@ export default {
 
 .panel-cart-btn:last-child {
   border-right: none;
-  border-left: var(--nb-border);
+  border-left: 1px solid var(--corp-line);
 }
 
 .panel-cart-btn:hover {
-  background-color: var(--nb-black);
-  color: var(--nb-yellow);
+  background-color: var(--corp-blue);
+  color: #fff;
 }
 
 .panel-cart-btn:active {
-  background-color: var(--nb-black);
-  color: var(--nb-yellow);
+  background-color: var(--corp-blue);
+  color: #fff;
 }
 
 .panel-cart-info {
@@ -529,7 +552,8 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--nb-green);
+  background-color: var(--corp-blue-soft);
+  color: var(--corp-blue);
   padding: 0.6rem 0;
 }
 
@@ -552,29 +576,29 @@ export default {
   position: fixed;
   bottom: 28px;
   right: 28px;
-  background-color: var(--nb-black);
-  color: var(--nb-yellow);
+  background-color: var(--corp-blue);
+  color: #fff;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 800;
   font-size: 0.95rem;
-  text-transform: uppercase;
   letter-spacing: 0.3px;
   padding: 0.75rem 1.4rem;
-  border: 3px solid var(--nb-yellow);
-  box-shadow: 5px 5px 0 var(--nb-yellow);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 10px 25px rgba(30, 58, 138, 0.35);
   cursor: pointer;
   z-index: 999;
   transition: transform 0.06s ease, box-shadow 0.06s ease;
 }
 
 .cart-float:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 var(--nb-yellow);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(30, 58, 138, 0.4);
 }
 
 .cart-float:active {
-  transform: translate(2px, 2px);
-  box-shadow: 3px 3px 0 var(--nb-yellow);
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
 }
 
 /* Paneel */
@@ -588,8 +612,8 @@ export default {
 }
 
 .panel-content {
-  background: var(--nb-bg);
-  border-left: var(--nb-border);
+  background: var(--nb-white);
+  border-left: 1px solid var(--corp-line);
   width: 440px;
   height: 100%;
   overflow-y: auto;

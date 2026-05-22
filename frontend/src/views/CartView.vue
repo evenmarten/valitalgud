@@ -288,8 +288,8 @@ export default {
 
 <style scoped>
 .hero-banner {
-  background-color: var(--nb-black);
-  border-bottom: 6px solid var(--nb-yellow);
+  background-color: var(--corp-surface);
+  border-bottom: 1px solid var(--corp-line);
   padding: 2rem 0;
 }
 
@@ -310,14 +310,14 @@ export default {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--nb-yellow);
+  color: var(--corp-muted);
   opacity: 0.7;
   margin: 0 0 0.2rem;
 }
 
 .hero-title {
   font-size: 3rem;
-  color: var(--nb-yellow);
+  color: var(--corp-ink);
   margin: 0;
   line-height: 1;
 }
@@ -331,28 +331,28 @@ export default {
 .hero-count {
   font-family: 'Archivo Black', sans-serif;
   font-size: 3.5rem;
-  color: var(--nb-white);
+  color: var(--corp-ink);
   line-height: 1;
 }
 
 .hero-count-label {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--nb-white);
+  color: var(--corp-muted);
   opacity: 0.6;
   text-transform: uppercase;
 }
 
 .hero-divider {
   font-size: 2rem;
-  color: var(--nb-yellow);
+  color: var(--corp-line);
   opacity: 0.4;
 }
 
 .hero-total {
   font-family: 'Archivo Black', sans-serif;
   font-size: 2.2rem;
-  color: var(--nb-yellow);
+  color: var(--corp-blue);
   line-height: 1;
 }
 
@@ -364,13 +364,13 @@ export default {
 .qty-input {
   width: 60px;
   text-align: center;
-  border: var(--nb-border);
-  box-shadow: 2px 2px 0 var(--nb-black);
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
   padding: 0.25rem 0.4rem;
-  background-color: var(--nb-bg);
+  background-color: var(--nb-white);
   -moz-appearance: textfield;
 }
 
@@ -381,13 +381,15 @@ export default {
 
 .qty-input:focus {
   outline: none;
-  box-shadow: 4px 4px 0 var(--nb-black);
+  border-color: var(--corp-blue);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
 }
 
 .btn-clear-cart {
   background: none;
-  border: var(--nb-border);
-  box-shadow: 2px 2px 0 var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: 8px;
+  box-shadow: none;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   font-size: 0.8rem;
@@ -401,7 +403,7 @@ export default {
 
 .btn-clear-cart:hover {
   background-color: var(--nb-pink);
-  color: var(--nb-black);
+  color: #fff;
 }
 
 .product-price {
@@ -432,8 +434,8 @@ export default {
 }
 
 .panel-content {
-  background: var(--nb-bg);
-  border-left: var(--nb-border);
+  background: var(--nb-white);
+  border-left: 1px solid var(--corp-line);
   width: 440px;
   height: 100%;
   overflow-y: auto;
@@ -442,17 +444,20 @@ export default {
 .panel-cart-control {
   display: flex;
   align-items: stretch;
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow);
+  border: 1px solid var(--corp-line);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--corp-shadow);
 }
 
 .panel-cart-btn {
-  background-color: var(--nb-yellow);
+  background-color: var(--corp-surface);
+  color: var(--corp-blue);
   border: none;
-  border-right: var(--nb-border);
-  font-family: 'Archivo Black', sans-serif;
+  border-right: 1px solid var(--corp-line);
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.4rem;
-  font-weight: 900;
+  font-weight: 700;
   width: 56px;
   cursor: pointer;
   flex-shrink: 0;
@@ -460,12 +465,12 @@ export default {
 
 .panel-cart-btn:last-child {
   border-right: none;
-  border-left: var(--nb-border);
+  border-left: 1px solid var(--corp-line);
 }
 
 .panel-cart-btn:hover {
-  background-color: var(--nb-black);
-  color: var(--nb-yellow);
+  background-color: var(--corp-blue);
+  color: #fff;
 }
 
 .panel-cart-info {
@@ -474,7 +479,8 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--nb-green);
+  background-color: var(--corp-blue-soft);
+  color: var(--corp-blue);
   padding: 0.6rem 0;
 }
 

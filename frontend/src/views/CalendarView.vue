@@ -242,8 +242,9 @@ export default {
 <style scoped>
 /* ---- Kalender raam ---- */
 .calendar-frame {
-  border: 3px solid var(--nb-black);
-  box-shadow: 6px 6px 0 var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
+  box-shadow: var(--corp-shadow);
   background: var(--nb-white);
   overflow: hidden;
 }
@@ -253,15 +254,15 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.9rem 1.2rem;
-  border-bottom: 3px solid var(--nb-black);
-  background: var(--nb-yellow);
+  border-bottom: 1px solid var(--corp-line);
+  background: var(--corp-surface);
 }
 
 /* ---- Nädalapäevad ---- */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  background: var(--nb-black);
+  background: var(--corp-blue);
 }
 
 .weekday-label {
@@ -286,8 +287,8 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-right: 2px solid var(--nb-black);
-  border-bottom: 2px solid var(--nb-black);
+  border-right: 1px solid var(--corp-line);
+  border-bottom: 1px solid var(--corp-line);
   padding: 6px 4px;
   gap: 4px;
   background: var(--nb-white);
@@ -302,27 +303,28 @@ export default {
 }
 
 .calendar-cell--active:hover {
-  background-color: #fdf0c0;
+  background-color: var(--corp-blue-soft);
 }
 
 .calendar-cell--today .day-number {
-  background-color: var(--nb-pink);
-  color: #fff;
+  background-color: var(--corp-blue-soft);
+  color: var(--corp-blue);
   width: 28px;
   height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--nb-black);
+  border: 1px solid var(--corp-blue);
+  border-radius: 50%;
 }
 
 .calendar-cell--selected {
-  background-color: var(--nb-blue) !important;
+  background-color: var(--corp-blue) !important;
   color: #fff;
 }
 
 .calendar-cell--selected:hover {
-  background-color: #2470e8 !important;
+  background-color: #16306e !important;
 }
 
 .day-number {
@@ -336,8 +338,8 @@ export default {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: var(--nb-pink);
-  border: 1px solid var(--nb-black);
+  background-color: var(--corp-blue);
+  border: none;
   display: block;
   flex-shrink: 0;
 }
@@ -353,30 +355,33 @@ export default {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: var(--nb-yellow);
-  border: 3px solid var(--nb-black);
-  box-shadow: 4px 4px 0 var(--nb-black);
+  background: var(--corp-surface);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
+  box-shadow: var(--corp-shadow);
   margin-bottom: 1rem;
 }
 
 .events-section-header h5 {
   font-family: 'Archivo Black', sans-serif;
-  text-transform: uppercase;
+  text-transform: none;
   margin: 0;
 }
 
 .events-count-badge {
-  background: var(--nb-black);
-  color: var(--nb-yellow);
+  background: var(--corp-blue);
+  color: #fff;
   font-weight: 700;
   font-size: 0.8rem;
   text-transform: uppercase;
   padding: 0.2em 0.6em;
   letter-spacing: 0.3px;
+  border-radius: 999px;
 }
 
 .loading-box {
-  border: 3px solid var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
   padding: 1.2rem 1rem;
   font-weight: 600;
   color: #444;
@@ -390,8 +395,8 @@ export default {
   display: inline-block;
   width: 18px;
   height: 18px;
-  border: 3px solid var(--nb-black);
-  border-top-color: var(--nb-blue);
+  border: 3px solid var(--corp-line);
+  border-top-color: var(--corp-blue);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   flex-shrink: 0;
@@ -402,7 +407,8 @@ export default {
 }
 
 .no-events-box {
-  border: 3px solid var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
   padding: 1.2rem 1rem;
   font-weight: 600;
   color: #555;
@@ -417,8 +423,9 @@ export default {
 }
 
 .event-btn-card {
-  border: 3px solid var(--nb-black);
-  box-shadow: 4px 4px 0 var(--nb-black);
+  border: 1px solid var(--corp-line);
+  border-radius: var(--corp-radius);
+  box-shadow: var(--corp-shadow);
   background: var(--nb-white);
   cursor: pointer;
   padding: 1rem 1.1rem;
@@ -426,14 +433,14 @@ export default {
 }
 
 .event-btn-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--nb-black);
-  background-color: #fdf0c0;
+  transform: translateY(-3px);
+  box-shadow: var(--corp-shadow-lg);
+  background-color: var(--corp-blue-soft);
 }
 
 .event-btn-card:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--nb-black);
+  transform: translateY(0);
+  box-shadow: var(--corp-shadow);
 }
 
 .event-btn-inner {
@@ -451,7 +458,7 @@ export default {
 .event-btn-title {
   font-family: 'Archivo Black', sans-serif;
   font-size: 1rem;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: -0.3px;
   line-height: 1.2;
   margin-bottom: 0.2rem;

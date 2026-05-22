@@ -13,6 +13,10 @@ export default {
     router.push('/register')
   },
 
+  navigateToRegisterSuccess(fullName) {
+    router.push({ name: 'register-success', state: { registered: true, fullName } })
+  },
+
   navigateToShop() {
     router.push('/shop')
   },

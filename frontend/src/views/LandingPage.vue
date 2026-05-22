@@ -45,17 +45,6 @@
       </div>
     </section>
 
-    <!-- ===== MARQUEE ===== -->
-    <div class="marquee">
-      <div class="marquee-track">
-        <span v-for="half in 2" :key="half" class="marquee-group">
-          <template v-for="(word, i) in marqueeRow" :key="i">
-            <span class="marquee-item">{{ word }}</span><span class="marquee-star">★</span>
-          </template>
-        </span>
-      </div>
-    </div>
-
     <!-- ===== KUIDAS SEE TOIMIB ===== -->
     <section class="section section-blue">
       <div class="container">
@@ -239,7 +228,6 @@ export default {
     return {
       isLoggedIn: false,
       heroImage,
-      marqueeWords: ['Sündmused', 'Talgud', 'Kogukond', 'Korralda', 'Osale'],
       steps: [
         {
           number: 1,
@@ -341,14 +329,6 @@ export default {
       ],
     }
   },
-  computed: {
-    // Repeat the word list so a single marquee half stays comfortably wide,
-    // keeping the scroll dense on common screens (gaps are still prevented by
-    // min-width: 100vw + space-around in the CSS).
-    marqueeRow() {
-      return [...this.marqueeWords, ...this.marqueeWords]
-    },
-  },
   methods: {
     bannerStyle(item) {
       return {
@@ -387,6 +367,8 @@ export default {
 <style scoped>
 /* ---------- Hero ---------- */
 .hero {
+  /* Hero hoiab oma soojema bränditooni, samal ajal kui muu leht on rahulik neutraalne */
+  background: var(--nb-bg);
   border-bottom: var(--nb-border);
   position: relative;
   overflow: hidden;
@@ -459,155 +441,162 @@ export default {
   height: auto;
 }
 
-/* ---------- Marquee ---------- */
-.marquee {
-  background: var(--nb-black);
-  border-top: 3px solid var(--nb-yellow);
-  border-bottom: 3px solid var(--nb-yellow);
-  overflow: hidden;
-  padding: 0.7rem 0;
-}
-
-.marquee-track {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: marquee-scroll 52s linear infinite;
-}
-
-.marquee-group {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-around;
-  /* Each half is at least one viewport wide so the loop never reveals a gap;
-     space-around turns any extra width into even spacing, seam included. */
-  min-width: 100vw;
-  flex-shrink: 0;
-}
-
-.marquee-item {
-  font-family: 'Archivo Black', sans-serif;
-  text-transform: uppercase;
-  color: var(--nb-yellow);
-  font-size: 1.4rem;
-  letter-spacing: 0.05em;
-  padding: 0 1.2rem;
-}
-
-.marquee-star {
-  color: var(--nb-pink);
-  font-size: 1.2rem;
-}
-
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
-}
-
-/* ---------- Sektsioonid ---------- */
+/* ============================================================
+   SISUSEKTSIOONID — rahulik korporatiivne (Corporate) toon.
+   Hero, navbar ja footer jäävad neobrutalistlikuks; siin on
+   pehme lõuend, mida elavdavad üksikud julged aktsendid (nupud,
+   lõpu-CTA). Kõik allolev on scoped — globaalset teemat ei muudeta.
+   ============================================================ */
 .section {
-  padding: 4rem 0;
+  /* Korporatiivne palett, mis kehtib ainult sisusektsioonides */
+  --corp-blue: #1e3a8a;
+  --corp-blue-soft: #eef2fb;
+  --corp-teal: #0e7490;
+  --corp-ink: #1f2937;
+  --corp-muted: #6b7280;
+  --corp-line: #e5e7eb;
+  --corp-surface: #f4f6fa;
+  --corp-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 10px 30px rgba(16, 24, 40, 0.06);
+  --corp-shadow-lg: 0 8px 16px rgba(16, 24, 40, 0.08), 0 22px 48px rgba(16, 24, 40, 0.12);
+
+  padding: 4.5rem 0;
+  background: var(--nb-white);
+  border-top: 1px solid var(--corp-line);
+}
+
+/* Vahelduvad pehmed taustad annavad rütmi ilma valju värviplokita */
+.section-blue,
+.section-yellow {
+  background: var(--corp-surface);
 }
 
 .section-alt {
   background: var(--nb-white);
-  border-top: var(--nb-border);
-  border-bottom: var(--nb-border);
 }
 
-.section-blue {
-  background: var(--nb-blue);
-  border-bottom: var(--nb-border);
-}
-
-.section-blue .section-title,
-.section-blue .section-subtitle {
-  color: var(--nb-white);
-}
-
-.section-yellow {
-  background: var(--nb-yellow);
-  border-bottom: var(--nb-border);
-}
-
+/* Pehme hierarhia: tume pealkiri, summutatud alapealkiri */
 .section-title {
-  font-size: 2.2rem;
-  margin-bottom: 0.25rem;
+  font-size: 2.1rem;
+  margin-bottom: 0.4rem;
+  color: var(--corp-ink);
 }
 
 .section-subtitle {
   font-size: 1.1rem;
-  color: #555;
-  font-weight: 600;
+  color: var(--corp-muted);
+  font-weight: 500;
 }
 
-/* ---------- Kaartide hõljutus ---------- */
+/* Kaardid: pehmed ääred, ümarad nurgad, hajus vari (mitte kõva nihe) */
+.section .card {
+  border: 1px solid var(--corp-line) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--corp-shadow);
+  background-color: var(--nb-white);
+  overflow: hidden;
+}
+
+.section .card-title {
+  color: var(--corp-ink);
+}
+
+.section .card-img-top {
+  border-bottom: 1px solid var(--corp-line);
+}
+
+/* Skill-tagid → pehmed pill-sildid */
+.section .badge {
+  border: none !important;
+  border-radius: 999px !important;
+  background-color: var(--corp-blue-soft) !important;
+  color: var(--corp-blue) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 600;
+  padding: 0.4em 0.85em;
+}
+
+/* Nupud jäävad julgeks (sild neobrutalismi juurde), kuid värv on rahulik */
+.section .btn-primary {
+  background-color: var(--corp-blue) !important;
+}
+
+.section .btn-danger {
+  background-color: var(--corp-teal) !important;
+}
+
+/* ---------- Kaartide pehme hõljutus ---------- */
 .lift-card {
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .lift-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: var(--nb-shadow-lg);
+  transform: translateY(-5px);
+  box-shadow: var(--corp-shadow-lg) !important;
 }
 
-/* ---------- Sammud ---------- */
+/* ---------- Sammud: pehmed ümarad numbrid ---------- */
 .step-number {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Archivo Black', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   color: var(--nb-white);
-  border: var(--nb-border);
-  box-shadow: 3px 3px 0 var(--nb-black);
-  margin-bottom: 1rem;
+  border-radius: 50%;
+  margin-bottom: 1.1rem;
 }
 
-.step-blue { background: var(--nb-blue); }
-.step-pink { background: var(--nb-pink); }
-.step-green { background: var(--nb-green); color: var(--nb-black); }
+.step-blue { background: var(--corp-blue); }
+.step-pink { background: var(--corp-teal); }
+.step-green { background: #2563eb; color: var(--nb-white); }
 
-/* ---------- Sihtrühma kaardid ---------- */
-.audience-card {
-  border-width: 3px;
+/* ---------- Sihtrühma kaardid: peen ülaserv aktsendina ---------- */
+.section .audience-card.audience-blue {
+  border-top: 4px solid var(--corp-blue) !important;
 }
 
-.audience-blue { border-top: 10px solid var(--nb-blue); }
-.audience-pink { border-top: 10px solid var(--nb-pink); }
+.section .audience-card.audience-pink {
+  border-top: 4px solid var(--corp-teal) !important;
+}
+
+.audience-card .card-body {
+  padding: 2rem;
+}
 
 .audience-tag {
   display: inline-block;
-  background: var(--nb-yellow);
-  border: 2px solid var(--nb-black);
-  font-weight: 700;
+  background: var(--corp-blue-soft);
+  color: var(--corp-blue);
+  border-radius: 999px;
+  font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  padding: 0.25rem 0.6rem;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.4px;
+  font-size: 0.74rem;
+  padding: 0.3rem 0.85rem;
+  margin-bottom: 0.85rem;
 }
 
 .audience-heading {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin-bottom: 1rem;
+  color: var(--corp-ink);
 }
 
 .feature-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.5rem;
 }
 
 .feature-list li {
   position: relative;
-  padding-left: 1.6rem;
-  margin-bottom: 0.6rem;
+  padding-left: 1.7rem;
+  margin-bottom: 0.65rem;
   font-weight: 500;
+  color: var(--corp-ink);
 }
 
 .feature-list li::before {
@@ -615,7 +604,7 @@ export default {
   position: absolute;
   left: 0;
   font-weight: 900;
-  color: var(--nb-green);
+  color: var(--corp-blue);
 }
 
 /* ---------- Sündmuste / poe kaardid ---------- */
@@ -640,27 +629,28 @@ export default {
 
 .shop-card {
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .shop-card:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: var(--nb-shadow-lg);
+  transform: translateY(-5px);
+  box-shadow: var(--corp-shadow-lg) !important;
 }
 
-/* ---------- Lõpp-CTA ---------- */
+/* ---------- Lõpp-CTA: rahulik korporatiivne paneel ---------- */
 .cta-banner {
-  background: var(--nb-pink);
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow-lg);
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(30, 58, 138, 0.28);
   color: var(--nb-white);
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: 3.25rem 1.5rem;
 }
 
 .cta-title {
   color: var(--nb-white);
-  font-size: 2.2rem;
+  font-size: 2.1rem;
   margin-bottom: 0.75rem;
 }
 
@@ -668,6 +658,7 @@ export default {
   font-size: 1.15rem;
   max-width: 560px;
   margin: 0 auto 1.75rem;
+  opacity: 0.92;
 }
 
 @media (max-width: 992px) {

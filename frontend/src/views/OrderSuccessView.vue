@@ -64,9 +64,8 @@ export default {
 
 <style scoped>
 .hero-banner {
-  background-color: var(--nb-yellow);
-  border-bottom: var(--nb-border);
-  box-shadow: 0 5px 0 var(--nb-black);
+  background-color: var(--corp-blue-soft);
+  border-bottom: 1px solid var(--corp-line);
   padding: 2.5rem 0 2rem;
 }
 
@@ -75,14 +74,14 @@ export default {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--nb-black);
+  color: var(--corp-blue);
   opacity: 0.6;
   margin: 0 0 0.2rem;
 }
 
 .hero-title {
   font-size: 3rem;
-  color: var(--nb-black);
+  color: var(--corp-ink);
   margin: 0;
   line-height: 1;
 }
@@ -90,7 +89,8 @@ export default {
 
 .doggy {
   width: 300px;
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow-lg);
+  border: 1px solid var(--corp-line);
+  box-shadow: var(--corp-shadow-lg);
+  border-radius: var(--corp-radius);
 }
 </style>
