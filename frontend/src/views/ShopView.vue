@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="container py-4">
+    <div class="container pt-4 pb-5">
       <AlertError :error-message="errorMessage" />
 
       <div v-if="successMessage" class="alert-success-nb">

@@ -21,7 +21,8 @@
       "Bash(curl *)",
       "Bash(lsof *)",
       "Bash(sips -g pixelWidth -g pixelHeight src/assets/logo/valitalgud-logo.png)",
-      "WebFetch(domain:resend.com)"
+      "WebFetch(domain:resend.com)",
+      "Bash(kill 96278 96334)"
     ]
   }
 }

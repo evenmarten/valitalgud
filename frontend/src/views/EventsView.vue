@@ -2,7 +2,7 @@
   <div>
     <AppNavbar />
 
-    <div class="container py-4">
+    <div class="container pt-4 pb-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Events</h2>
         <button class="btn btn-primary" @click="goToCreateEvent">Loo uus sündmus</button>
@@ -115,6 +115,8 @@ import AlertError from '@/components/common/AlertError.vue'
 import SkillTagFilter from '@/components/forms/SkillTagFilter.vue'
 import EventService from '@/api-services/EventService.js'
 import SkillTagService from '@/api-services/SkillTagService.js'
+import CityService from '@/api-services/CityService.js'
+import CountyService from '@/api-services/CountyService.js'
 import NavigationService from '@/navigation/NavigationService.js'
 
 export default {
@@ -145,13 +147,25 @@ export default {
 
     handleGetEventsResponse(events) {
       this.events = events
-      this.populateCityOptions(events)
-      this.populateCountyOptions(events)
     },
 
     getSkillTags() {
       SkillTagService.sendGetSkillTagsRequest()
         .then((response) => (this.skillTagOptions = response.data))
+        .catch(() => NavigationService.navigateToErrorView())
+        .finally()
+    },
+
+    getCities() {
+      CityService.sendGetCitiesRequest()
+        .then((response) => (this.cityOptions = response.data))
+        .catch(() => NavigationService.navigateToErrorView())
+        .finally()
+    },
+
+    getCounties() {
+      CountyService.sendGetCountiesRequest()
+        .then((response) => (this.countyOptions = response.data))
         .catch(() => NavigationService.navigateToErrorView())
         .finally()
     },
@@ -176,24 +190,6 @@ export default {
       return params
     },
 
-    populateCityOptions(events) {
-      if (this.cityOptions.length === 0) {
-        this.cityOptions = this.collectUniqueOptions(events, 'cityId', 'city')
-      }
-    },
-
-    populateCountyOptions(events) {
-      if (this.countyOptions.length === 0) {
-        this.countyOptions = this.collectUniqueOptions(events, 'countyId', 'county')
-      }
-    },
-
-    collectUniqueOptions(events, idField, nameField) {
-      const map = new Map()
-      events.forEach((event) => map.set(event[idField], event[nameField]))
-      return Array.from(map, ([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name))
-    },
-
     formatDate(isoDate) {
       const [year, month, day] = isoDate.split('-')
       return `${day}.${month}.${year}`
@@ -208,6 +204,8 @@ export default {
     },
   },
   beforeMount() {
+    this.getCities()
+    this.getCounties()
     this.getSkillTags()
     this.getEvents()
   },

@@ -113,14 +113,9 @@
     <!-- ===== EELSEISVAD SÜNDMUSED ===== -->
     <section class="section section-yellow">
       <div class="container">
-        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
-          <div>
-            <h2 class="section-title mb-1">Tutvu eelseisvate sündmustega</h2>
-            <p class="section-subtitle mb-0">Näide sellest, mis kogukonnas toimub</p>
-          </div>
-          <button class="btn btn-dark" @click="browseEvents">
-            {{ isLoggedIn ? 'Vaata kõiki sündmusi' : 'Loo konto ja osale' }}
-          </button>
+        <div class="text-center mb-5">
+          <h2 class="section-title">Tutvu eelseisvate sündmustega</h2>
+          <p class="section-subtitle">Näide sellest, mis kogukonnas toimub</p>
         </div>
 
         <div class="row g-4">
@@ -129,7 +124,7 @@
             :key="event.eventId"
             class="col-sm-6 col-md-4"
           >
-            <div class="card lift-card h-100">
+            <div class="card lift-card h-100 event-card" @click="goToEvents">
               <div class="card-img-top demo-banner" :style="bannerStyle(event)">
                 <img :src="event.image" :alt="event.title" class="demo-banner-img" />
               </div>
@@ -164,8 +159,8 @@
       <div class="container">
         <div class="text-center mb-5">
           <h2 class="section-title">Tutvu meie e-poega</h2>
-          <p class="section-subtitle">Toeta kogukonda ja kanna seda uhkusega</p>
         </div>
+
 
         <div class="row g-4">
           <div
@@ -191,12 +186,12 @@
         <div class="cta-banner">
           <template v-if="isLoggedIn">
             <h2 class="cta-title">Korralda oma esimene sündmus</h2>
-            <p class="cta-text">Loo sündmus või talgud ja too kogukond kokku juba täna.</p>
+            <p class="cta-text">Loo sündmus või talgud ja too inimesed kokku juba täna.</p>
             <button class="btn btn-secondary btn-lg" @click="goToCreateEvent">Loo sündmus</button>
           </template>
           <template v-else>
             <h2 class="cta-title">Valmis alustama?</h2>
-            <p class="cta-text">Loo tasuta konto ja avasta sündmusi, mis su kogukonda elavdavad.</p>
+            <p class="cta-text">Loo konto ja avasta sündmusi, mis su kogukonda elavdavad.</p>
             <button class="btn btn-secondary btn-lg" @click="goToRegister">Loo konto</button>
           </template>
         </div>
@@ -222,33 +217,31 @@ export default {
         {
           number: 1,
           title: 'Avasta',
-          text: 'Sirvi eelseisvaid sündmusi ja talguid. Leia linna ja oskuste järgi see, mis sind kõnetab.',
+          text: 'Sirvi eelseisvaid sündmusi ja talguid. Leia, mis sind kõnetab.',
           color: 'step-blue',
         },
         {
           number: 2,
           title: 'Liitu',
-          text: 'Märgi end osalejaks ühe klikiga — lähen, võib-olla või ei lähe. Kõik valikud koonduvad kalendrisse.',
+          text: 'Märgi end osalejaks ühe klikiga ja jälgi üritusi enda kalendris.',
           color: 'step-pink',
         },
         {
           number: 3,
           title: 'Korralda',
-          text: 'Loo ise sündmus või talgud, kutsu kogukond kokku ja jälgi osalejaid reaalajas.',
+          text: 'Loo ise sündmus või talgud.',
           color: 'step-green',
         },
       ],
       participantFeatures: [
         'Avasta sündmusi ja talguid linna ning oskuste järgi',
-        'Registreeru ühe klikiga: lähen, võib-olla või ei lähe',
-        'Hoia kõik oma sündmused ühes kalendris koos',
-        'Aruta ja küsi küsimusi sündmuse kommentaarides',
+        'Registreeru ühe klikiga',
+        'Jälgi kõiki sündmsui enda kalendris',
       ],
       organizerFeatures: [
-        'Loo sündmus mugava sammhaaval vormiga',
+        'Loo sündmus mugavalt',
         'Lisa kirjeldus, asukoht, oskuse-tagid ja banner',
-        'Halda osalejaid ja jälgi huvi reaalajas',
-        'Muuda või tühista oma sündmusi igal ajal',
+        'Jälgi oma loodud sündmusi mugavalt eraldi vaatest',
       ],
       demoEvents: [
         {
@@ -343,6 +336,9 @@ export default {
     },
     goToShop() {
       NavigationService.navigateToShop()
+    },
+    goToEvents() {
+      NavigationService.navigateToEvents()
     },
   },
   beforeMount() {
@@ -620,6 +616,11 @@ export default {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Klikitav sündmusekaart landingul — viib events vaatesse */
+.event-card {
+  cursor: pointer;
 }
 
 .shop-card {
