@@ -21,7 +21,7 @@ public class CartResponseDto {
     @Schema(description = "Tarnetasu", example = "5.00")
     private BigDecimal shipping;
 
-    @Schema(description = "Käibemaks (8%)", example = "8.12")
+    @Schema(description = "Käibemaks (24%)", example = "24.36")
     private BigDecimal tax;
 
     @Schema(description = "Kogusumma", example = "114.61")

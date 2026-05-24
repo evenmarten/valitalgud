@@ -166,7 +166,7 @@
                   <span>{{ shipping.toFixed(2) }} €</span>
                 </div>
                 <div class="summary-row">
-                  <span>Käibemaks (8%)</span>
+                  <span>Käibemaks (24%)</span>
                   <span>{{ tax.toFixed(2) }} €</span>
                 </div>
                 <div class="summary-row summary-row--total">
@@ -246,7 +246,7 @@ export default {
       return method ? method.price : 0
     },
     tax() {
-      return Math.round(this.subtotal * 0.08 * 100) / 100
+      return Math.round(this.subtotal * 0.24 * 100) / 100
     },
     total() {
       return this.subtotal + this.shipping + this.tax

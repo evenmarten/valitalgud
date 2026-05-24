@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="contact-view">
     <AppNavbar />
 
-    <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="card shadow">
-            <div class="card-body p-4 p-md-5">
+    <div class="container py-5 flex-grow-1 d-flex flex-column">
+      <div class="row justify-content-center flex-grow-1">
+        <div class="col-lg-8 d-flex">
+          <div class="card shadow flex-grow-1">
+            <div class="card-body p-4 p-md-5 d-flex flex-column">
               <h1 class="text-center mb-3">Kontakt</h1>
               <p class="text-muted text-center mb-4">
                 Alustame koostööd. Võtke meiega ühendust ja me vastame Teile esimesel võimalusel.
@@ -17,7 +17,7 @@
                 {{ successMessage }}
               </div>
 
-              <form @submit.prevent="sendMessage">
+              <form @submit.prevent="sendMessage" class="d-flex flex-column flex-grow-1">
                 <div class="row g-3">
                   <div class="col-md-6">
                     <label for="nameOrCompany" class="form-label">Nimi/Ettevõte</label>
@@ -40,12 +40,12 @@
                   </div>
                 </div>
 
-                <div class="mt-3 mb-4">
+                <div class="mt-3 mb-4 flex-grow-1 d-flex flex-column">
                   <label for="message" class="form-label">Sõnum</label>
                   <textarea
                     id="message"
                     v-model="contactForm.message"
-                    class="form-control"
+                    class="form-control flex-grow-1"
                     rows="8"
                   ></textarea>
                 </div>
@@ -139,3 +139,13 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* Venita vaade page-wrapperi kõrgusele, et vorm täidaks ruumi ja footerini
+   jääks ühtlane vahe (sama nagu poe/sündmuste vaates), mitte suur tühi ala. */
+.contact-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+</style>

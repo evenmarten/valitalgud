@@ -31,7 +31,7 @@ public class OrderService {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
     private static final BigDecimal SHIPPING_COST = new BigDecimal("5.00");
-    private static final BigDecimal TAX_RATE = new BigDecimal("0.08");
+    private static final BigDecimal TAX_RATE = new BigDecimal("0.24");
 
     private final BillingRepository billingRepository;
     private final OrderRepository orderRepository;

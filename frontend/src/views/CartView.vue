@@ -5,7 +5,6 @@
     <div class="hero-banner">
       <div class="container">
         <div class="hero-left">
-          <p class="hero-label">Sinu valikud</p>
           <h1 class="hero-title">Ostukorv</h1>
         </div>
       </div>
@@ -83,11 +82,7 @@
                 <span>{{ subtotal.toFixed(2) }} €</span>
               </div>
               <div class="d-flex justify-content-between mb-3 fs-5">
-                <span class="text-muted">Transport:</span>
-                <span>{{ shipping.toFixed(2) }} €</span>
-              </div>
-              <div class="d-flex justify-content-between mb-3 fs-5">
-                <span class="text-muted">Käibemaks (8%):</span>
+                <span class="text-muted">Käibemaks (24%):</span>
                 <span>{{ tax.toFixed(2) }} €</span>
               </div>
               <hr />
@@ -186,14 +181,11 @@ export default {
     subtotal() {
       return this.items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0)
     },
-    shipping() {
-      return this.isEmpty ? 0 : 5.0
-    },
     tax() {
-      return Math.round(this.subtotal * 0.08 * 100) / 100
+      return Math.round(this.subtotal * 0.24 * 100) / 100
     },
     total() {
-      return this.subtotal + this.shipping + this.tax
+      return this.subtotal + this.tax
     },
     panelItem() {
       return this.items.find((i) => i.productId === this.selectedProduct.productId) || null

@@ -5,7 +5,6 @@
     <div class="hero-banner">
       <div class="container">
         <h1 class="hero-title">Valitalgud Merch</h1>
-        <p class="hero-sub">Kanna oma kirge — kvaliteetne kraam tõelistele üritussõpradele</p>
       </div>
     </div>
 

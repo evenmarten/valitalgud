@@ -118,7 +118,7 @@ public class CartService {
         List<CartItemViewDto> itemDtos = cartItemMapper.toCartItemViewDtos(items);
         BigDecimal subtotal = calculateSubtotal(itemDtos);
         BigDecimal shipping = itemDtos.isEmpty() ? BigDecimal.ZERO : new BigDecimal("5.00");
-        BigDecimal tax = subtotal.multiply(new BigDecimal("0.08")).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal tax = subtotal.multiply(new BigDecimal("0.24")).setScale(2, RoundingMode.HALF_UP);
         BigDecimal total = subtotal.add(shipping).add(tax);
         CartResponseDto cartResponseDto = new CartResponseDto();
         cartResponseDto.setCartId(cart.getId());
