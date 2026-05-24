@@ -8,12 +8,6 @@
           <p class="hero-label">Sinu valikud</p>
           <h1 class="hero-title">Ostukorv</h1>
         </div>
-        <div class="hero-right" v-if="!isEmpty">
-          <span class="hero-count">{{ totalItems }}</span>
-          <span class="hero-count-label">toodet</span>
-          <span class="hero-divider">·</span>
-          <span class="hero-total">{{ subtotal.toFixed(2) }} €</span>
-        </div>
       </div>
     </div>
 
@@ -201,9 +195,6 @@ export default {
     total() {
       return this.subtotal + this.shipping + this.tax
     },
-    totalItems() {
-      return this.items.reduce((sum, item) => sum + item.quantity, 0)
-    },
     panelItem() {
       return this.items.find((i) => i.productId === this.selectedProduct.productId) || null
     },
@@ -321,41 +312,6 @@ export default {
   margin: 0;
   line-height: 1;
 }
-
-.hero-right {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-}
-
-.hero-count {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 3.5rem;
-  color: var(--corp-ink);
-  line-height: 1;
-}
-
-.hero-count-label {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--corp-muted);
-  opacity: 0.6;
-  text-transform: uppercase;
-}
-
-.hero-divider {
-  font-size: 2rem;
-  color: var(--corp-line);
-  opacity: 0.4;
-}
-
-.hero-total {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 2.2rem;
-  color: var(--corp-blue);
-  line-height: 1;
-}
-
 
 .product-link {
   cursor: pointer;

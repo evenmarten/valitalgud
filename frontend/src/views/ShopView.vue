@@ -184,12 +184,21 @@
       </div>
     </div>
 
-    <!-- Pildi suurendus (lightbox) — vajuta sulgemiseks -->
-    <div v-if="isImageZoomed" class="image-lightbox" @click="closeZoom">
+    <!-- Pildi suurendus (lightbox) — taust, ESC või rist sulgeb; pildil klõps zoomib 2x -->
+    <div v-if="isImageZoomed" class="image-lightbox" @click.self="closeZoom">
+      <button
+        type="button"
+        class="lightbox-close"
+        aria-label="Sulge"
+        @click="closeZoom"
+      >✕</button>
       <img
         :src="selectedProduct.imageUrl"
         :alt="selectedProduct.name"
         class="image-lightbox-img"
+        :class="{ 'is-magnified': isLightboxMagnified }"
+        :title="isLightboxMagnified ? 'Vajuta vähendamiseks' : 'Vajuta detailseks vaateks'"
+        @click="toggleMagnify"
       />
     </div>
   </div>
@@ -218,6 +227,7 @@ export default {
       },
       isPanelOpen: false,
       isImageZoomed: false,
+      isLightboxMagnified: false,
       quantity: 1,
       sortOrder: 'default',
       addedProductId: null,
@@ -269,17 +279,29 @@ export default {
 
     closePanel() {
       this.isPanelOpen = false
-      this.isImageZoomed = false
+      this.closeZoom()
     },
 
     zoomImage() {
       if (this.selectedProduct.imageUrl) {
         this.isImageZoomed = true
+        this.isLightboxMagnified = false
       }
     },
 
     closeZoom() {
       this.isImageZoomed = false
+      this.isLightboxMagnified = false
+    },
+
+    toggleMagnify() {
+      this.isLightboxMagnified = !this.isLightboxMagnified
+    },
+
+    handleKeydown(event) {
+      if (event.key === 'Escape' && this.isImageZoomed) {
+        this.closeZoom()
+      }
     },
 
     incrementQuantity() {
@@ -373,6 +395,12 @@ export default {
   beforeMount() {
     this.getProducts()
     this.loadCart()
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydown)
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown)
   },
 }
 </script>
@@ -635,12 +663,13 @@ export default {
   justify-content: flex-end;
 }
 
-/* Klikitav pilt detailide paneelis — vihjab suurendusele */
+/* Klikitav pilt detailide paneelis — käekursor vihjab, et pilt on klikitav */
 .zoomable-img {
-  cursor: zoom-in;
+  cursor: pointer;
 }
 
-/* Pildi suurendus (lightbox) üle terve ekraani */
+/* Pildi suurendus (lightbox) üle terve ekraani.
+   overflow: hidden hoiab 2x suurendatud pildi vaateakna piires (kärbib keskele). */
 .image-lightbox {
   position: fixed;
   inset: 0;
@@ -650,7 +679,8 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  cursor: zoom-out;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .image-lightbox-img {
@@ -661,6 +691,42 @@ export default {
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+/* Lightbox'i lisazoom — klõps suurendab pildi 2x, et detaili lähemalt vaadata */
+.image-lightbox-img.is-magnified {
+  transform: scale(2);
+}
+
+/* Lightbox'i sulgemisrist üleval paremal */
+.lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  /* Üle 2x suurendatud pildi, et rist jääks alati klikitavaks */
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--nb-black);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--corp-shadow);
+  transition: background-color 0.08s ease, transform 0.08s ease;
+}
+
+.lightbox-close:hover {
+  background: #fff;
+  transform: scale(1.05);
 }
 
 .panel-content {
