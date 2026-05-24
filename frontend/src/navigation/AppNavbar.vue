@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container-fluid" style="padding-left: 44px; padding-right: 44px;">
       <a class="navbar-brand p-0" href="#" @click.prevent="goToHome">
         <img :src="logo" alt="Valitalgud" height="84" />

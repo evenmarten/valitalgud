@@ -82,7 +82,7 @@
                 <span>{{ subtotal.toFixed(2) }} €</span>
               </div>
               <div class="d-flex justify-content-between mb-3 fs-5">
-                <span class="text-muted">Käibemaks (24%):</span>
+                <span class="text-muted">sh käibemaks (24%):</span>
                 <span>{{ tax.toFixed(2) }} €</span>
               </div>
               <hr />
@@ -182,10 +182,13 @@ export default {
       return this.items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0)
     },
     tax() {
-      return Math.round(this.subtotal * 0.24 * 100) / 100
+      // Hinnad sisaldavad käibemaksu — KM on summas sees, mitte juurde lisatav.
+      // Sisalduv KM osa brutosummast: brutosumma × 24 / 124.
+      return Math.round((this.subtotal * 0.24 / 1.24) * 100) / 100
     },
     total() {
-      return this.subtotal + this.tax
+      // Hinnad on käibemaksuga, seega kogusumma = vahesumma (KM-i juurde ei liideta).
+      return this.subtotal
     },
     panelItem() {
       return this.items.find((i) => i.productId === this.selectedProduct.productId) || null

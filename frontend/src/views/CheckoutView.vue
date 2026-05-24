@@ -166,7 +166,7 @@
                   <span>{{ shipping.toFixed(2) }} €</span>
                 </div>
                 <div class="summary-row">
-                  <span>Käibemaks (24%)</span>
+                  <span>sh käibemaks (24%)</span>
                   <span>{{ tax.toFixed(2) }} €</span>
                 </div>
                 <div class="summary-row summary-row--total">
@@ -246,10 +246,13 @@ export default {
       return method ? method.price : 0
     },
     tax() {
-      return Math.round(this.subtotal * 0.24 * 100) / 100
+      // Hinnad (ja transport) sisaldavad käibemaksu — KM on summas sees, mitte juurde lisatav.
+      // Sisalduv KM osa brutosummast: brutosumma × 24 / 124.
+      return Math.round(((this.subtotal + this.shipping) * 0.24 / 1.24) * 100) / 100
     },
     total() {
-      return this.subtotal + this.shipping + this.tax
+      // Kogusumma = kaubad + transport (mõlemad juba käibemaksuga); KM-i juurde ei liideta.
+      return this.subtotal + this.shipping
     },
   },
   methods: {

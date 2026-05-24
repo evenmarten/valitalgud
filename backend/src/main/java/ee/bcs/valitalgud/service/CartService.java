@@ -118,8 +118,10 @@ public class CartService {
         List<CartItemViewDto> itemDtos = cartItemMapper.toCartItemViewDtos(items);
         BigDecimal subtotal = calculateSubtotal(itemDtos);
         BigDecimal shipping = itemDtos.isEmpty() ? BigDecimal.ZERO : new BigDecimal("5.00");
-        BigDecimal tax = subtotal.multiply(new BigDecimal("0.24")).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal total = subtotal.add(shipping).add(tax);
+        BigDecimal total = subtotal.add(shipping);
+        // Hinnad sisaldavad käibemaksu — KM ei lisandu, vaid on summas sees: bruto × 24 / 124.
+        BigDecimal tax = total.multiply(new BigDecimal("0.24"))
+                .divide(new BigDecimal("1.24"), 2, RoundingMode.HALF_UP);
         CartResponseDto cartResponseDto = new CartResponseDto();
         cartResponseDto.setCartId(cart.getId());
         cartResponseDto.setItems(itemDtos);

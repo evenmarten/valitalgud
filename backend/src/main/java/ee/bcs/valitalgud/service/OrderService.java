@@ -47,8 +47,8 @@ public class OrderService {
         Billing billing = createAndSaveBilling(createOrderDto);
         BigDecimal subtotal = calculateSubtotal(createOrderDto.getItems(), products);
         BigDecimal shipping = SHIPPING_COST;
-        BigDecimal tax = calculateTax(subtotal);
-        BigDecimal total = subtotal.add(shipping).add(tax);
+        BigDecimal total = subtotal.add(shipping);
+        BigDecimal tax = calculateIncludedTax(total);
         Order order = createAndSaveOrder(createOrderDto.getUserId(), billing.getId(), subtotal, shipping, tax, total);
         createOrderItemsAndDecrementStock(createOrderDto.getItems(), products, order);
         return orderMapper.toOrderResponseDto(order);
@@ -110,8 +110,11 @@ public class OrderService {
         return billingRepository.save(billing);
     }
 
-    private BigDecimal calculateTax(BigDecimal subtotal) {
-        return subtotal.multiply(TAX_RATE).setScale(2, RoundingMode.HALF_UP);
+    // Hinnad sisaldavad käibemaksu, seega KM ei lisandu — see arvutab brutosummas
+    // juba sisalduva käibemaksu osa: bruto × määr / (1 + määr).
+    private BigDecimal calculateIncludedTax(BigDecimal grossAmount) {
+        return grossAmount.multiply(TAX_RATE)
+                .divide(BigDecimal.ONE.add(TAX_RATE), 2, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calculateSubtotal(List<OrderItemDto> items, List<Product> products) {

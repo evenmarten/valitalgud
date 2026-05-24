@@ -24,6 +24,7 @@
 
         <form class="chat-input" @submit.prevent="sendMessage">
           <input
+            ref="field"
             v-model="draft"
             type="text"
             class="chat-field"
@@ -75,6 +76,7 @@ export default {
       this.isOpen = !this.isOpen
       if (this.isOpen) {
         this.scrollToBottom()
+        this.focusField()
       }
     },
     close() {
@@ -100,6 +102,7 @@ export default {
         .finally(() => {
           this.isLoading = false
           this.scrollToBottom()
+          this.focusField()
         })
     },
     handleReply(data) {
@@ -123,6 +126,14 @@ export default {
         const container = this.$refs.messages
         if (container) {
           container.scrollTop = container.scrollHeight
+        }
+      })
+    },
+    focusField() {
+      // $nextTick tagab, et väli on uuesti lubatud (disabled eemaldatud), enne kui fokuseerime.
+      this.$nextTick(() => {
+        if (this.$refs.field) {
+          this.$refs.field.focus()
         }
       })
     },

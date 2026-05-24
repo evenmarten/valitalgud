@@ -21,7 +21,7 @@ public class CartResponseDto {
     @Schema(description = "Tarnetasu", example = "5.00")
     private BigDecimal shipping;
 
-    @Schema(description = "Käibemaks (24%)", example = "24.36")
+    @Schema(description = "Summas sisalduv käibemaks (24%) — hinnad on käibemaksuga, KM ei lisandu", example = "23.15")
     private BigDecimal tax;
 
     @Schema(description = "Kogusumma", example = "114.61")
