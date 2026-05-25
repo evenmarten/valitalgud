@@ -1,0 +1,99 @@
+/* ============================================================
+   Landing — jagatud sektsioonistiilid (rahulik korporatiivne toon).
+
+   Need reeglid on tahtlikult globaalsed (mitte <style scoped>), sest:
+   1) --corp-* muutujad defineeritakse .section peal ja peavad
+      päranduma alamkomponentidesse (sammud, sihtrühmad, sündmused ...),
+      mis renderdavad oma sisu eraldi scoped-skoobis;
+   2) sama .section-baasreeglistikku kasutab mitu sektsioonikomponenti.
+
+   Kõik on namespace'itud .landing-page alla, et stiilid ei lekiks
+   teistele lehtedele (nt CheckoutView kasutab samuti .section-title).
+   ============================================================ */
+.landing-page .section {
+  /* Korporatiivne palett, mis kehtib ainult landing'u sisusektsioonides */
+  --corp-blue: #1e3a8a;
+  --corp-blue-soft: #eef2fb;
+  --corp-teal: #0e7490;
+  --corp-ink: #1f2937;
+  --corp-muted: #6b7280;
+  --corp-line: #e5e7eb;
+  --corp-surface: #f4f6fa;
+  --corp-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 10px 30px rgba(16, 24, 40, 0.06);
+  --corp-shadow-lg: 0 8px 16px rgba(16, 24, 40, 0.08), 0 22px 48px rgba(16, 24, 40, 0.12);
+
+  padding: 4.5rem 0;
+  background: var(--nb-white);
+  border-top: 1px solid var(--corp-line);
+}
+
+/* Vahelduvad pehmed taustad annavad rütmi ilma valju värviplokita */
+.landing-page .section-blue,
+.landing-page .section-yellow {
+  background: var(--corp-surface);
+}
+
+.landing-page .section-alt {
+  background: var(--nb-white);
+}
+
+/* Pehme hierarhia: tume pealkiri, summutatud alapealkiri */
+.landing-page .section-title {
+  font-size: 2.1rem;
+  margin-bottom: 0.4rem;
+  color: var(--corp-ink);
+}
+
+.landing-page .section-subtitle {
+  font-size: 1.1rem;
+  color: var(--corp-muted);
+  font-weight: 500;
+}
+
+/* Kaardid: pehmed ääred, ümarad nurgad, hajus vari (mitte kõva nihe) */
+.landing-page .section .card {
+  border: 1px solid var(--corp-line) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--corp-shadow);
+  background-color: var(--nb-white);
+  overflow: hidden;
+}
+
+.landing-page .section .card-title {
+  color: var(--corp-ink);
+}
+
+.landing-page .section .card-img-top {
+  border-bottom: 1px solid var(--corp-line);
+}
+
+/* Skill-tagid → pehmed pill-sildid */
+.landing-page .section .badge {
+  border: none !important;
+  border-radius: 999px !important;
+  background-color: var(--corp-blue-soft) !important;
+  color: var(--corp-blue) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 600;
+  padding: 0.4em 0.85em;
+}
+
+/* Nupud jäävad julgeks (sild neobrutalismi juurde), kuid värv on rahulik */
+.landing-page .section .btn-primary {
+  background-color: var(--corp-blue) !important;
+}
+
+.landing-page .section .btn-danger {
+  background-color: var(--corp-teal) !important;
+}
+
+/* ---------- Kaartide pehme hõljutus ---------- */
+.landing-page .lift-card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.landing-page .lift-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--corp-shadow-lg) !important;
+}
